@@ -1,6 +1,6 @@
 <?php
 
-namespace SISAUGES;
+namespace SISAUGES\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 

@@ -2,7 +2,7 @@
 
 namespace SISAUGES\Http\Controllers\Auth;
 
-use SISAUGES\User;
+use SISAUGES\Models\User;
 use Validator;
 use SISAUGES\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -69,4 +69,5 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
 }
