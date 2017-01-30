@@ -59,13 +59,13 @@
                             <ul class="nav nav-children">
 
                                 <li>
-                                    <a href="{{url('representante')}}">
-                                        Representantes
+                                    <a href="{{url('tutor')}}">
+                                        Tutor
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{url('tesista')}}">
-                                        Tesistas
+                                    <a href="{{url('estudiante')}}">
+                                        Estudiante
                                     </a>
                                 </li>
 

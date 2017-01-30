@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => SISAUGES\User::class,
+            'model' => SISAUGES\Models\User::class,
         ],
 
         // 'users' => [

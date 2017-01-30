@@ -18,7 +18,7 @@
 });*/
 
 
-Route::get('/', ['uses' => 'Auth\AuthController@index', 'as' => 'login']);
+Route::get('/', ['uses' => 'Auth\AuthController@index', 'as' => '/']);
 
 
 Route::auth();

@@ -30,6 +30,8 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
 
+    protected $redirectAfterLogout = '/login';
+
     /**
      * Create a new authentication controller instance.
      *
@@ -42,7 +44,7 @@ class AuthController extends Controller
 
     public function index()
     {
-        return view('auth.register');
+        return view('auth.login');
     }
 
     /**
