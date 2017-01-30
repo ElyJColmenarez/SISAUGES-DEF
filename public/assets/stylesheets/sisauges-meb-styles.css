@@ -1,0 +1,126 @@
+.princpl-bnr{
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background: url('../backgrounds/BANNER1.png');
+	background-size:  100% 120px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.separador{
+	margin-top: -10px;
+	margin-bottom: 20px;
+    background-color: #000;
+    opacity: 0.3;
+    height: 1px;
+}
+
+.center{
+	text-align: center;
+}
+
+.header{
+	height: 120px !important;
+}
+
+.panel-body{
+	border-radius: 0px;
+}
+
+.muestralista{
+	width: 120px;
+}
+
+.hiddenform{
+	display: none;
+}
+
+.waitingimg{
+	width: 100%;
+	text-align: center;
+	background-color: #fff;
+}
+
+.modal-block-lg{
+	width: 80%;
+    margin: auto;
+}
+
+.waitingback{
+	width: 200px;
+	min-height: 200px;
+	margin: auto;
+	background-image: url('../images/carga.gif');
+	background-size: 150px 150px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tblhover > div > input::-webkit-input-placeholder { /* Chrome */
+  color: #000;
+}
+.tblhover > div > input:-ms-input-placeholder { /* IE 10+ */
+  color: #000;
+}
+.tblhover > div > input:-moz-placeholder { /* Firefox 19+ */
+  color: #000;
+}
+.tblhover > div > input:-moz-placeholder { /* Firefox 4 - 18 */
+  color: #000;
+}
+
+
+.tblhover > div > input:hover{
+
+	background-color: #fff;
+    border-color: #000;
+}
+
+.tblhover > div > input{
+	
+	background-color: transparent;
+    border-color: transparent;
+}
+
+
+#results > div:nth-child(2){
+	text-align: right;
+}
+
+.table .actions{
+	width: 10%;
+	text-align: right;
+}
+
+.table .actions a{
+	color: #fff;
+}
+
+#datatable-institucion > thead > tr > th > div.col-md-2{
+	text-align: center;
+    vertical-align: middle;
+    top: 10px;
+}
+
+#datatable-institucion > thead > tr > th > div.col-md-2	> span{
+	font-size: 20px;
+}
+
+#datatable-institucion > thead > tr > th > div.col-md-2	> span:hover{
+	color: #33bbff;
+	cursor: pointer;
+}
+
+
+@media only screen and (min-width: 768px){
+
+	html.fixed .inner-wrapper {
+	    padding-top: 160px !important;
+	}
+
+	html.fixed .sidebar-left, html.fixed .page-header {
+	    top: 120px !important;
+	}
+
+}

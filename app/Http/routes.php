@@ -1,5 +1,7 @@
 <?php
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,9 +13,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*Route::get('/', function () {
+    return view('auth.login');
+});*/
+
+
+Route::get('/', ['uses' => 'Auth\AuthController@index', 'as' => 'login']);
+
 
 Route::auth();
 
