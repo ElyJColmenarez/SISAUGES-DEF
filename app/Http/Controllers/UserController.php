@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 use SISAUGES\Http\Requests;
 use SISAUGES\Models\Persona;
 use SISAUGES\Models\User;
+use SISAUGES\Models\RolUsuario;
 
 class UserController extends Controller
 {
-
+    protected $persona;
+    protected $user;
     protected $rol;
 
     public function __construct()
@@ -26,6 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
+
         return view('users.index');
     }
 
@@ -49,7 +52,7 @@ class UserController extends Controller
     {
         if ($request->isMethod('get'))
         {
-            return view('user.crear');
+            return view('users.crear');
         }
 
         if ($request->isMethod('post'))
