@@ -29,7 +29,7 @@ class AuthController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
-
+    protected $username = 'username';
     protected $redirectAfterLogout = '/login';
 
     /**
@@ -45,6 +45,18 @@ class AuthController extends Controller
     public function index()
     {
         return view('auth.login');
+    }
+
+    public function loginUsername()
+    {
+        return property_exists($this, 'username') ? $this->username : 'username';
+    }
+
+    public function logout()
+    {
+        Auth::guard($this->getGuard())->logout();
+
+        return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
     /**
