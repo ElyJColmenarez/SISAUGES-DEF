@@ -20,7 +20,7 @@ Route::get('/', ['uses' => 'Auth\AuthController@index', 'as' => '/']);
 
 Route::auth();
 
-Route::group(['prefix'=>'superuser', 'namespace'=>'SuperUser', 'middleware'=>'auth', 'as'=>'superuser'],function(){
+Route::group(['prefix'=>'superuser', 'namespace'=>'SuperUser', 'middleware'=>'su', 'as'=>'superuser'],function(){
 
     Route::group(['prefix'=>'auditoria', 'namespace'=>'Auditoria', 'as'=>'auditoria'], function(){
 
@@ -36,7 +36,7 @@ Route::group(['prefix'=>'superuser', 'namespace'=>'SuperUser', 'middleware'=>'au
 
 });
 
-Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware'=>'auth', 'as'=>'admin'], function(){
+Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware'=>'admin', 'as'=>'admin'], function(){
 
     Route::group(['prefix'=>'usuario', 'namespace'=>'Usuario','as'=>'usuario'], function(){
 
@@ -57,7 +57,7 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware'=>'auth', 'as
 
 });
 
-Route::group(['prefix'=>'operador', 'namespace'=>'Operador', 'middleware'=>'auth', 'as'=>'operador'],function(){
+Route::group(['prefix'=>'operador', 'namespace'=>'Operador', 'middleware'=>'op', 'as'=>'operador'],function(){
 
     Route::group(['prefix'=>'tutor', 'namespace'=>'Tutor', 'as'=>'tutor'], function(){
 
