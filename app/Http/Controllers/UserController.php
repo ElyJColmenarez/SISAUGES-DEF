@@ -2,6 +2,7 @@
 
 namespace SISAUGES\Http\Controllers;
 
+use Faker\Provider\ar_JO\Person;
 use Illuminate\Http\Request;
 
 use SISAUGES\Http\Requests;
@@ -29,7 +30,8 @@ class UserController extends Controller
     public function index()
     {
 
-        return view('users.index');
+        $persona = Persona::orderBy('cedula','desc')->paginate(20);
+        return view('users.index',compact('persona'));
     }
 
     /**
@@ -37,9 +39,72 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function renderForm(Request $request)
     {
-        //
+        if ($request->typeform == 'add')
+        {
+            $action = "usuario/crear/";
+        }
+        elseif($request->typeform == 'modify')
+        {
+            $action = "usuario/modificar/".$request->cedula_usuario;
+        }
+        elseif ($request->typeform == 'delete')
+        {
+            $action = "usuario/eliminar/".$request->cedula_usuario;
+        }
+
+        $persona = Persona::find($request->cedula);
+
+        if ($request->typeform == 'delete')
+        {
+            $fields = false;
+        }
+        else
+        {
+            $fields = array(
+
+                'cedula' => array(
+                    'type'          => 'text',
+                    'value'         => (empty($persona))? '' : $persona->cedula,
+                    'id'            => 'cedula' ),
+
+                'nombre'         => array(
+                    'type'          => 'text',
+                    'value'         => (empty($persona))? '' : $persona->nombre,
+                    'id'            => 'nombre',
+                    'label'         => 'Nombre',
+                    'validaciones'  => array(
+                        'solocaracteres',
+                        'obligatorio')),
+
+                'apellido'       => array(
+                    'type'          => 'text',
+                    'value'         => (empty($persona))? '' : $persona->apellido,
+                    'id'            => 'apellido',
+                    'label'         => 'Apellido',
+                    'validaciones'  => array(
+                        'solocaracteres',
+                        'obligatorio' )),
+
+                'email'          => array(
+                    'type'          => 'email',
+                    'value'         => (empty($persona))? '' : $persona->email,
+                    'id'            => 'email',
+                    'label'         => 'Correo Electronico',
+                    'validaciones'  => array(
+                        'solocorreo',
+                        'obligatorio' )),
+                'telefono'       => array(
+                    'type'          => 'text',
+                    'value'         => (empty($persona))? '' : $persona->telefono,
+                    'id'            => 'telefono',
+                    'label'         => 'Teléfono',
+                    'validaciones'  => array(
+                        'solonumero',
+                        'obligatorio' )),
+            );
+        }
     }
 
     /**
