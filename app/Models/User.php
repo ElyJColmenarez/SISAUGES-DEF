@@ -16,16 +16,16 @@ class User extends Authenticatable
 
     public function muestra()
     {
-        return $this->hasMany(Muestra::class,'id_muestra','id_usuario');
+        return $this->hasMany(Muestra::class,'id_muestra');
     }
 
     public function rol()
     {
-        return $this->belongsTo(RolUsuario::class,'id_rol','id_usuario');
+        return $this->belongsTo(RolUsuario::class,'id_rol');
     }
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'cedula','id_usuario');
+        return $this->belongsTo(Persona::class,'cedula');
     }
 }

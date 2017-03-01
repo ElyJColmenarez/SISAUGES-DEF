@@ -14,6 +14,6 @@ class SectorProyecto extends Model
 
     public function proyecto()
     {
-        return $this->hasMany(Proyecto::class,'id_proyecto','id_sector_pr');
+        return $this->hasMany(Proyecto::class,'id_proyecto');
     }
 }

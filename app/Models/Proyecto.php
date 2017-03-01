@@ -19,7 +19,7 @@ class Proyecto extends Model
 
     public function estudiante()
     {
-        return $this->hasMany(Estudiante::class,'id_estudiante','id_proyecto');
+        return $this->hasMany(Estudiante::class,'id_estudiante');
     }
 
     public function muestras()
@@ -29,6 +29,6 @@ class Proyecto extends Model
 
     public function sector()
     {
-        return $this->belongsTo(SectorProyecto::class,'id_sector_pr','id_proyecto');
+        return $this->belongsTo(SectorProyecto::class,'id_sector_pr');
     }
 }

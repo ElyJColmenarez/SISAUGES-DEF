@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS USUARIO
 	constraint fk_rol_usuario
 		foreign key (id_rol) references ROL_USUARIO (id_rol),
 	constraint fk_persona_
-		foreign key (cedula_usuario) references persona(cedula)
+		foreign key (cedula_persona) references persona(cedula)
 );
 
 --drop table usuario;

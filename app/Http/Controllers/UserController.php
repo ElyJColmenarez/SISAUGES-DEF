@@ -5,6 +5,8 @@ namespace SISAUGES\Http\Controllers;
 use Faker\Provider\ar_JO\Person;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use SISAUGES\Http\Requests;
 use SISAUGES\Models\Persona;
 use SISAUGES\Models\User;
@@ -19,6 +21,9 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->persona = Persona::orderBy('cedula','desc')->paginate(20);
+        $this->user = User::orderBy('cedula','desc')->paginate(20);
+        $this->rol = RolUsuario::all();
 
     }
 
@@ -29,9 +34,11 @@ class UserController extends Controller
      */
     public function index()
     {
+        $persona = $this->persona;
+        $user = $this->user;
 
-        $persona = Persona::orderBy('cedula','desc')->paginate(20);
-        return view('users.index',compact('persona'));
+        return view('users.index',compact('persona','user'));
+
     }
 
 
@@ -61,7 +68,12 @@ class UserController extends Controller
         {
             $fields = array(
 
-                'cedula' => array(
+                'id_persona'     =>array(
+                    'type'          => 'hidden',
+                    'value'         => $request->id_persona,
+                    'id'            => 'id_persona'
+                ),
+                'cedula'         => array(
                     'type'          => 'text',
                     'value'         => (empty($persona))? '' : $persona->cedula,
                     'id'            => 'cedula' ),
@@ -127,15 +139,24 @@ class UserController extends Controller
                     ),
                     'label'         => 'Status',
                     'options'       => array(
-                        'true'      => 'Activo',
-                        'false'     => 'Inactivo'
+                        'true'          => 'Activo',
+                        'false'         => 'Inactivo'
                     )
 
+                ),
+
+                'id_rol'           => array(
+                    'type'          => 'select',
+                    'value'         => (empty($usuario))? '' : $usuario->id_rol,
+                    'id'            => 'rol',
+                    'validaciones'  => array('obligatorio'),
+                    'label'         => 'Rol usuario',
+                    'options'       => array('true' => 'Activo', 'false' => 'Inactivo')
                 )
             );
         }
 
-        $htmlBody = view::make('layouts.regularform',compact('action','fields'))->render();
+        $htmlBody = View::make('layouts.regularform',compact('action','fields'))->render();
 
         if ($htmlBody)
         {
@@ -168,34 +189,41 @@ class UserController extends Controller
         if ($request->isMethod('post'))
         {
             $persona = Persona::find($request->cedula);
-            if (!empty($persona))
+            if (empty($persona))
             {
+                $persona = new Persona();
 
+                $persona->cedula    = Crypt::encrypt($request->cedula);
+                $persona->nombre    = $request->nombre;
+                $persona->apellido  = $request->apellido;
+                $persona->email     = $request->email;
+                $persona->telefono  = $request->telefono;
+                $persona->status    = $request->status;
+                $persona->save();
+
+                $usuario = new User();
+
+                $usuario->username          = $request->username;
+                $usuario->password          = Hash::make($request->password);
+                $usuario->id_rol            = $request->id_rol;
+                $usuario->cedula_persona    = $request->cedula;
+                $usuario->save();
+
+
+            }
+            else
+            {
+                $usuario = new User();
+
+                $usuario->username          = $request->username;
+                $usuario->password          = Hash::make($request->password);
+                $usuario->id_rol            = $request->id_rol;
+                $usuario->cedula_persona    = $request->cedula;
+                $usuario->save();
             }
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

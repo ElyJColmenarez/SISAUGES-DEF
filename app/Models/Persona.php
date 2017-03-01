@@ -14,16 +14,16 @@ class Persona extends Model
 
     public function usuario()
     {
-        return $this->hasOne(User::class,'id_usuario','cedula');
+        return $this->hasOne(User::class,'cedula_persona');
     }
 
     public function estudiante()
     {
-        return $this->hasOne(Estudiante::class,'id_estudiante','cedula');
+        return $this->hasOne(Estudiante::class,'cedula_persona');
     }
 
     public function tutor()
     {
-        return $this->hasOne(Tutor::class,'id_tutor','cedula');
+        return $this->hasOne(Tutor::class,'cedula_persona');
     }
 }
