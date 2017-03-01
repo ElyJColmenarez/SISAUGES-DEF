@@ -10,7 +10,7 @@ class Estudiante extends Model
     protected $table="estudiante";
     protected $primaryKey="id_estudiante";
     protected $fillable=['carrera_estudiante', 'semestre_estudiante'];
-    protected $guarded=['id_persona','id_estudiante', 'id_proyecto'];
+    protected $guarded=['id_persona','id_estudiante', 'id_proyecto','cedula_persona'];
 
     public function proyecto()
     {
@@ -19,6 +19,6 @@ class Estudiante extends Model
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'id_persona','id_estudiante');
+        return $this->belongsTo(Persona::class,'cedula','id_estudiante');
     }
 }

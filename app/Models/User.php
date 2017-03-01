@@ -9,7 +9,7 @@ class User extends Authenticatable
     public $timestamps = false;
     protected $table="usuario";
     protected $primaryKey = "id_usuario";
-    protected $fillable = ['username', 'password','status'];
+    protected $fillable = ['username', 'password','cedula_persona','status'];
     protected $casts = ['id_rol' => 'integer'];
     protected $guarded = ['id_usuario','id_rol'];
     protected $hidden = ['password', 'remember_token'];
@@ -26,6 +26,6 @@ class User extends Authenticatable
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'id_persona','id_usuario');
+        return $this->belongsTo(Persona::class,'cedula','id_usuario');
     }
 }

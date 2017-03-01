@@ -9,7 +9,7 @@ class Tutor extends Model
     public $timestamps = false;
     protected $table = "tutor";
     protected $primaryKey = "id_tutor";
-    protected $guarded = ['id_tutor','id_departamento','id_persona','id_status'];
+    protected $guarded = ['id_tutor','id_departamento','cedula_persona','id_status'];
 
     public function departamento()
     {
@@ -19,6 +19,6 @@ class Tutor extends Model
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'id_persona','id_usuario');
+        return $this->belongsTo(Persona::class,'cedula','id_tutor');
     }
 }

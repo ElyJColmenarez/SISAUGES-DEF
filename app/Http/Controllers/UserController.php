@@ -34,11 +34,7 @@ class UserController extends Controller
         return view('users.index',compact('persona'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function renderForm(Request $request)
     {
         if ($request->typeform == 'add')
@@ -55,6 +51,7 @@ class UserController extends Controller
         }
 
         $persona = Persona::find($request->cedula);
+        $usuario = User::find($request->cedula);
 
         if ($request->typeform == 'delete')
         {
@@ -95,6 +92,7 @@ class UserController extends Controller
                     'validaciones'  => array(
                         'solocorreo',
                         'obligatorio' )),
+
                 'telefono'       => array(
                     'type'          => 'text',
                     'value'         => (empty($persona))? '' : $persona->telefono,
@@ -103,8 +101,55 @@ class UserController extends Controller
                     'validaciones'  => array(
                         'solonumero',
                         'obligatorio' )),
+
+                'username'      => array(
+                    'type'          => 'text',
+                    'value'         =>  (empty($usuario))? '' : $usuario->username,
+                    'id'            => 'username',
+                    'label'         => 'Nombre de Usuario',
+                    'validaciones'  => array('solotexto','obligatorio')
+                ),
+
+                'password'      => array(
+                    'type'          => 'password',
+                    'value'         => (empty($usuario))? '' : $usuario->password,
+                    'id'            => 'password',
+                    'lavel'         => 'Contraseña',
+                    'validaciones'  => array('obligatorio')
+                ),
+
+                'status'        => array(
+                    'type'          => 'select',
+                    'value'         => (empty($persona))? '' : $persona->status,
+                    'id'            => 'status',
+                    'validaciones'  => array(
+                        'obligatorio'
+                    ),
+                    'label'         => 'Status',
+                    'options'       => array(
+                        'true'      => 'Activo',
+                        'false'     => 'Inactivo'
+                    )
+
+                )
             );
         }
+
+        $htmlBody = view::make('layouts.regularform',compact('action','fields'))->render();
+
+        if ($htmlBody)
+        {
+            $retorno = array(
+                'result'    => true,
+                'html'      => $htmlBody
+            );
+        }
+        else
+        {
+            $retorno = array('result'   => false);
+        }
+
+        echo json_encode($retorno);
     }
 
     /**
