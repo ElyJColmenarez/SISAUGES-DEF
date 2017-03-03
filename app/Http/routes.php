@@ -17,10 +17,11 @@
 
 Route::get('/', ['uses' => 'Auth\AuthController@index', 'as' => '/']);
 
+Route::get('principal', ['uses' => 'OperadorController@index', 'as' => 'principal']);
 
 Route::auth();
 
-Route::group(['prefix'=>'superuser', 'namespace'=>'SuperUser', 'middleware'=>'su', 'as'=>'superuser'],function(){
+Route::group(['prefix'=>'superuser', 'middleware'=>'su', 'as'=>'superuser'],function(){
 
     Route::group(['prefix'=>'auditoria', 'namespace'=>'Auditoria', 'as'=>'auditoria'], function(){
 
@@ -28,7 +29,7 @@ Route::group(['prefix'=>'superuser', 'namespace'=>'SuperUser', 'middleware'=>'su
     /**
      * Rutas del rol del usuario, manejadas solo por el superuser
      */
-    Route::group(['prefix'=>'rol', 'namespace'=>'Rol', 'as'=>'rol'], function(){
+    Route::group(['prefix'=>'rol', 'as'=>'rol'], function(){
 
         Route::get('Listar',['uses'=>'RolController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'RolController@renderForm', 'as'=>'registerform']);
@@ -65,7 +66,7 @@ Route::group(['prefix'=>'superuser', 'namespace'=>'SuperUser', 'middleware'=>'su
 
 });
 
-Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware'=>'admin', 'as'=>'admin'], function(){
+Route::group(['prefix'=>'admin', 'middleware'=>'admin', 'as'=>'admin'], function(){
 
     Route::group(['prefix'=>'usuario', 'namespace'=>'Usuario','as'=>'usuario'], function(){
 
@@ -106,7 +107,8 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware'=>'admin', 'a
 
 });
 
-Route::group(['prefix'=>'operador', 'namespace'=>'Operador', 'middleware'=>'op', 'as'=>'operador'],function(){
+Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],function(){
+
 
     Route::group(['prefix'=>'tutor', 'namespace'=>'Tutor', 'as'=>'tutor'], function(){
 
