@@ -16,9 +16,9 @@ class SuperUserMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->id_rol == 3)
+        if(Auth::user()->id_rol == 1)
         {
-            return redirect('');
+            return redirect('Usuario/Listar');
         }
         return $next($request);
     }

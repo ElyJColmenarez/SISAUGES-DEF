@@ -15,16 +15,4 @@ use SISAUGES\Models\RolUsuario;
 class OperadorController extends Controller
 {
 
-
-
-    public function index()
-    {
-
-
-        return view('welcome');
-
-    }
-
-
-    
 }

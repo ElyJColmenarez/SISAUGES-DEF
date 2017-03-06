@@ -2,7 +2,9 @@
 
 namespace SISAUGES\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Hash;
 use SISAUGES\Models\User;
+use SISAUGES\Models\Persona;
 use Validator;
 use SISAUGES\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -29,7 +31,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'principal';
+    protected $redirectTo = 'Principal';
     protected $username = 'username';
     protected $redirectAfterLogout = '/login';
 
@@ -45,20 +47,30 @@ class AuthController extends Controller
 
     public function index()
     {
+        /*Persona::create(array(
+
+            'cedula'=>'18491779',
+            'nombre'=>'Ely',
+            'apellido'=>'Colmenarez',
+            'email'=>'elyjcolmenarez@.com',
+            'telefono'=>'04262197873',
+            'status'=>TRUE,
+
+        ));
+
+        User::create(array(
+
+            'username'=>'elyjcolm',
+            'password'=>Hash::make('12345'),
+            'cedula_persona'=>'18491779',
+            'status'=>TRUE
+
+        ));*/
+
         return view('auth.login');
     }
 
-    public function loginUsername()
-    {
-        return property_exists($this, 'username') ? $this->username : 'username';
-    }
 
-    public function logout()
-    {
-        Auth::guard($this->getGuard())->logout();
-
-        return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
-    }
 
     /**
      * Get a validator for an incoming registration request.

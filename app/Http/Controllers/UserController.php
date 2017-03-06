@@ -20,9 +20,9 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('su');
         $this->persona = Persona::orderBy('cedula','desc')->paginate(20);
-        $this->user = User::orderBy('cedula','desc')->paginate(20);
+        $this->user = User::orderBy('cedula_persona','desc')->paginate(20);
         $this->rol = RolUsuario::all();
 
     }
@@ -50,11 +50,11 @@ class UserController extends Controller
         }
         elseif($request->typeform == 'modify')
         {
-            $action = "usuario/modificar/".$request->cedula_usuario;
+            $action = "usuario/modificar/".$request->field_id;
         }
         elseif ($request->typeform == 'delete')
         {
-            $action = "usuario/eliminar/".$request->cedula_usuario;
+            $action = "usuario/eliminar/".$request->field_id;
         }
 
         $persona = Persona::find($request->cedula);
@@ -75,7 +75,7 @@ class UserController extends Controller
                 ),
                 'cedula'         => array(
                     'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->cedula,
+                    'value'         => (empty($persona))? '' : Crypt::decrypt($persona->cedula),
                     'id'            => 'cedula' ),
 
                 'nombre'         => array(
@@ -132,7 +132,7 @@ class UserController extends Controller
 
                 'status'        => array(
                     'type'          => 'select',
-                    'value'         => (empty($persona))? '' : $persona->status,
+                    'value'         => (empty($usuario))? '' : $usuario->status,
                     'id'            => 'status',
                     'validaciones'  => array(
                         'obligatorio'
@@ -206,7 +206,7 @@ class UserController extends Controller
                 $usuario->username          = $request->username;
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
-                $usuario->cedula_persona    = $request->cedula;
+                $usuario->cedula_persona    = Crypt::encrypt($request->cedula);
                 $usuario->save();
 
 
@@ -218,7 +218,7 @@ class UserController extends Controller
                 $usuario->username          = $request->username;
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
-                $usuario->cedula_persona    = $request->cedula;
+                $usuario->cedula_persona    = Crypt::encrypt($request->cedula);
                 $usuario->save();
             }
         }

@@ -15,21 +15,22 @@
 
 
 
-Route::get('/', ['uses' => 'Auth\AuthController@index', 'as' => '/']);
+Route::get('/login', ['uses' => 'Auth\AuthController@index', 'as' => '/login']);
+Route::get('/logout',['uses' => 'Auth\AuthController@getLogout', 'as' => '/logout']);
 
-Route::get('principal', ['uses' => 'OperadorController@index', 'as' => 'principal']);
+Route::get('Principal', ['uses' => 'HomeController@index', 'as' => 'Principal']);
 
 Route::auth();
 
-Route::group(['prefix'=>'superuser', 'middleware'=>'su', 'as'=>'superuser'],function(){
+Route::group(['middleware'=>'su'],function(){
 
-    Route::group(['prefix'=>'auditoria', 'namespace'=>'Auditoria', 'as'=>'auditoria'], function(){
+    Route::group(['prefix'=>'Auditoria'], function(){
 
     });
     /**
      * Rutas del rol del usuario, manejadas solo por el superuser
      */
-    Route::group(['prefix'=>'rol', 'as'=>'rol'], function(){
+    Route::group(['prefix'=>'rol'], function(){
 
         Route::get('Listar',['uses'=>'RolController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'RolController@renderForm', 'as'=>'registerform']);
@@ -40,21 +41,21 @@ Route::group(['prefix'=>'superuser', 'middleware'=>'su', 'as'=>'superuser'],func
         Route::post('Asignar-Rol',['uses'=>'RolController@ajaxRegularAssign', 'as'=>'asignar-rol']); //hablar con Edward para este metodo
     });
 
-    Route::group(['prefix'=>'estatustutor', 'namespace'=>'EstatusTutor', 'as'=>'estatustutor'], function(){
+    Route::group(['prefix'=>'Estatus-Tutor'], function(){
 
-        Route::get('Listar',['uses'=>'EstatusTutorController@index', 'as'=>'listar']);
+        Route::get('Listar',['uses'=>'EstatusTutorController@index', 'as'=>'Listar']);
         Route::post('RegisterForm',['uses'=>'EstatusTutorController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'Buscar',['uses'=>'EstatusTutorController@renderForm', 'as'=>'buscar']);
-        Route::match(array('get','post'),'Crear',['uses'=>'EstatusTutorController@ajaxRegularStore', 'as'=>'crear']);
+        Route::match(array('get','post'),'Crear',['uses'=>'EstatusTutorController@store', 'as'=>'crear']);
         Route::match(array('get','post'),'Editar/{id}',['uses'=>'EstatusTutorController@ajaxRegularUpdate', 'as'=>'editar']);
         Route::post('Eliminar/{id}',['uses'=>'EstatusTutorController@ajaxRegularDestroy', 'as'=>'eliminar']);
         Route::post('Asignar-Estatus',['uses'=>'EstatusTutorController@ajaxRegularAssign', 'as'=>'asignar-estatus']); //hablar con Edward para este metodo
 
     });
 
-    Route::group(['prefix'=>'usuario', 'namespace'=>'Usuario','as'=>'usuario'], function(){
+    Route::group(['prefix'=>'usuario'], function(){
 
-        Route::get('Listar',['uses'=>'UserController@index', 'as'=>'listar']);
+        Route::get('Listar',['uses'=>'UserController@index', 'as'=>'Listar']);
         Route::post('RegisterForm',['uses'=>'UserController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'Buscar',['uses'=>'UserController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'Crear',['uses'=>'UserController@ajaxRegularStore', 'as'=>'crear']);
@@ -66,9 +67,9 @@ Route::group(['prefix'=>'superuser', 'middleware'=>'su', 'as'=>'superuser'],func
 
 });
 
-Route::group(['prefix'=>'admin', 'middleware'=>'admin', 'as'=>'admin'], function(){
+Route::group(['middleware'=>'admin'], function(){
 
-    Route::group(['prefix'=>'usuario', 'namespace'=>'Usuario','as'=>'usuario'], function(){
+    Route::group(['prefix'=>'Usuario'], function(){
 
         Route::get('Listar',['uses'=>'UserController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'UserController@renderForm', 'as'=>'registerform']);
@@ -80,7 +81,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'admin', 'as'=>'admin'], function
 
     });
 
-    Route::group(['prefix'=>'sectorproyecto', 'namespace'=>'SectorProyecto', 'as'=>'sectorproyecto'], function(){
+    Route::group(['prefix'=>'Sector-Proyecto'], function(){
 
         Route::get('Listar',['uses'=>'SectorProyectoController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'SectorProyectoController@renderForm', 'as'=>'registerform']);
@@ -90,7 +91,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'admin', 'as'=>'admin'], function
         Route::post('Eliminar/{id}',['uses'=>'SectorProyectoController@ajaxRegularDestroy', 'as'=>'eliminar']);
     });
 
-    Route::group(['prefix'=>'tecnicaestudio', 'namespace'=>'TecnicaEstudio', 'as'=>'tecnicaestudio'], function(){
+    Route::group(['prefix'=>'Tecnica-Estudio'], function(){
 
         Route::get('Listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'registerform']);
@@ -107,10 +108,10 @@ Route::group(['prefix'=>'admin', 'middleware'=>'admin', 'as'=>'admin'], function
 
 });
 
-Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],function(){
+Route::group(['middleware'=>'op'],function(){
 
 
-    Route::group(['prefix'=>'tutor', 'namespace'=>'Tutor', 'as'=>'tutor'], function(){
+    Route::group(['prefix'=>'Tutor'], function(){
 
         Route::get('Listar',['uses'=>'TutorController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'TutorController@renderForm', 'as'=>'registerform']);
@@ -122,7 +123,7 @@ Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],functi
 
     });
 
-    Route::group(['prefix'=>'estudiante', 'namespace'=>'Estudiante', 'as'=>'estudiante'], function(){
+    Route::group(['prefix'=>'Estudiante'], function(){
 
         Route::get('Listar',['uses'=>'EstudianteController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'EstudianteController@renderForm', 'as'=>'registerform']);
@@ -134,7 +135,7 @@ Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],functi
 
     });
 
-    Route::group(['prefix'=>'institucion', 'namespace'=>'Institucion', 'as'=>'institucion'], function(){
+    Route::group(['prefix'=>'Institucion'], function(){
 
         Route::get('Listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'InstitucionController@renderForm', 'as'=>'registerform']);
@@ -147,7 +148,7 @@ Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],functi
     });
 
 
-    Route::group(['prefix'=>'departamento', 'namespace'=>'Departamento', 'as'=>'departamento'], function(){
+    Route::group(['prefix'=>'Departamento'], function(){
         Route::get('Listar',['uses'=>'DepartamentoController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'DepartamentoController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'Buscar',['uses'=>'DepartamentoController@renderForm', 'as'=>'buscar']);
@@ -158,7 +159,7 @@ Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],functi
     });
 
 
-    Route::group(['prefix'=>'proyecto', 'namespace'=>'Proyecto', 'as'=>'proyecto'], function(){
+    Route::group(['prefix'=>'Proyecto'], function(){
 
         Route::get('Listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'InstitucionController@renderForm', 'as'=>'registerform']);
@@ -170,7 +171,7 @@ Route::group(['prefix'=>'operador', 'middleware'=>'op', 'as'=>'operador'],functi
 
     });
 
-    Route::group(['prefix'=>'muestra', 'namespace'=>'Muestra','as'=>'muestra'], function(){
+    Route::group(['prefix'=>'Muestra'], function(){
 
         Route::get('Listar',['uses'=>'MuestraController@index', 'as'=>'listar']);
         Route::post('RegisterForm',['uses'=>'MuestraController@renderForm', 'as'=>'registerform']);

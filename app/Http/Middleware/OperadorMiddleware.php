@@ -16,7 +16,7 @@ class OperadorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->id_rol == 1)
+        if(Auth::user()->id_rol == 3)
         {
             return redirect('');
         }
