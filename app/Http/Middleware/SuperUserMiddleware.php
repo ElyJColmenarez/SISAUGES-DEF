@@ -18,7 +18,7 @@ class SuperUserMiddleware
     {
         if(Auth::user()->id_rol == 1)
         {
-            return redirect('Usuario/Listar');
+            return redirect('usuario/listar');
         }
         return $next($request);
     }

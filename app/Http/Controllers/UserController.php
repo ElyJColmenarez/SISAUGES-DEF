@@ -20,7 +20,8 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('su');
+        //$this->middleware('');
+        //$this->middleware('su');
         $this->persona = Persona::orderBy('cedula','desc')->paginate(20);
         $this->user = User::orderBy('cedula_persona','desc')->paginate(20);
         $this->rol = RolUsuario::all();
