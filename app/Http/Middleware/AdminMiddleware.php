@@ -16,10 +16,17 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->id_rol != 2)
+        if(empty(Auth::user()))
+        {
+            return redirect('/login');
+        }
+        elseif(Auth::user()->id_rol != 2)
         {
             return redirect('');
         }
-        return $next($request);
+        else
+        {
+            return $next($request);
+        }
     }
 }

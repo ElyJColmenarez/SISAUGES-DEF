@@ -17,11 +17,18 @@ class SuperUserMiddleware
     public function handle($request, Closure $next)
     {
 
-
-        if(Auth::user()->id_rol != 1)
+        if(empty(Auth::user()))
+        {
+            return redirect('/login');
+        }
+        elseif(Auth::user()->id_rol != 1)
         {
             return redirect('');
         }
-        return $next($request);
+        else
+        {
+            return $next($request);
+        }
+
     }
 }
