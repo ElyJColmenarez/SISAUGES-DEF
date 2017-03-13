@@ -66,7 +66,7 @@
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li>
-                                    <a href="{{asset('welcome')}}">
+                                    <a href="{{asset('/')}}">
                                         <i class="fa fa-home"></i>
                                     </a>
                                 </li>

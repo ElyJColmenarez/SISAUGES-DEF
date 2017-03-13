@@ -22,7 +22,7 @@ Route::get('/', ['uses' => 'HomeController@index', 'as' => 'principal']);
 
 Route::auth();
 
-Route::group(['middleware'=>'su'],function(){
+Route::group(['middleware'=>'su', 'prefix'=>'superuser'],function(){
 
     Route::group(['prefix'=>'auditoria'], function(){
 
@@ -67,7 +67,7 @@ Route::group(['middleware'=>'su'],function(){
 
 });
 
-Route::group(['middleware'=>'admin'], function(){
+Route::group(['middleware'=>'admin','prefix' => 'admin'], function(){
 
     Route::group(['prefix'=>'usuario'], function(){
 
@@ -108,7 +108,7 @@ Route::group(['middleware'=>'admin'], function(){
 
 });
 
-Route::group(['middleware'=>'op'],function(){
+Route::group(['middleware'=>'op', 'prefix' => 'operador'],function(){
 
 
     Route::group(['prefix'=>'tutor'], function(){
