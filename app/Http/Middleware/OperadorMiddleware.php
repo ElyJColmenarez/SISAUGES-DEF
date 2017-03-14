@@ -16,6 +16,7 @@ class OperadorMiddleware
      */
     public function handle($request, Closure $next)
     {
+
         if(empty(Auth::user()))
         {
             return redirect('/login');
@@ -28,5 +29,6 @@ class OperadorMiddleware
         {
             return $next($request);
         }
+
     }
 }
