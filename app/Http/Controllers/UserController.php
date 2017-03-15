@@ -11,6 +11,9 @@ use SISAUGES\Http\Requests;
 use SISAUGES\Models\Persona;
 use SISAUGES\Models\User;
 use SISAUGES\Models\RolUsuario;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -66,13 +69,13 @@ class UserController extends Controller
         {
             $fields = array(
 
-                'id_persona'     =>array(
-                    'type'          => 'hidden',
-                    'value'         => $request->id_persona,
-                    'id'            => 'id_persona'
+                'field_id'=>array(
+                    'type'  => 'hidden',
+                    'value' => $request->field_id,
+                    'id'    => 'field_id',
                 ),
                 'cedula'         => array(
-                    'type'          => 'text',
+                    'type'          => 'label',
                     'value'         => (empty($persona))? '' : Crypt::decrypt($persona->cedula),
                     'id'            => 'cedula' ),
 
@@ -124,7 +127,7 @@ class UserController extends Controller
                     'type'          => 'password',
                     'value'         => (empty($usuario))? '' : $usuario->password,
                     'id'            => 'password',
-                    'lavel'         => 'Contraseña',
+                    'label'         => 'Contraseña',
                     'validaciones'  => array('obligatorio')
                 ),
 
