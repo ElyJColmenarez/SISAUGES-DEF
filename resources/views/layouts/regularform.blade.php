@@ -4,7 +4,7 @@
 		{!!Form::open(['url'=>$action, 'class'=>'form-horizontal form-bordered', 'method' => 'post', 'id'=>'modalmicroform'])!!}
 
 	        <header class="panel-heading">
-				<h2 class="panel-title">Registration Form</h2>
+				<h2 class="panel-title">Formulario de Registro</h2>
 			</header>
 
 			<div class="waitingimg" style="display: none;">
@@ -43,80 +43,146 @@
 			    <div id="mdl-truebody">
 					<div class="panel-body">
 
+					<?php $datos=array_chunk($fields, 2,true); ?>
+
 						<div class="formcontent">
-					        @foreach( $fields as $key => $value )
 
-					        	@if( $value['type']=='text' )
+							@foreach( $datos as $key2 => $value2 )
 
-					        		<div class="form-group col-md-6">
-						                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
-						                <div class="col-md-8">
-						                    <input type="{!! $value['type'] !!}" class="form-control" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
-						                </div>
-						            </div>
+								<div class="form-group">
 
-						        @elseif( $value['type']=='hidden' )
+							        @foreach( $value2 as $key => $value )
 
-						        	<input type="{!! $value['type'] !!}" class="form-control" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
+							        	@if(isset($value['validaciones']))
+								                
+						        			<?php $validaciones=""; ?>
 
-					        	@elseif( $value['type']=='select' )
+					                    	@foreach($value['validaciones'] as $k => $val)
 
-					        		@if(isset($value['extrafields']))
+					                    		@if($k !== 'limites')
+					                    			<?php $validaciones.= 'data-'.$val.'="true"'; ?> 
+					                    		@else
+					                    			<?php $validaciones.= 'data-limites="'.$val[0].','.$val[1].'"'; ?>
+					                    		@endif
 
-					        			<div class="form-group col-md-6">
-							                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
-							                <div class="col-md-8" style="padding: 0px">
-							                    
-							                    <div class="col-md-4">
-							                        <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}">
-							                            
-							                        	@foreach( $value['options'] as $key2 => $value2 )
+					                    	@endforeach
 
-							                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
-
-							                        	@endforeach
-
-							                        </select>
-							                    </div>
-							                    @foreach( $value['extrafields'] as $key2 => $value2 )
-
-								                    <div class="col-md-8">
-								                        <input type="text" class="form-control" id="{!! $value2['name'] !!}" name="{!! $value2['name'] !!}" value="{!! $value2['value'] !!}" placeholder="{!! $value2['placeholder'] !!}">
-								                    </div>
-
-								                @endforeach
-
-							                </div>
-							            </div>
-
-					        		@else
+					                    @endif
 
 
-					        			<div class="form-group col-md-6">
-							                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
-							                <div class="col-md-8">
-							                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}">
-							                            
-						                        	@foreach( $value['options'] as $key2 => $value2 )
+							        	@if( $value['type']=='text' || $value['type']=='password' || $value['type']=='email')
 
-						                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
+							        		<div class="col-md-6">
+								                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+								                <div class="col-md-8">
+								                    <input type="{!! $value['type'] !!}" class="form-control" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+								                </div>
+								            </div>
 
-						                        	@endforeach
-
-							                    </select>
-							                </div>
-							            </div>
+								        @elseif( $value['type']=='field' )
 
 
-					        		@endif
-
-					        	@else
+								        	
 
 
-					        	@endif
 
-					        @endforeach
-					    </div>
+								        @elseif( $value['type']=='date' )
+
+
+								        	<div class="col-md-6">
+												<label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+												<div class="col-md-8">
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</span>
+														<input type="text" data-plugin-datepicker class="form-control datepkr" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
+													</div>
+												</div>
+											</div>
+
+							        	@elseif( $value['type']=='select' )
+
+							        		@if(isset($value['extrafields']))
+
+							        			<div class="col-md-6">
+									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <div class="col-md-8" style="padding: 0px">
+									                    
+									                    <div class="col-md-4">
+									                        <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+									                            
+									                        	@foreach( $value['options'] as $key2 => $value2 )
+
+									                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
+
+									                        	@endforeach
+
+									                        </select>
+									                    </div>
+									                    @foreach( $value['extrafields'] as $key2 => $value2 )
+
+									                    	@if(isset($value['extrafields']['validaciones']))
+								                
+											        			<?php $validaciones=""; ?>
+
+										                    	@foreach($value['extrafields']['validaciones'] as $k => $val)
+
+										                    		@if($k!='limites')
+										                    			<?php $validaciones.= 'data-'.$val.'="true"'; ?> 
+										                    		@else
+										                    			<?php $validaciones.= 'data-limites="'.$val[0].','.$val[1].'"'; ?>
+										                    		@endif
+
+										                    	@endforeach
+
+										                    @endif
+
+										                    <div class="col-md-8">
+										                        <input type="text" class="form-control" id="{!! $value2['name'] !!}" name="{!! $value2['name'] !!}" value="{!! $value2['value'] !!}" placeholder="{!! $value2['placeholder'] !!}" @if (isset($value['extrafields']['validaciones'])) {!! $validaciones !!}  @endif>
+										                    </div>
+
+										                @endforeach
+
+									                </div>
+									            </div>
+
+							        		@else
+
+
+							        			<div class="col-md-6">
+									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <div class="col-md-8">
+									                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+									                            
+								                        	@foreach( $value['options'] as $key2 => $value2 )
+
+								                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
+
+								                        	@endforeach
+
+									                    </select>
+									                </div>
+									            </div>
+
+
+							        		@endif
+
+							        	@else
+
+
+							        	@endif
+
+							        @endforeach
+							    
+							    </div>
+							@endforeach
+
+							@foreach( $hiddenfields as $key => $value )
+								<input type="{!! $value['type'] !!}" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
+							@endforeach
+
+						</div>
 
 			        </div>
 

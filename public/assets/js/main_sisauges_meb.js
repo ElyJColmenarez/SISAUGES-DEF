@@ -209,7 +209,68 @@ jQuery(document).ready(function() {
 
 		});   	
 
-    })
+    });
+
+    /*Ajax table search functions*/
     
+    $('.advanced-search-proyect').on('click',function(event){
+
+        event.preventDefault();
+
+        if ($(this).attr('data-show')==0) {
+            $('.form'+$(this).data('formid')).slideUp('slow','swing');
+            $('.hiddenformsearch').slideDown('slow','swing');
+            $(this).text('Busqueda simple');
+            $(this).attr('data-show','1');
+        }else{
+            $('.form'+$(this).data('formid')).slideDown('slow','swing');
+            $('.hiddenformsearch').slideUp('slow','swing');
+            $(this).text('Busqueda avanzada');
+            $(this).attr('data-show','0');
+        }
+
+    });
     
+    $('.start-search-proyect').on('click',function(event){
+
+        event.preventDefault();
+
+        if ($('.advanced-search-proyect').attr('data-show')==0) {
+
+            var form=$('.formsimple');
+
+        }else{
+
+            var form=$('.searchform');
+
+        }
+
+        var inform= form.serializeArray();
+
+        var taction=form.attr('action').replace('#', $(this).data('taction'));
+
+        var promise=$.ajax({
+
+            url:taction,
+            cache: false,
+            data:inform,
+            type:"POST",
+            dataType: "json",
+            beforeSend: function(){},
+            success:    function(data){
+
+                if (data.result) {
+                    $('#modalForm').empty();
+                    $('#modalForm').append(data.html);
+                    $('.openmodalbtn').click();
+                }
+
+            },
+            error:      function(){}
+
+        });
+
+
+    });
+
 });

@@ -24,4 +24,11 @@ class Institucion extends Model
     {
         return $this->hasMany(Departamento::class,'id_departamento');
     }
+
+    public function scopeNombreInstitucion($query,$search){
+
+        return $query->where('nombre_institucion', 'LIKE', '%'.$search.'%');
+    }
+
+    
 }
