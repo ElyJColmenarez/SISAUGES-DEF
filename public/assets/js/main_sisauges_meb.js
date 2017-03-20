@@ -80,6 +80,9 @@ jQuery(document).ready(function() {
 
     /*Ajax modal form section request*/
 
+    
+
+
     $('#modalForm').on('click','button[name=finregistro]',function(event){
 
         event.preventDefault();
@@ -103,6 +106,7 @@ jQuery(document).ready(function() {
 
             	$('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
 
+
             	if (data.resultado=='success') {
 
             		$('#modalForm').addClass('modal-block-success');
@@ -111,6 +115,10 @@ jQuery(document).ready(function() {
             		$('.msn-alerta-header').text('Solicitud completa!');
             		$('.msn-alerta-body').text(data.mensaje);
             		$('#mld-dismiss-fin').attr('class','btn btn-success modal-dismiss');
+
+                   $('#modalForm').on('click','#mld-dismiss-fin',function(event){
+                        location.reload();  
+                     }) 
 
             	}else{
 

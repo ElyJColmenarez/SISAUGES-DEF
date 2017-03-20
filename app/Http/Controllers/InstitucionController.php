@@ -52,11 +52,11 @@ class InstitucionController extends Controller
     public function index(Request $request)
     {
 
-        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->whereHas('departamento', function($query) use ($request){
+        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->/*whereHas('departamento', function($query) use ($request){
 
                 $query->descripciondepartamento('');
 
-        })->orderBy('nombre_institucion', 'desc')->paginate(1);
+        })->*/orderBy('nombre_institucion', 'desc')->paginate(1);
 
         $action="institucion/listar";
 
@@ -118,7 +118,7 @@ class InstitucionController extends Controller
         if ($request->typeform=='add') {
             $action="institucion/crear";
         }elseif($request->typeform=='modify'){
-            $action="institucion/modificar/".$request->field_id;
+            $action="institucion/editar/".$request->field_id;
         }elseif($request->typeform=='deleted'){
             $action="institucion/eliminar/".$request->field_id;
         }elseif($request->typeform=='search'){
@@ -179,7 +179,7 @@ class InstitucionController extends Controller
                     'options'   => array(
                         ''=>'Seleccione...',
                         '1'=>'Activo',
-                        '2'=>'Inactivo'
+                        '0'=>'Inactivo'
                     )
                 )
             );
