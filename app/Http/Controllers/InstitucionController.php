@@ -54,7 +54,7 @@ class InstitucionController extends Controller
 
         $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->whereHas('departamento', function($query) use ($request){
 
-                $query->descripciondepartamento('');
+                $query->descripciondepartamento('test2');
 
         })->orderBy('nombre_institucion', 'desc')->paginate(1);
 
@@ -99,8 +99,16 @@ class InstitucionController extends Controller
             )
         );
 
+        $data=array(
 
-        return view('institucion.index',compact('instituciones','action','fields','request'));
+            'title'=>'Instituciones',
+            'principal_search'=>'nombre_institucion',
+            'registros'=>$instituciones,
+            'carpeta'=>'institucion'
+
+        );
+
+        return view('layouts.index',compact('data','action','fields','request'));
         
     }
 

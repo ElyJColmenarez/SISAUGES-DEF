@@ -1,4 +1,4 @@
-@foreach($instituciones as $institucion)
+@foreach($data['registros'] as $institucion)
 
     <tr class="gradeX">
         <td>{{$institucion->nombre_institucion}}</td>
