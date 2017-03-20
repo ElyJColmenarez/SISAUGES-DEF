@@ -102,7 +102,6 @@ CREATE TABLE IF NOT EXISTS INSTITUCION
 	direccion_institucion varchar(100),
 	correo_institucional varchar(30) not null,
 	telefono_institucion varchar(12),
-	id_departamento int,
 	status boolean,
 	constraint pk_institucion
 		primary key (id_institucion)
