@@ -10,7 +10,7 @@
                 <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
             </div>
         </div>
-    
+        
         <div class="nano">
             <div class="nano-content">
                 <nav id="menu" class="nav-main" role="navigation">
@@ -18,19 +18,33 @@
                         <li class="nav-active">
                             <a href="{{url('/')}}">
                                 <i class="fa fa-home" aria-hidden="true"></i>
-                                <span>Dashboard</span>
+                                <span>Dashboard
+                                   
+                                </span>
                             </a>
                         </li>
 
+                        @if (Auth::user()->id_rol == 1)
+                                     asdhaslhdjkhlahsd}
+                        @endif
+
+                        @if (Auth::user()->id_rol == 2)
+                          a2222
+                        @endif
+
+                        @if (Auth::user()->id_rol == 3)
+                          a333
+                        @endif
+
                         <li class="">
-                            <a href="{{url('proyecto')}}">
+                            <a href="{{url('proyecto/listar')}}">
                                 <i class="fa fa-cube" aria-hidden="true"></i>
                                 <span>Proyectos</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="{{url('institucion')}}">
+                            <a href="{{url('institucion/listar')}}">
                                 <i class="fa fa-university" aria-hidden="true"></i>
                                 <span>Instituciones</span>
                             </a>
@@ -38,14 +52,14 @@
 
 
                         <li class="">
-                            <a href="{{url('departamento')}}">
+                            <a href="{{url('departamento/listar')}}">
                                 <i class="fa fa-book" aria-hidden="true"></i>
                                 <span>Departamentos</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="{{url('laboratorios')}}">
+                            <a href="{{url('laboratorios/listar')}}">
                                 <i class="fa fa-flask" aria-hidden="true"></i>
                                 <span>Laboratorios</span>
                             </a>
@@ -59,12 +73,12 @@
                             <ul class="nav nav-children">
 
                                 <li>
-                                    <a href="{{url('tutor')}}">
+                                    <a href="{{url('tutor/listar')}}">
                                         Tutor
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{url('estudiante')}}">
+                                    <a href="{{url('estudiante/listar')}}">
                                         Estudiante
                                     </a>
                                 </li>
@@ -73,14 +87,14 @@
                         </li>
 
                         <li class="">
-                            <a href="{{url('muestra')}}">
+                            <a href="{{url('muestra/listar')}}">
                                 <i class="fa fa-picture-o" aria-hidden="true"></i>
                                 <span>Muestras</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="{{url('usuario')}}">
+                            <a href="{{url('usuario/listar')}}">
                                 <i class="fa fa-key" aria-hidden="true"></i>
                                 <span>Usuarios</span>
                             </a>

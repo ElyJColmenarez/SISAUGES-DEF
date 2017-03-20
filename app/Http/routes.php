@@ -28,7 +28,11 @@ Route::group(['middleware'=>'su'],function(){
 
     });
 
-    Route::group(['prefix'=>'usuario', 'as'=>'usuario.'], function(){
+});
+
+Route::group(['middleware'=>'admin'], function(){
+
+     Route::group(['prefix'=>'usuario', 'as'=>'usuario.'], function(){
 
         Route::get('listar',['uses'=>'UserController@index', 'as'=>'listar']);
         Route::post('register-form',['uses'=>'UserController@renderForm', 'as'=>'register-form']);
@@ -39,10 +43,6 @@ Route::group(['middleware'=>'su'],function(){
         Route::post('asignar-rol',['uses'=>'UserController@ajaxRegularAssign', 'as'=>'asignar-rol']); //hablar con Edward para este metodo
 
     });
-
-});
-
-Route::group(['middleware'=>'admin'], function(){
 
 
     Route::group(['prefix'=>'estatus-tutor'], function(){
