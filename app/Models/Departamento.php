@@ -22,4 +22,9 @@ class Departamento extends Model
     {
         return $this->hasMany(Tutor::class,'id_tutor','id_departamento');
     }
+
+    public function scopeDescripcionDepartamento($query,$search){
+
+        return $query->where('descripcion_departamento', 'LIKE', '%'.$search.'%');
+    }
 }

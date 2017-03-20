@@ -10,7 +10,8 @@ class User extends Authenticatable
     protected $table="usuario";
     protected $primaryKey = "id_usuario";
     protected $fillable = ['username', 'password','cedula_persona','status'];
-    protected $guarded = ['id_usuario','cedula_persona'];
+    protected $casts = ['id_rol' => 'integer'];
+    protected $guarded = ['id_usuario','id_rol'];
     protected $hidden = ['password', 'remember_token'];
 
     public function muestra()

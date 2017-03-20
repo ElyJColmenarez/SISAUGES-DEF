@@ -21,7 +21,7 @@
                             <div class="row">
                                 
                                 <div>
-                                    {!!Form::open(['url'=>'institucion/buscar' , 'method' => 'post' , 'class'=>'form-horizontal form-bordered formsimple'])!!}
+                                    {!!Form::open(['url'=>'institucion/listar' , 'method' => 'post' , 'class'=>'form-horizontal form-bordered formsimple'])!!}
 
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="input-group mb-md">
@@ -29,9 +29,9 @@
                                                 <span class="input-group-addon advanced-search-proyect" data-show="0" data-formid="1">
                                                     Busqueda avanzada
                                                 </span>
-                                                <input type="text" name="nombre_institucion" class="form-control form1">
+                                                <input type="text" name="nombre_institucion" class="form-control form1" value="@if(isset($request->nombre_institucion)){{ $request->nombre_institucion }}@endif">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default start-search-proyect" type="button">Go!</button>
+                                                    <button class="btn btn-default start-search-proyect" type="submit">Go!</button>
                                                 </span>
 
                                             </div>
@@ -81,7 +81,7 @@
                             <div class="col-md-6">
                             </div>
                             <div class="col-md-6">
-                                {!!$instituciones->render()!!} 
+                                {!!$instituciones->appends($request->all())->render()!!} 
                             </div>
 
                         </div>

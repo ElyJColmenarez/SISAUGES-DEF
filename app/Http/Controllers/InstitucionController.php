@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Input;
 use SISAUGES\Http\Requests;
 use SISAUGES\Http\Controllers\Controller;
 use SISAUGES\Models\Institucion;
+use SISAUGES\Models\Departamento;
 
 use Illuminate\Support\Facades\View;
 /**
@@ -48,42 +49,46 @@ class InstitucionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $instituciones=Institucion::orderBy('nombre_institucion', 'desc')->paginate(20);
+        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->whereHas('departamento', function($query) use ($request){
 
-        $action="institucion/buscar";
+                $query->descripciondepartamento('test2');
+
+        })->orderBy('nombre_institucion', 'desc')->paginate(1);
+
+        $action="institucion/listar";
 
         $fields=array(
 
             'nombre_institucion' => array(
                 'type'  => 'text',
-                'value' => '',
+                'value' => (isset($request->nombre_institucion))? $request->nombre_institucion:'',
                 'id'    => 'nombre_institucion',
                 'label' => 'Nombre de la institucion'
             ),
             'correo_institucional' => array(
                 'type'  => 'text',
-                'value' => '',
+                'value' => (isset($request->correo_institucional))? $request->correo_institucional:'',
                 'id'    => 'correo_institucional',
                 'label' => 'Correo de la institucion'
             ),
             'direccion_institucion' => array(
                 'type'  => 'text',
-                'value' => '',
+                'value' => (isset($request->direccion_institucion))? $request->direccion_institucion:'',
                 'id'    => 'direccion_institucion',
                 'label' => 'Direccion de la institucion'
             ),
             'telefono_institucion' => array(
                 'type'  => 'text',
-                'value' => '',
+                'value' => (isset($request->telefono_institucion))? $request->telefono_institucion:'',
                 'id'    => 'telefono_institucion',
                 'label' => 'Telefono de la institucion'
             ),
             'status' => array(
                 'type'      => 'select',
-                'value'     => '',
+                'value'     => (isset($request->status))? $request->status:'',
                 'id'        => 'status',
                 'label'     => 'Status',
                 'options'   => array(
@@ -95,7 +100,7 @@ class InstitucionController extends Controller
         );
 
 
-        return view('institucion.index',compact('instituciones','action','fields'));
+        return view('institucion.index',compact('instituciones','action','fields','request'));
         
     }
 
@@ -287,15 +292,6 @@ class InstitucionController extends Controller
 
 
 
-    public function search($request){
-
-        $result=Institucion::nombreinstitucion($request->nombre_institucion)->orderBy('nombre_institucion', 'desc')->paginate(20);
-
-        return $result;
-
-    }
-
-
     public function ajaxRegularStore(Request $request){
 
 
@@ -362,75 +358,6 @@ class InstitucionController extends Controller
         echo json_encode($retorno);
 
     }
-
-    public function ajaxRegularSearch(Request $request){
-
-        if ($request->isMethod('get')) {
-        
-            $instituciones=$this->search($request);
-
-            $action="institucion/buscar";
-
-            $fields=array(
-
-                'nombre_institucion' => array(
-                    'type'  => 'text',
-                    'value' => '',
-                    'id'    => 'nombre_institucion',
-                    'label' => 'Nombre de la institucion'
-                ),
-                'correo_institucional' => array(
-                    'type'  => 'text',
-                    'value' => '',
-                    'id'    => 'correo_institucional',
-                    'label' => 'Correo de la institucion'
-                ),
-                'direccion_institucion' => array(
-                    'type'  => 'text',
-                    'value' => '',
-                    'id'    => 'direccion_institucion',
-                    'label' => 'Direccion de la institucion'
-                ),
-                'telefono_institucion' => array(
-                    'type'  => 'text',
-                    'value' => '',
-                    'id'    => 'telefono_institucion',
-                    'label' => 'Telefono de la institucion'
-                ),
-                'status' => array(
-                    'type'      => 'select',
-                    'value'     => '',
-                    'id'        => 'status',
-                    'label'     => 'Status',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Activo',
-                        '2'=>'Inactivo'
-                    )
-                )
-            );
-
-
-            return view('institucion.index',compact('instituciones','action','fields'));
-
-        } 
-
-        if ($request->isMethod('post')) {
-
-            $instituciones=$this->search($request);
-
-            $retorno=array();
-
-            $retorno['tabla']=View::make('institucion.regulartable',compact('instituciones'))->render();
-
-            $retorno['paginador']=$instituciones->render();
-
-            echo json_encode($retorno);
-
-        }       
-
-    }
-
 
 
 }

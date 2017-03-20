@@ -235,41 +235,16 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
+
         if ($('.advanced-search-proyect').attr('data-show')==0) {
 
-            var form=$('.formsimple');
+            $('.formsimple').submit();
 
         }else{
 
-            var form=$('.searchform');
+            $('.searchform').submit();
 
         }
-
-        var inform= form.serializeArray();
-
-        var taction=form.attr('action').replace('#', $(this).data('taction'));
-
-        var promise=$.ajax({
-
-            url:taction,
-            cache: false,
-            data:inform,
-            type:"POST",
-            dataType: "json",
-            beforeSend: function(){},
-            success:    function(data){
-
-                if (data.result) {
-                    $('#modalForm').empty();
-                    $('#modalForm').append(data.html);
-                    $('.openmodalbtn').click();
-                }
-
-            },
-            error:      function(){}
-
-        });
-
 
     });
 

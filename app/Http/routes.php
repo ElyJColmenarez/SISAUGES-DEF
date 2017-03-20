@@ -109,7 +109,7 @@ Route::group(['middleware'=>'op'],function(){
 
     Route::group(['prefix'=>'institucion'], function(){
 
-        Route::get('listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
+        Route::match(array('get','post'),'listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
         Route::post('registerform',['uses'=>'InstitucionController@renderForm', 'as'=>'register-form']);
         Route::match(array('get','post'),'buscar',['uses'=>'InstitucionController@ajaxRegularSearch', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'InstitucionController@ajaxRegularStore', 'as'=>'crear']);
