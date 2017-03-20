@@ -1,7 +1,7 @@
 
 
 
-{!!Form::open(['url'=>$action, 'class'=>'form-horizontal form-bordered searchform', 'method' => 'post'])!!}
+{!!Form::model($request->all(),['url'=>$action, 'class'=>'form-horizontal form-bordered searchform', 'method' => 'post'])!!}
 
     @if($fields)
 	    <div class="col-md-12">
