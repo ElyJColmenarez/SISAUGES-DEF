@@ -302,3 +302,15 @@ CREATE TABLE IF NOT EXISTS AUXIMG
 	
 
 );
+
+
+CREATE TABLE IF NOT EXISTS auditoria
+(
+  id_auditoria serial NOT NULL,
+  modulo character varying(100),
+  operacion character varying(60),
+  descripcion character varying(2000),
+  usuario character varying(200),
+  fecha date,
+  CONSTRAINT pk_auditoria PRIMARY KEY (id_auditoria)
+);
