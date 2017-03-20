@@ -54,7 +54,7 @@ class InstitucionController extends Controller
 
         $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->whereHas('departamento', function($query) use ($request){
 
-                $query->descripciondepartamento('test2');
+                $query->descripciondepartamento('');
 
         })->orderBy('nombre_institucion', 'desc')->paginate(1);
 
