@@ -9,8 +9,8 @@ class Departamento extends Model
     public $timestamps = false;
     protected  $table = "departamento";
     protected  $primaryKey = "id_departamento";
-    protected $fillable = ['descripcion_departamento','status'];
-    protected $guarded = ['id_departamento','id_institucion'];
+    protected $fillable = ['descripcion_departamento','id_institucion','status'];
+    protected $guarded = ['id_departamento'];
 
 
     public function institucion()

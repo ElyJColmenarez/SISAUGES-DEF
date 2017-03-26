@@ -156,6 +156,7 @@ CREATE TABLE IF NOT EXISTS TUTOR
 	id_departamento int,
 	cedula_persona varchar(12),
 	id_status int,
+	status boolean,
 	constraint pk_tutor 
 		primary key (id_tutor),
 	constraint fk_departamento
@@ -288,7 +289,7 @@ CREATE TABLE IF NOT EXISTS MUESTRA_LABORATORIO
 
 
 
---insert into representante(cedula, nombre, apellido, correo_electronico, telefono) values(18491779,'ely','colmenarez','elyjcolmenarez@gmail.com','02124430191');
+--insert into tutor(cedula, nombre, apellido, correo_electronico, telefono) values(18491779,'ely','colmenarez','elyjcolmenarez@gmail.com','02124430191');
 --select * from persona
 
 

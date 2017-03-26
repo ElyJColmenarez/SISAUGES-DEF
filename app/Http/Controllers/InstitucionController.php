@@ -292,7 +292,8 @@ class InstitucionController extends Controller
 
         $institucion=Institucion::find($id);
 
-        $val=$institucion->delete();
+        $institucion->status = $request->status;
+        $val = $institucion->save();
 
         return $val;
 

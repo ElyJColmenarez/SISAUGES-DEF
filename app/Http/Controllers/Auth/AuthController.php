@@ -56,12 +56,13 @@ class AuthController extends Controller
             'telefono'=>'04262197873',
             'status'=>TRUE,
 
-        ));
+        ));*/
 
-        User::create(array(
+        /*User::create(array(
 
             'username'=>'elyjcolm',
             'password'=>Hash::make('12345'),
+            'rol_id'=>'3',
             'cedula_persona'=>'18491779',
             'status'=>TRUE
 

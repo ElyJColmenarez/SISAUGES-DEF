@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Proyectos')
+@section('title', 'Departamentos')
 @section('content')
 
     
@@ -7,12 +7,12 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    <h2 class="panel-title">Usuarios</h2>
+                    <h2 class="panel-title">Tutores</h2>
                 </header>
                 <div class="panel-body">
 
-                    <div class="form-group col-md-3">
-                        <a class="modal-with-form btn btn-default" href="#modalForm">Agregar Usuario</a>
+                    <div class="form-group col-md-3 modalscript">
+                        <a class="btn btn-default click" href="#" data-typeform="add" data-taction="{{url('departamento/register-form')}}" data-field-id="0">Agregar <i class="fa fa-arrow-up" aria-hidden="true"></i></a>
                     </div>
 
                     <div class="form-group col-md-12" id="principal_muestras_table">
@@ -48,9 +48,16 @@
 
 
                 </div>
+                {!!Form::open(['url'=>'#', 'class'=>'hiddenform' , 'method' => 'post' , 'id'=>'principalform'])!!}
 
-                <!-- Modals -->
-                <div id="modalForm" class="modal-block modal-block-primary mfp-hide">
+                    <a class="mb-xs mt-xs mr-xs modal-with-zoom-anim btn btn-default openmodalbtn" href="#modalForm"></a>
+                    <input type="hidden" name="typeform" value="">
+                    <input type="hidden" name="field_id" value="">
+
+                {!! Form::close() !!}
+
+            <!-- Modals -->
+                <div id="modalForm" class="zoom-anim-dialog modal-block-lg modal-block-primary mfp-hide">
                 </div>
             </section>
         </div>

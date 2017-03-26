@@ -12,7 +12,7 @@ class User extends Authenticatable
     protected $fillable = ['username', 'password','cedula_persona','status'];
     protected $casts = ['id_rol' => 'integer'];
     protected $guarded = ['id_usuario','id_rol'];
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['remember_token'];
 
     public function muestra()
     {

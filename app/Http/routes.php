@@ -14,15 +14,15 @@
 */
 
 
-
-Route::get('/login', ['uses' => 'Auth\AuthController@index', 'as' => '/login']);
 Route::get('/logout',['uses' => 'Auth\AuthController@getLogout', 'as' => '/logout']);
-
+Route::auth();
+Route::get('/login', ['uses' => 'Auth\AuthController@index', 'as' => '/login']);
 Route::get('/', ['uses' => 'HomeController@index', 'as' => 'principal']);
 
-Route::auth();
 
-Route::group(['middleware'=>'su'],function(){
+
+
+Route::group(['middleware'=>'auditoria'],function(){
 
     Route::group(['prefix'=>'auditoria'], function(){
 

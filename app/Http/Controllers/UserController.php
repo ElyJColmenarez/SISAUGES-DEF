@@ -5,28 +5,16 @@ namespace SISAUGES\Http\Controllers;
 use Faker\Provider\ar_JO\Person;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use SISAUGES\Http\Requests;
 use SISAUGES\Models\Persona;
 use SISAUGES\Models\User;
-use SISAUGES\Models\RolUsuario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
-    protected $persona;
-    protected $user;
-    protected $rol;
-
-    public function __construct()
-    {
-        $this->persona = Persona::orderBy('cedula','desc')->paginate(20);
-        $this->user = User::orderBy('cedula_persona','desc')->paginate(20);
-        $this->rol = RolUsuario::all();
-    }
 
     /**
      * Display a listing of the resource.
@@ -35,11 +23,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $persona = $this->persona;
-        $user = $this->user;
-
-        return view('users.index',compact('persona','user'));
-
+        return view('users.index');
     }
 
 
@@ -67,17 +51,23 @@ class UserController extends Controller
         }
         else
         {
-            $fields = array(
-
+            $hiddenfields = array(
                 'field_id'=>array(
                     'type'  => 'hidden',
                     'value' => $request->field_id,
                     'id'    => 'field_id',
-                ),
+                )
+            );
+
+            $fields = array(
+
+
                 'cedula'         => array(
-                    'type'          => 'label',
-                    'value'         => (empty($persona))? '' : Crypt::decrypt($persona->cedula),
-                    'id'            => 'cedula' ),
+                    'type'          => 'text',
+                    'value'         => (empty($persona))? '' : $persona->cedula,
+                    'id'            => 'cedula',
+                    'label'         => 'Cédula',
+                    'validaciones'  => array('solonumeros','obligatorio')),
 
                 'nombre'         => array(
                     'type'          => 'text',
@@ -104,7 +94,7 @@ class UserController extends Controller
                     'label'         => 'Correo Electronico',
                     'validaciones'  => array(
                         'solocorreo',
-                        'obligatorio' )),
+                        'obligatorio' )), //no lo muestra
 
                 'telefono'       => array(
                     'type'          => 'text',
@@ -131,33 +121,30 @@ class UserController extends Controller
                     'validaciones'  => array('obligatorio')
                 ),
 
-                'status'        => array(
-                    'type'          => 'select',
-                    'value'         => (empty($usuario))? '' : $usuario->status,
-                    'id'            => 'status',
-                    'validaciones'  => array(
-                        'obligatorio'
-                    ),
-                    'label'         => 'Status',
-                    'options'       => array(
-                        'true'          => 'Activo',
-                        'false'         => 'Inactivo'
-                    )
-
-                ),
-
                 'id_rol'           => array(
                     'type'          => 'select',
                     'value'         => (empty($usuario))? '' : $usuario->id_rol,
                     'id'            => 'rol',
                     'validaciones'  => array('obligatorio'),
                     'label'         => 'Rol usuario',
-                    'options'       => array('true' => 'Activo', 'false' => 'Inactivo')
+                    'options'       => array('2' => 'Administrador', '3' => 'Operador')
+                ),
+
+                'status' => array(
+                    'type'      => 'select',
+                    'value'     => (isset($request->status))? $request->status:'',
+                    'id'        => 'status',
+                    'label'     => 'Status',
+                    'options'   => array(
+                                    ''=>'Seleccione...',
+                                    'true' =>'Activo',
+                                    'false'=>'Inactivo'
+                    )
                 )
             );
         }
 
-        $htmlBody = View::make('layouts.regularform',compact('action','fields'))->render();
+        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
 
         if ($htmlBody)
         {
@@ -194,7 +181,7 @@ class UserController extends Controller
             {
                 $persona = new Persona();
 
-                $persona->cedula    = Crypt::encrypt($request->cedula);
+                $persona->cedula    = $request->cedula;
                 $persona->nombre    = $request->nombre;
                 $persona->apellido  = $request->apellido;
                 $persona->email     = $request->email;
@@ -207,8 +194,9 @@ class UserController extends Controller
                 $usuario->username          = $request->username;
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
-                $usuario->cedula_persona    = Crypt::encrypt($request->cedula);
-                $usuario->save();
+                $usuario->cedula_persona    = $request->cedula;
+                $usuario->status            = $request->status;
+                $val = $usuario->save();
 
 
             }
@@ -219,9 +207,11 @@ class UserController extends Controller
                 $usuario->username          = $request->username;
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
-                $usuario->cedula_persona    = Crypt::encrypt($request->cedula);
-                $usuario->save();
+                $usuario->cedula_persona    = $request->cedula;
+                $val = $usuario->save();
             }
+
+            return $val;
         }
     }
 
@@ -235,7 +225,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $usuario = User::find($id);
+        $persona = Persona::find($usuario->cedula_persona);
+
+
+        $persona->cedula    = $request->cedula;
+        $persona->nombre    = $request->nombre;
+        $persona->apellido  = $request->apellido;
+        $persona->email     = $request->email;
+        $persona->telefono  = $request->telefono;
+        $persona->status    = $request->status;
+        $persona->save();
+
+
+        $usuario->username          = $request->username;
+        $usuario->password          = Hash::make($request->password);
+        $usuario->id_rol            = $request->id_rol;
+        $usuario->cedula_persona    = $request->cedula;
+        $val = $usuario->save();
+
+
+        return $val;
     }
 
     /**
@@ -246,6 +256,78 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $usuario=User::find($id);
+
+        $usuario->status = false;
+        $val = $usuario->save();
+
+        return $val;
+    }
+
+    public function ajaxRegularStore(Request $request){
+
+
+        $val=$this->store($request);
+
+        $retorno=array();
+
+        if ($val) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos suministrados no son validos';
+
+        }
+
+        echo json_encode($retorno);
+
+    }
+
+    public function ajaxRegularUpdate(Request $request, $id){
+
+        $val=$this->update($request,$id);
+
+        $retorno=array();
+
+        if ($val) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos suministrados no son validos';
+
+        }
+
+        echo json_encode($retorno);
+
+    }
+
+    public function ajaxRegularDestroy($id){
+
+        $val=$this->destroy($id);
+
+        $retorno=array();
+
+        if ($val) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos suministrados no son validos.';
+
+        }
+
+        echo json_encode($retorno);
+
     }
 }

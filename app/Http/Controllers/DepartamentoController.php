@@ -23,7 +23,7 @@ class DepartamentoController extends Controller
 
     }
 
-    public function renderform(Request $request){
+    public function renderForm(Request $request){
 
 
         if ($request->typeform=='add') {
@@ -56,13 +56,15 @@ class DepartamentoController extends Controller
 
             $res = array_combine($arrayI, $arrayD);
 
-
-            $fields=array(
+            $hiddenfields = array(
                 'field_id'=>array(
                     'type'  => 'hidden',
                     'value' => $request->field_id,
-                    'id'    => 'field_id'
-                ),
+                    'id'    => 'field_id',
+                )
+            );
+
+            $fields=array(
 
                 'descripcion_departamento' => array(
                     'type'  => 'text',
@@ -98,7 +100,7 @@ class DepartamentoController extends Controller
 
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
 
 
         if ($htmlbody) {

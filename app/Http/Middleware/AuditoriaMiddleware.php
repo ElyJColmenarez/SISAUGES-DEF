@@ -5,7 +5,7 @@ namespace SISAUGES\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class SuperUserMiddleware
+class AuditoriaMiddleware
 {
     /**
      * Handle an incoming request.
