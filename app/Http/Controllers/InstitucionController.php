@@ -268,11 +268,11 @@ class InstitucionController extends Controller
             $val=false;
         }else{
 
-            $institucion->nombre_institucion=$request->nombre_institucion;
-            $institucion->direccion_institucion=$request->direccion_institucion;
-            $institucion->correo_institucional=$request->correo_institucional;
-            $institucion->telefono_institucion=$request->telefono_institucion;
-            $institucion->status=$request->status;
+            $institucion->nombre_institucion    = $request->nombre_institucion;
+            $institucion->direccion_institucion = $request->direccion_institucion;
+            $institucion->correo_institucional  = $request->correo_institucional;
+            $institucion->telefono_institucion  = $request->telefono_institucion;
+            $institucion->status                = $request->status;
 
             $val=$institucion->save();
         }

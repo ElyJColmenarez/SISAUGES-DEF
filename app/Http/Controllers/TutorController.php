@@ -173,8 +173,8 @@ class TutorController extends Controller
 
         if ($request->isMethod('post'))
         {
-            $persona = Persona::find($request->cedula);
-            if (empty($persona))
+            $persona = Persona::buscarpersona($request->cedula)->get();
+            if (!isset($persona[0]))
             {
                 $persona = new Persona();
 
@@ -221,7 +221,8 @@ class TutorController extends Controller
     public function update(Request $request, $id)
     {
         $tutor      = Tutor::find($id);
-        $persona    = Persona::find($tutor->cedula_persona);
+        $persona    = Persona::buscarpersona($request->cedula)->get();
+        $persona    = Persona::find($persona[0]->id_persona);
 
         $persona->cedula    = $request->cedula;
         $persona->nombre    = $request->nombre;

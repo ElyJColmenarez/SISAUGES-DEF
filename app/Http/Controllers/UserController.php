@@ -176,8 +176,9 @@ class UserController extends Controller
 
         if ($request->isMethod('post'))
         {
-            $persona = Persona::find($request->cedula);
-            if (empty($persona))
+            $persona = Persona::buscarpersona($request->cedula)->get();
+
+            if (!isset($persona[0]))
             {
                 $persona = new Persona();
 
@@ -226,7 +227,8 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $usuario = User::find($id);
-        $persona = Persona::find($usuario->cedula_persona);
+        $persona = Persona::buscarpersona($request->cedula)->get();
+        $persona = Persona::find($persona[0]->id_persona);
 
 
         $persona->cedula    = $request->cedula;

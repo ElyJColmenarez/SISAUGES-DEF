@@ -9,8 +9,8 @@ class Persona extends Model
     public $timestamps = false;
     protected $table = "persona";
     protected $primaryKey = "id_persona";
-    protected $fillable = ['cedula','nombre','apellido','email','telefono','status','tipo_persona'];
-    protected $guarded = ['id_persona','tipo_persona'];
+    protected $fillable = ['cedula','nombre','apellido','email','telefono','status'];
+    protected $guarded = ['id_persona'];
 
     public function usuario()
     {
@@ -25,5 +25,10 @@ class Persona extends Model
     public function tutor()
     {
         return $this->hasOne(Tutor::class,'cedula_persona');
+    }
+
+    public function scopeBuscarPersona($query,$search)
+    {
+        return $query->where('cedula','=',$search);
     }
 }
