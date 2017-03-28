@@ -27,4 +27,14 @@ class Departamento extends Model
 
         return $query->where('descripcion_departamento', 'LIKE', '%'.$search.'%');
     }
+
+    public function scopeStatusDepartamento($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
+
+    public function scopeInstitutoDepartamento($query,$search){
+
+        return $query->where('id_institucion', '=', $search);
+    }
 }

@@ -21,4 +21,19 @@ class Estudiante extends Model
     {
         return $this->belongsTo(Persona::class,'cedula','id_estudiante');
     }
+
+    public function scopeCarreraEstudiante($query,$search){
+
+        return $query->where('carrera_estudiante', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeSemestreEstudiante($query,$search){
+
+         return $query->where('semestre_estudiante', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeCedulaEstudiante($query,$search){
+
+        return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+    }
 }

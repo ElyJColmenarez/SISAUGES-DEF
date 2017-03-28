@@ -31,4 +31,31 @@ class Proyecto extends Model
     {
         return $this->belongsTo(SectorProyecto::class,'id_sector_pr');
     }
+
+    public function scopeNombreProyecto($query,$search)
+    {
+        return $query->where('nombre', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopePermisoProyecto($query,$search)
+    {
+        return $query->where('permiso_proyecto','=',$search);
+    }
+
+    public function scopeFechaInicioProyecto($query,$search)
+    {
+        return $query->where('fecha_inicio','=',$search);
+    }
+
+    public function scopeFechaFinalProyecto($query,$search)
+    {
+        return $query->where('fecha_final','=',$search);
+    }
+
+    public function scopeStatusProyecto($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
+
 }
+

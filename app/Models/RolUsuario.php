@@ -16,4 +16,14 @@ class RolUsuario extends Model
     {
         return $this->hasMany(User::class,'id_usuario');
     }
+
+    public function scopeDescripcionRol($query,$search)
+    {
+        return $query->where('descripcion_rol', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeStatusRol($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
 }

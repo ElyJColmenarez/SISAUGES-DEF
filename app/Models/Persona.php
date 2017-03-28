@@ -31,4 +31,30 @@ class Persona extends Model
     {
         return $query->where('cedula','=',$search);
     }
+
+    public function scopeNombrePersona($query,$search)
+    {
+        return $query->where('nombre', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeApellidoPersona($query,$search)
+    {
+        return $query->where('apellido', 'LIKE', '%'.$search.'%');
+    
+    }
+
+    public function scopeEmailPersona($query,$search)
+    {
+         return $query->where('email', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeTelefonoPersona($query,$search)
+    {
+         return $query->where('telefono', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeStatusPersona($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
 }

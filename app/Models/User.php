@@ -28,4 +28,20 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Persona::class,'cedula');
     }
+
+    public function scopeDescripcionUser($query,$search)
+    {
+        return $query->where('username', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeCedulaUser($query,$search)
+    {
+        return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeStatusUser($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
+    
 }

@@ -19,4 +19,14 @@ class TecnicaEstudio extends Model
             'id_tecnica_estudio',
             'id_muestra');
     }
+
+    public function scopeDescripcionTecnicaE($query,$search)
+    {
+        return $query->where('descripcion_tecnica_estudio', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeStatusTecnicaE($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
 }

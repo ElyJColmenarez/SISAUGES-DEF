@@ -16,4 +16,14 @@ class SectorProyecto extends Model
     {
         return $this->hasMany(Proyecto::class,'id_proyecto');
     }
+
+    public function scopeDescripcionSector($query,$search)
+    {
+        return $query->where('descripcion_sector', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeStatusSector($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
 }

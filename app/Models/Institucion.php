@@ -30,5 +30,23 @@ class Institucion extends Model
         return $query->where('nombre_institucion', 'LIKE', '%'.$search.'%');
     }
 
+    public function scopeDireccionInstitucion($query,$search){
+
+        return $query->where('direccion_institucion', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeCorreoInstitucion($query,$search){
+
+        return $query->where('correo_institucional', 'LIKE', '%'.$search.'%');
+    }
+
+    public function scopeTelefonoInstitucion($query,$search){
+
+        return $query->where('telefono_institucion', '=', $search);
+    }
     
+    public function scopeStatusInstitucion($query,$search){
+
+        return $query->where('status', '=', $search);
+    }
 }
