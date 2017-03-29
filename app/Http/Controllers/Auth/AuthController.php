@@ -47,22 +47,22 @@ class AuthController extends Controller
 
     public function index()
     {
-        /*Persona::create(array(
+/*        Persona::create(array(
 
             'cedula'=>'18491779',
             'nombre'=>'Ely',
             'apellido'=>'Colmenarez',
-            'email'=>'elyjcolmenarez@.com',
+            'email'=>'elyjcolmenarez@gmail.com',
             'telefono'=>'04262197873',
             'status'=>TRUE,
 
         ));*/
 
-        /*User::create(array(
+/*        User::create(array(
 
             'username'=>'elyjcolm',
             'password'=>Hash::make('12345'),
-            'rol_id'=>'3',
+            'id_rol'=>'2',
             'cedula_persona'=>'18491779',
             'status'=>TRUE
 

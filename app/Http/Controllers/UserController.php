@@ -21,9 +21,111 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('users.index');
+        $persona = Persona::buscarpersona($request->cedula)->orderBy('cedula','desc')->paginate(20);
+        $usuario = User::cedulauser($request->cedula)->orderBy('username','desc')->paginate(20);
+        $action = "usuario/listar";
+
+        $fields = array(
+
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($request))? '' : $request->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'username'      => array(
+                'type'          => 'text',
+                'value'         =>  (empty($request))? '' : $request->username,
+                'id'            => 'username',
+                'label'         => 'Nombre de Usuario',
+                'validaciones'  => array('solotexto','obligatorio')
+            ),
+
+            'password'      => array(
+                'type'          => 'password',
+                'value'         => (empty($request))? '' : $request->password,
+                'id'            => 'password',
+                'label'         => 'Contraseña',
+                'validaciones'  => array('obligatorio')
+            ),
+
+            'id_rol'           => array(
+                'type'          => 'select',
+                'value'         => (empty($request))? '' : $request->id_rol,
+                'id'            => 'rol',
+                'validaciones'  => array('obligatorio'),
+                'label'         => 'Rol usuario',
+                'options'       => array('2' => 'Administrador', '3' => 'Operador')
+            ),
+
+            'status' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->status))? $request->status:'',
+                'id'        => 'status',
+                'label'     => 'Status',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        $data=array(
+
+            'title'             => 'Usuarios',
+            'principal_search'  => 'username',
+            'registros'         => $persona,
+            'registros2'        => $usuario,
+            'carpeta'           => 'users'
+
+        ); //Preguntale a Edward si tienes que renderizar ambos registros y recuerda que la busqueda te explota
+
+
+
+
+
+        return view('layouts.index',compact('data','action','fields','request'));
     }
 
 
@@ -42,8 +144,10 @@ class UserController extends Controller
             $action = "usuario/eliminar/".$request->field_id;
         }
 
-        $persona = Persona::find($request->cedula);
-        $usuario = User::find($request->cedula);
+        $usuario = User::find($request->field_id);
+        $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
+        $persona = Persona::find($persona[0]->id_persona);
+
 
         if ($request->typeform == 'delete')
         {

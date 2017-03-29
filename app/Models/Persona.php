@@ -29,7 +29,7 @@ class Persona extends Model
 
     public function scopeBuscarPersona($query,$search)
     {
-        return $query->where('cedula','=',$search);
+        return $query->where('cedula','LIKE', '%'.$search.'%');
     }
 
     public function scopeNombrePersona($query,$search)

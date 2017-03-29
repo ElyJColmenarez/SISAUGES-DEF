@@ -19,7 +19,7 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-        return view('estudiante.index');
+        return view('layouts.index');
     }
 
     public function renderForm(Request $request)
