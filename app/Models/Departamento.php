@@ -15,7 +15,7 @@ class Departamento extends Model
 
     public function institucion()
     {
-        return $this->belongsTo(Institucion::class,'id_institucion','id_departamento');
+        return $this->belongsTo(Institucion::class,'id_institucion');
     }
 
     public function tutor()
