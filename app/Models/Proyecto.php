@@ -19,7 +19,7 @@ class Proyecto extends Model
 
     public function estudiante()
     {
-        return $this->hasMany(Estudiante::class,'id_estudiante');
+        return $this->hasMany(Estudiante::class,'id_proyecto');
     }
 
     public function muestras()

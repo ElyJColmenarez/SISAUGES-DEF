@@ -14,12 +14,12 @@ class Estudiante extends Model
 
     public function proyecto()
     {
-        return $this->belongsTo(Proyecto::class,'id_proyecto','id_estudiante');
+        return $this->belongsTo(Proyecto::class,'id_proyecto');
     }
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'cedula','id_estudiante');
+        return $this->belongsTo(Persona::class,'cedula');
     }
 
     public function scopeCarreraEstudiante($query,$search){

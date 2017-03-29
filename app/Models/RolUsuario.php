@@ -14,7 +14,7 @@ class RolUsuario extends Model
 
     public function usuarios()
     {
-        return $this->hasMany(User::class,'id_usuario');
+        return $this->hasMany(User::class,'id_rol');
     }
 
     public function scopeDescripcionRol($query,$search)

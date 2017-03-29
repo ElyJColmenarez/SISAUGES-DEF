@@ -16,7 +16,7 @@ class User extends Authenticatable
 
     public function muestra()
     {
-        return $this->hasMany(Muestra::class,'id_muestra');
+        return $this->hasMany(Muestra::class,'id_usuario');
     }
 
     public function rol()

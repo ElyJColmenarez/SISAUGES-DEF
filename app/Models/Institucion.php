@@ -22,7 +22,7 @@ class Institucion extends Model
 
     public function departamento()
     {
-        return $this->hasMany(Departamento::class,'id_departamento');
+        return $this->hasMany(Departamento::class,'id_institucion');
     }
 
     public function scopeNombreInstitucion($query,$search){
