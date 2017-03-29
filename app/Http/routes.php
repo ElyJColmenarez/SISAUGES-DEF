@@ -67,10 +67,10 @@ Route::group(['middleware'=>'admin'], function(){
         Route::post('eliminar/{id}',['uses'=>'SectorProyectoController@ajaxRegularDestroy', 'as'=>'eliminar']);
     });
 
-    Route::group(['prefix'=>'Tecnica-Estudio'], function(){
+     Route::group(['prefix'=>'tecnica-estudio'], function(){
 
-        Route::get('listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'registerform']);
+        Route::match(array('get','post'),'listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);   
+        Route::post('registerform',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'TecnicaEstudioController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularUpdate', 'as'=>'editar']);

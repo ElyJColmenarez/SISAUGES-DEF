@@ -11,13 +11,55 @@ use SISAUGES\Http\Requests;
 
 class TecnicaEstudioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
+        if (!is_null($request->status)){
+            $tecnicas=TecnicaEstudio::DescripcionTecnicaE($request->descripcion_tecnica_estudio)->
+            StatusTecnicaE($request->status)->
+            orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
+        }else{
+            $tecnicas=TecnicaEstudio::DescripcionTecnicaE($request->descripcion_tecnica_estudio)->
+            orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
+        }
 
-        $tecnicas=TecnicaEstudio::orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
+         $action="tecnica-estudio/listar";
 
-        return view('tecnicasEstudio.index',compact('tecnicas'));
+            $fields=array(
+
+                'descripcion_tecnica_estudio' => array(
+                    'type'  => 'text',
+                    'value' => (isset($request->descripcion_tecnica_estudio))?  $request->descripcion_tecnica_estudio:'',
+                    'id'    => 'descripcion_departamento',
+                    'label' => 'Nombre'
+                ),
+               
+                'status' => array(
+                    'type'      => 'select',
+                    'value'     => (isset($request->status))? $request->status: '',
+                    'id'        => 'status',
+                    'label'     => 'Status',
+                    'validaciones'=>array(
+                        'obligatorio'
+                    ),                    
+                    'options'   => array(
+                        ''=>'Seleccione...',
+                        '1'=>'Activo',
+                        '0'=>'Inactivo'
+                    )
+                )
+            );     
+
+        $data=array(
+
+            'title'=>'Tecnicas de Estudio',
+            'principal_search'=>'descripcion_tecnica_estudio',
+            'registros'=>$tecnicas,
+            'carpeta'=>'tecnicaestudio'
+
+        );
+
+          return view('layouts.index',compact('data','action','fields','request'));       
 
     }
 
@@ -25,11 +67,11 @@ class TecnicaEstudioController extends Controller
 
 
         if ($request->typeform=='add') {
-            $action="tecnicasEstudio/crear";
+            $action="tecnica-estudio/crear";
         }elseif($request->typeform=='modify'){
-            $action="tecnicasEstudio/modificar/".$request->field_id;;
+            $action="tecnica-estudio/editar/".$request->field_id;;
         }elseif ($request->typeform=='deleted') {
-            $action="tecnicasEstudio/eliminar/".$request->field_id;
+            $action="tecnica-estudio/eliminar/".$request->field_id;
         }
 
         $tecnicasEstudio = TecnicaEstudio::find($request->field_id);
@@ -39,13 +81,18 @@ class TecnicaEstudioController extends Controller
         }else{
 
 
+            $hiddenfields=array(
 
-            $fields=array(
                 'field_id'=>array(
                     'type'  => 'hidden',
                     'value' => $request->field_id,
-                    'id'    => 'field_id'
+                    'id'    => 'field_id',
                 ),
+            );
+
+
+            $fields=array(
+               
 
                 'descripcion_tecnica_estudio' => array(
                     'type'  => 'text',
@@ -65,8 +112,8 @@ class TecnicaEstudioController extends Controller
                     'label'     => 'Status',
                     'options'   => array(
                         ''=>'Seleccione...',
-                        'true'=>'Activo',
-                        'false'=>'Inactivo'
+                        '1'=>'Activo',
+                        '0'=>'Inactivo'
                     )
                 )
             );
@@ -74,7 +121,7 @@ class TecnicaEstudioController extends Controller
 
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
 
 
         if ($htmlbody) {

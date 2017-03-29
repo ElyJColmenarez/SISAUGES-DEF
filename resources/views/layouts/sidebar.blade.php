@@ -65,6 +65,13 @@
                             </a>
                         </li>
 
+                        <li class="">
+                            <a href="{{url('tecnica-estudio/listar')}}">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <span>Tecnicas de Estudios</span>
+                            </a>
+                        </li>
+
                         <li class="nav-parent">
                             <a href="#">
                                 <i class="fa fa-group " aria-hidden="true"></i>
