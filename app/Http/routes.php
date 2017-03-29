@@ -35,7 +35,7 @@ Route::group(['middleware'=>'admin'], function(){
      Route::group(['prefix'=>'usuario', 'as'=>'usuario.'], function(){
 
         Route::get('listar',['uses'=>'UserController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'UserController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'UserController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'UserController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'UserController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'UserController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -48,7 +48,7 @@ Route::group(['middleware'=>'admin'], function(){
     Route::group(['prefix'=>'estatus-tutor'], function(){
 
         Route::get('listar',['uses'=>'EstatusTutorController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'EstatusTutorController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'EstatusTutorController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'EstatusTutorController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'EstatusTutorController@store', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'EstatusTutorController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -60,7 +60,7 @@ Route::group(['middleware'=>'admin'], function(){
     Route::group(['prefix'=>'sector-proyecto'], function(){
 
         Route::get('listar',['uses'=>'SectorProyectoController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'SectorProyectoController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'SectorProyectoController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'SectorProyectoController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'SectorProyectoController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'SectorProyectoController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -70,7 +70,7 @@ Route::group(['middleware'=>'admin'], function(){
     Route::group(['prefix'=>'tecnica-estudio'], function(){
 
         Route::get('listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'TecnicaEstudioController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -86,7 +86,7 @@ Route::group(['middleware'=>'op'],function(){
     Route::group(['prefix'=>'tutor'], function(){
 
         Route::get('listar',['uses'=>'TutorController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'TutorController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'TutorController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'TutorController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'TutorController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'TutorController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -96,7 +96,7 @@ Route::group(['middleware'=>'op'],function(){
 
     Route::group(['prefix'=>'estudiante'], function(){
         Route::get('listar',['uses'=>'EstudianteController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'EstudianteController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'EstudianteController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'EstudianteController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'EstudianteController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'EstudianteController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -107,7 +107,7 @@ Route::group(['middleware'=>'op'],function(){
 
     Route::group(['prefix'=>'institucion'], function(){
         Route::match(array('get','post'),'listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'InstitucionController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'InstitucionController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'InstitucionController@ajaxRegularSearch', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'InstitucionController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'InstitucionController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -118,7 +118,7 @@ Route::group(['middleware'=>'op'],function(){
 
     Route::group(['prefix'=>'departamento'], function(){
         Route::match(array('get','post'),'listar',['uses'=>'DepartamentoController@index', 'as'=>'listar']);      
-        Route::post('registerform',['uses'=>'DepartamentoController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'DepartamentoController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'DepartamentoController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'DepartamentoController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'DepartamentoController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -128,7 +128,7 @@ Route::group(['middleware'=>'op'],function(){
 
     Route::group(['prefix'=>'laboratorio'], function(){
         Route::match(array('get','post'),'listar',['uses'=>'LaboratorioController@index', 'as'=>'listar']);      
-        Route::post('registerform',['uses'=>'LaboratorioController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'LaboratorioController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'LaboratorioController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'LaboratorioController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'LaboratorioController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -149,7 +149,7 @@ Route::group(['middleware'=>'op'],function(){
     Route::group(['prefix'=>'proyecto'], function(){
 
         Route::get('listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'InstitucionController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'InstitucionController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'InstitucionController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'InstitucionController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'InstitucionController@ajaxRegularUpdate', 'as'=>'editar']);
@@ -161,7 +161,7 @@ Route::group(['middleware'=>'op'],function(){
     Route::group(['prefix'=>'muestra'], function(){
 
         Route::get('listar',['uses'=>'MuestraController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'MuestraController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'MuestraController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'MuestraController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'MuestraController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'MuestraController@ajaxRegularUpdate', 'as'=>'editar']);
