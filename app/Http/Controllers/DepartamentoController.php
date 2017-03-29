@@ -11,13 +11,12 @@ use Illuminate\Support\Facades\View;
 
 class DepartamentoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
 
-        $departamento = DB::table('departamento')->leftJoin('institucion', 'departamento.id_institucion', '=', 'institucion.id_institucion')
-            ->select('departamento.id_departamento', 'departamento.descripcion_departamento', 'institucion.id_institucion','institucion.nombre_institucion',  'departamento.status')
-            ->paginate(20);
+        $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)-> StatusDepartamento($request->status)->orderBy('descripcion_departamento', 'desc')->paginate(20);
+
 
         return view('departamento.index',compact('departamento'));
 

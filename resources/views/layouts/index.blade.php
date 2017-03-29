@@ -29,7 +29,10 @@
                                                 <span class="input-group-addon advanced-search-proyect" data-show="0" data-formid="1">
                                                     Busqueda avanzada
                                                 </span>
-                                                <input type="text" name="{{$data['principal_search']}}" class="form-control form1" value="@if(isset($request->$data['principal_search'])){{ $request->$data['principal_search'] }}@endif">
+
+                                                <?php $aux=$data['principal_search']; ?>
+                                                
+                                                <input type="text" name="{{$aux}}" class="form-control form1" value=" @if(isset($request->$aux)) {{ $request->$aux }} @endif">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-default start-search-proyect" type="submit">Go!</button>
                                                 </span>

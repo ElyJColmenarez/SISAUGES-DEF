@@ -3,6 +3,7 @@
 namespace SISAUGES\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Departamento extends Model
 {
@@ -15,7 +16,7 @@ class Departamento extends Model
 
     public function institucion()
     {
-        return $this->belongsTo(Institucion::class,'id_institucion');
+        return $this->belongsTo(Institucion::class,'id_institucion','id_departamento');
     }
 
     public function tutor()
@@ -37,4 +38,15 @@ class Departamento extends Model
 
         return $query->where('id_institucion', '=', $search);
     }
+
+    public function scopeInstitucionRelaciones($query,$request){
+
+        return $query->whereExists(function($query) use ($request){
+        
+            $query->select(DB::raw(1))->from('institucion')->where('nombre_institucion', 'LIKE', '%'.$request->nombre_institucion.'%');
+
+        });
+
+    }
+
 }

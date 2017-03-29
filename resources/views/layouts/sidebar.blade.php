@@ -25,15 +25,15 @@
                         </li>
 
                         @if (Auth::user()->id_rol == 1)
-                                     asdhaslhdjkhlahsd}
+                                     
                         @endif
 
                         @if (Auth::user()->id_rol == 2)
-                          a2222
+                          
                         @endif
 
                         @if (Auth::user()->id_rol == 3)
-                          a333
+                          
                         @endif
 
                         <li class="">
