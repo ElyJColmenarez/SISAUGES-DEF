@@ -4,6 +4,7 @@ namespace SISAUGES\Http\Controllers;
 
 use Illuminate\Http\Request;
 use SISAUGES\Models\Departamento;
+use SISAUGES\Models\Institucion;
 use SISAUGES\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -14,8 +15,11 @@ class DepartamentoController extends Controller
     public function index(Request $request)
     {
 
+        $institucion=new Institucion();
 
-        $departamento = Departamento::descripciondepartamento($request->descripcion_departamento)->institucionrelaciones($request)->orderBy('descripcion_departamento', 'desc')->paginate(20);
+        var_dump($institucion);
+
+        $departamento = Departamento::institucionrelaciones($request)->orderBy('descripcion_departamento', 'desc')->paginate(20);
 
         var_dump($departamento);
 

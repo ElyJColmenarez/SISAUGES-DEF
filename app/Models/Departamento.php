@@ -16,7 +16,7 @@ class Departamento extends Model
 
     public function institucion()
     {
-        return $this->belongsTo(Institucion::class,'id_institucion','id_departamento');
+        return $this->belongsTo(Institucion::class,'id_institucion');
     }
 
     public function tutor()
@@ -36,14 +36,14 @@ class Departamento extends Model
 
     public function scopeInstitutoDepartamento($query,$search){
 
-        return $query->where('id_institucion', '=', $search);
+        return $query->where('id_institucion', $search);
     }
 
     public function scopeInstitucionRelaciones($query,$request){
 
-        return $query->whereExists(function($query) use ($request){
-        
-            $query->select(DB::raw(1))->from('institucion')->where('nombre_institucion', 'LIKE', '%'.$request->nombre_institucion.'%');
+        return $query->whereHas('institucion',function($query) use ($request){
+
+                $query->nombreinstitucion($request->nombre_institucion);
 
         });
 
