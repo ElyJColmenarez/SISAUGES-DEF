@@ -135,14 +135,14 @@ Route::group(['middleware'=>'op'],function(){
         Route::post('eliminar/{id}',['uses'=>'LaboratorioController@ajaxRegularDestroy', 'as'=>'eliminar']);
     }); 
 
-        Route::group(['prefix'=>'auditoria'], function(){
+     Route::group(['prefix'=>'auditoria'], function(){
         Route::match(array('get','post'),'listar',['uses'=>'AuditoriaController@index', 'as'=>'listar']);      
-        Route::post('registerform',['uses'=>'AuditoriaController@renderForm', 'as'=>'register-form']);
+        Route::post('registerform',['uses'=>'AuditoriaController@renderForm', 'as'=>'registerform']);
         Route::match(array('get','post'),'buscar',['uses'=>'AuditoriaController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'AuditoriaController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'AuditoriaController@ajaxRegularUpdate', 'as'=>'editar']);
       
-
+    }); 
 
     Route::group(['prefix'=>'tecnica-estudio'], function(){
 
@@ -181,6 +181,4 @@ Route::group(['middleware'=>'op'],function(){
     });
 
 });
-
-
 
