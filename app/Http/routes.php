@@ -67,7 +67,7 @@ Route::group(['middleware'=>'admin'], function(){
         Route::post('eliminar/{id}',['uses'=>'SectorProyectoController@ajaxRegularDestroy', 'as'=>'eliminar']);
     });
 
-    Route::group(['prefix'=>'Tecnica-Estudio'], function(){
+    Route::group(['prefix'=>'tecnica-estudio'], function(){
 
         Route::get('listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);
         Route::post('register-form',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'register-form']);
@@ -92,11 +92,9 @@ Route::group(['middleware'=>'op'],function(){
         Route::match(array('get','post'),'editar/{id}',['uses'=>'TutorController@ajaxRegularUpdate', 'as'=>'editar']);
         Route::post('eliminar/{id}',['uses'=>'TutorController@ajaxRegularDestroy', 'as'=>'eliminar']);
         Route::post('asignar-tutor-a-departamento',['uses'=>'TutorController@ajaxRegularAssign', 'as'=>'asignar-tutor-a-departamento']);
-
     });
 
     Route::group(['prefix'=>'estudiante'], function(){
-
         Route::get('listar',['uses'=>'EstudianteController@index', 'as'=>'listar']);
         Route::post('register-form',['uses'=>'EstudianteController@renderForm', 'as'=>'register-form']);
         Route::match(array('get','post'),'buscar',['uses'=>'EstudianteController@renderForm', 'as'=>'buscar']);
@@ -108,7 +106,6 @@ Route::group(['middleware'=>'op'],function(){
     });
 
     Route::group(['prefix'=>'institucion'], function(){
-
         Route::match(array('get','post'),'listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
         Route::post('register-form',['uses'=>'InstitucionController@renderForm', 'as'=>'register-form']);
         Route::match(array('get','post'),'buscar',['uses'=>'InstitucionController@ajaxRegularSearch', 'as'=>'buscar']);
@@ -119,15 +116,33 @@ Route::group(['middleware'=>'op'],function(){
 
     });
 
-
     Route::group(['prefix'=>'departamento'], function(){
-        Route::get('listar',['uses'=>'DepartamentoController@index', 'as'=>'listar']);
-        Route::post('register-form',['uses'=>'DepartamentoController@renderForm', 'as'=>'register-form']);
+        Route::match(array('get','post'),'listar',['uses'=>'DepartamentoController@index', 'as'=>'listar']);      
+        Route::post('registerform',['uses'=>'DepartamentoController@renderForm', 'as'=>'register-form']);
         Route::match(array('get','post'),'buscar',['uses'=>'DepartamentoController@renderForm', 'as'=>'buscar']);
         Route::match(array('get','post'),'crear',['uses'=>'DepartamentoController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'DepartamentoController@ajaxRegularUpdate', 'as'=>'editar']);
         Route::post('eliminar/{id}',['uses'=>'DepartamentoController@ajaxRegularDestroy', 'as'=>'eliminar']);
-        //Route::post('Asignar-Institucion-A-Proyecto',['uses'=>'DepartamentoController@ajaxRegularAssign', 'as'=>'asignar-institucion-a-proyecto']);
+    
+    }); 
+
+    Route::group(['prefix'=>'laboratorio'], function(){
+        Route::match(array('get','post'),'listar',['uses'=>'LaboratorioController@index', 'as'=>'listar']);      
+        Route::post('registerform',['uses'=>'LaboratorioController@renderForm', 'as'=>'register-form']);
+        Route::match(array('get','post'),'buscar',['uses'=>'LaboratorioController@renderForm', 'as'=>'buscar']);
+        Route::match(array('get','post'),'crear',['uses'=>'LaboratorioController@ajaxRegularStore', 'as'=>'crear']);
+        Route::match(array('get','post'),'editar/{id}',['uses'=>'LaboratorioController@ajaxRegularUpdate', 'as'=>'editar']);
+        Route::post('eliminar/{id}',['uses'=>'LaboratorioController@ajaxRegularDestroy', 'as'=>'eliminar']);
+    }); 
+
+    Route::group(['prefix'=>'tecnica-estudio'], function(){
+
+        Route::match(array('get','post'),'listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);   
+        Route::post('registerform',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'registerform']);
+        Route::match(array('get','post'),'buscar',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'buscar']);
+        Route::match(array('get','post'),'crear',['uses'=>'TecnicaEstudioController@ajaxRegularStore', 'as'=>'crear']);
+        Route::match(array('get','post'),'editar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularUpdate', 'as'=>'editar']);
+        Route::post('eliminar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularDestroy', 'as'=>'eliminar']);
     });
 
 
@@ -157,3 +172,6 @@ Route::group(['middleware'=>'op'],function(){
     });
 
 });
+
+
+

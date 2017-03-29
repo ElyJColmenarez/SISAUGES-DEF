@@ -58,22 +58,9 @@
                     <div class="form-group col-md-12">
                         
 
-                        <table class="table table-bordered table-striped mb-none">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Dirección</th>
-                                    <th>Telefono</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-t-body modalscript">
 
                                 @include($data['carpeta'].'.regulartable')
 
-                            </tbody>
-
-                        </table>
 
                         <div class="tblwait">
                             <div class="waitingback"></div>

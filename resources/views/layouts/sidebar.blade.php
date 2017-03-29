@@ -59,9 +59,16 @@
                         </li>
 
                         <li class="">
-                            <a href="{{url('laboratorios/listar')}}">
+                            <a href="{{url('laboratorio/listar')}}">
                                 <i class="fa fa-flask" aria-hidden="true"></i>
                                 <span>Laboratorios</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a href="{{url('tecnica-estudio/listar')}}">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <span>Tecnicas de Estudios</span>
                             </a>
                         </li>
 
