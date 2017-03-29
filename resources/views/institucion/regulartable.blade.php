@@ -1,3 +1,18 @@
+
+ <table class="table table-bordered table-striped mb-none">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Dirección</th>
+                                    <th>Telefono</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-t-body modalscript">
+
+                           
+
+
 @foreach($data['registros'] as $institucion)
 
     <tr class="gradeX">
@@ -11,3 +26,7 @@
     </tr>
 
 @endforeach
+
+        </tbody>
+
+                        </table>

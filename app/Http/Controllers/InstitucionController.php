@@ -56,7 +56,7 @@ class InstitucionController extends Controller
 
                 $query->descripciondepartamento('');
 
-        })->*/orderBy('nombre_institucion', 'desc')->paginate(1);
+        })->*/orderBy('nombre_institucion', 'desc')->paginate(20);
 
         $action="institucion/listar";
 
@@ -94,7 +94,7 @@ class InstitucionController extends Controller
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
-                    '2'=>'Inactivo'
+                    '0'=>'Inactivo'
                 )
             )
         );
