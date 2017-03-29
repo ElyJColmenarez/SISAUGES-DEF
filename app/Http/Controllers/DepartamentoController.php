@@ -15,8 +15,9 @@ class DepartamentoController extends Controller
     {
 
 
-        $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)-> StatusDepartamento($request->status)->orderBy('descripcion_departamento', 'desc')->paginate(20);
+        $departamento = Departamento::descripciondepartamento($request->descripcion_departamento)->institucionrelaciones($request)->orderBy('descripcion_departamento', 'desc')->paginate(20);
 
+        var_dump($departamento);
 
         return view('departamento.index',compact('departamento'));
 
