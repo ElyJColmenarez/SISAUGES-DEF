@@ -27,7 +27,7 @@ class MuestraController extends Controller
     public function index(Request $request)
     {
 
-        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->statusmuestra($request->status)->orderBy('nombre_institucion', 'desc')->paginate(20);
+        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->orderBy('codigo_muestra', 'desc')->paginate(20);
 
         $action="institucion/listar";
 
@@ -270,7 +270,7 @@ class MuestraController extends Controller
 
                     $img=$this->generarImagenVisible($request->imagenes[$key]->getRealPath(),$muestra->id_muestra,$request->proyecto);
 
-                    $muestra->proyecto()->attach($request->proyecto);
+                    $muestra->proyecto()->attach($request->proyecto,array('ruta_img_muestra'=>$img,'fecha_analisis'=>date('d-m-Y')));
                 }
                 
             }

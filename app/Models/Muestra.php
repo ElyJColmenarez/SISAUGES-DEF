@@ -24,7 +24,7 @@ class Muestra extends Model
 
     public function proyecto()
     {
-        return $this->belongsToMany(Proyecto::class,'muestra_proyecto','id_muestra','id_proyecto');
+        return $this->belongsToMany(Proyecto::class,'muestra_proyecto','id_muestra','id_proyecto')->withPivot('ruta_img_muestra','fecha_analisis');
     }
 
     public function tecnicaEstudio()
@@ -37,26 +37,37 @@ class Muestra extends Model
 
     public function scopeCodigoMuestra($query,$search){
 
-        return $query->where('codigo_muestra', 'LIKE', '%'.$search.'%');
+        if (count(trim($search))>1) {
+            return $query->where('codigo_muestra', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeTipoMuestra($query,$search){
 
-        return $query->where('tipo_muestra', '=', $search);
+        if (count(trim($search))>1) {
+            return $query->where('tipo_muestra', '=', $search);
+        }
+
     }
 
     public function scopeDescripcionMuestra($query,$search){
 
-        return $query->where('descripcion_muestra', 'LIKE', '%'.$search.'%');
+        if (count(trim($search))>1) {
+            return $query->where('descripcion_muestra', 'LIKE', '%'.$search.'%');
+        }
     }
     
     public function scopeFechaRecepcionMuestra($query,$search){
 
-        return $query->where('fecha_recepcion', '=', $search);
+        if (count(trim($search))>1) {
+            return $query->where('fecha_recepcion', '=', $search);
+        }
     } 
 
     public function scopeStatusMuestra($query,$search){
 
-        return $query->where('status', '=', $search);
+        if (count(trim($search))>1) {
+            return $query->where('status', '=', $search);
+        }
     }
 }
