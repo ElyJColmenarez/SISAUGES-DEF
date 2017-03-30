@@ -81,14 +81,6 @@ class UserController extends Controller
                 'validaciones'  => array('solotexto','obligatorio')
             ),
 
-            'password'      => array(
-                'type'          => 'password',
-                'value'         => (empty($request))? '' : $request->password,
-                'id'            => 'password',
-                'label'         => 'Contraseña',
-                'validaciones'  => array('obligatorio')
-            ),
-
             'id_rol'           => array(
                 'type'          => 'select',
                 'value'         => (empty($request))? '' : $request->id_rol,
@@ -116,10 +108,9 @@ class UserController extends Controller
             'title'             => 'Usuarios',
             'principal_search'  => 'username',
             'registros'         => $persona,
-            'registros2'        => $usuario,
             'carpeta'           => 'users'
 
-        ); //Preguntale a Edward si tienes que renderizar ambos registros y recuerda que la busqueda te explota
+        );
 
 
 

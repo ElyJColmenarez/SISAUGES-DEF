@@ -14,7 +14,7 @@ class Persona extends Model
 
     public function usuario()
     {
-        return $this->hasOne(User::class,'cedula_persona');
+        return $this->hasOne(User::class,'cedula_persona','cedula');
     }
 
     public function estudiante()

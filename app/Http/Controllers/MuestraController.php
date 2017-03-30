@@ -139,7 +139,7 @@ class MuestraController extends Controller
                 ),
                 'fecha_recepcion' => array(
                     'type'  => 'date',
-                    'value' => (isset($muestra->fecha_recepcion))? $fecha_recepcion:'',
+                    'value' => (isset($muestra->fecha_recepcion))? $muestra->fecha_recepcion:'',
                     'id'    => 'fecha_recepcion',
                     'label' => 'Fecha de Recepción de la Muestra'
                 ),
@@ -193,25 +193,18 @@ class MuestraController extends Controller
 
     public function store($request){
 
-        $institucion=new Institucion($request->all());
+        $muestra=new Muestra($request->all());
 
         $aux=$request->all();
 
-        $cont=0;
 
-        foreach ($aux as $key => $value) {
-            
-            $value=trim($value);
 
-            if ($value=='' &&  $key!='_token') {
-                $cont++;
-            }
-        }
-
-        if ($cont!=0) {
+        if (trim($request->codigo_muestra)=='' || trim($request->muestra->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion) || trim($request->status)=='') {
             $val=false;
         }else{
-            $val=$institucion->save();
+            
+            $val=true;
+
         }
 
         return $val;
