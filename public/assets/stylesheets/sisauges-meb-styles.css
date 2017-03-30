@@ -142,7 +142,7 @@
 }
 
 .muestra-seccion > div:nth-child(1){
-	margin-bottom: 15px;
+	margin: 15px 0px;
 }
 
 .muestra-seccion > div:nth-child(2){

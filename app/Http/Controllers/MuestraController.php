@@ -11,6 +11,7 @@ use SISAUGES\Http\Controllers\Controller;
 use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
+use SISAUGES\Models\Proyecto;
 
 use Illuminate\Support\Facades\View;
 
@@ -85,6 +86,34 @@ class MuestraController extends Controller
         
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+
+    public function generarImagenVisible($original_paht,$id){
+
+
+        $ruta=$_SERVER['DOCUMENT_ROOT']."/storage/";
+
+        $image = new Imagick($original_paht);
+
+        $fecha=date("d_m_Y_H_i_s");
+
+        $ruta=$ruta.$id.'aux-'.$fecha.".jpg";
+
+        $image->setImageFormat('jpg');
+
+        $image->writeImage($ruta);
+
+        return $id.'aux-'.$fecha.'.jpg';
+
+    }
+
     public function renderForm(Request $request){
 
         
@@ -97,6 +126,7 @@ class MuestraController extends Controller
         }
 
         $muestra = Muestra::find($request->field_id);
+        $proyectos = Proyecto::where('status_proyecto','<>','Culminado')->get();
 
         if ($request->typeform=='deleted') {
             $fields=false;
@@ -154,6 +184,15 @@ class MuestraController extends Controller
                         '2'=>'Inactivo'
                     )
                 ),
+                'proyecto'  => array(
+                    'type'      => 'select',
+                    'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->status:'',
+                    'id'        => 'id_proyecto',
+                    'label'     => 'Proyecto',
+                    'selecttype'=> 'obj',
+                    'objkeys'   => array('id_proyecto','nombre_proyecto'),
+                    'options'   => $proyectos
+                ),
                 'muestras'=>array(
 
                     'type'      => 'muestra',
@@ -197,19 +236,20 @@ class MuestraController extends Controller
 
         $aux=$request->all();
 
-
-
         if (trim($request->codigo_muestra)=='' || trim($request->muestra->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion) || trim($request->status)=='') {
             $val=false;
         }else{
-            
+
+
             $val=true;
+
 
         }
 
         return $val;
 
     }
+
 
     /**
      * Update the specified resource in storage.

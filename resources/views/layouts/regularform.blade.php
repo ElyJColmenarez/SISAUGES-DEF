@@ -208,6 +208,26 @@
 									                </div>
 									            </div>
 
+									        @elseif(isset($value['selecttype']))
+
+									        	<div class="col-md-6">
+									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <div class="col-md-8">
+									                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+									                        
+									                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
+
+								                        	@foreach( $value['options'] as $key2 => $value2 )
+
+								                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+								                        	@endforeach
+
+									                    </select>
+									                </div>
+									            </div>
+
+
 							        		@else
 
 
