@@ -19,6 +19,84 @@ class TutorController extends Controller
      */
     public function index()
     {
+        $tutor =
+
+        $action = "usuario/listar";
+
+        $fields = array(
+
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($request))? '' : $request->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'status' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->status))? $request->status:'',
+                'id'        => 'status',
+                'label'     => 'Status',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        $data=array(
+
+            'title'             => 'Usuarios',
+            'principal_search'  => 'username',
+            'registros'         => $tutor,
+            'carpeta'           => ''
+
+        );
+
+
+
+
+
+        return view('layouts.index',compact('data','action','fields','request'));
+
         return view('layouts.index');
     }
 

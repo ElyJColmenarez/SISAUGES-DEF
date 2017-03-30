@@ -122,23 +122,20 @@ class UserController extends Controller
 
     public function renderForm(Request $request)
     {
-        if ($request->typeform == 'add')
-        {
+        if ($request->typeform == 'add') {
             $action = "usuario/crear/";
-        }
-        elseif($request->typeform == 'modify')
-        {
-            $action = "usuario/modificar/".$request->field_id;
-        }
-        elseif ($request->typeform == 'delete')
-        {
-            $action = "usuario/eliminar/".$request->field_id;
+        } elseif ($request->typeform == 'modify') {
+            $action = "usuario/editar/" . $request->field_id;
+        } elseif ($request->typeform == 'delete') {
+            $action = "usuario/eliminar/" . $request->field_id;
         }
 
         $usuario = User::find($request->field_id);
-        $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
-        $persona = Persona::find($persona[0]->id_persona);
+        if (isset($usuario)){
 
+            $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
+            $persona = Persona::find($persona[0]->id_persona);
+        }
 
         if ($request->typeform == 'delete')
         {
@@ -210,7 +207,7 @@ class UserController extends Controller
 
                 'password'      => array(
                     'type'          => 'password',
-                    'value'         => (empty($usuario))? '' : $usuario->password,
+                    'value'         => '',
                     'id'            => 'password',
                     'label'         => 'Contraseña',
                     'validaciones'  => array('obligatorio')
@@ -339,6 +336,7 @@ class UserController extends Controller
         $usuario->password          = Hash::make($request->password);
         $usuario->id_rol            = $request->id_rol;
         $usuario->cedula_persona    = $request->cedula;
+        $usuario->status            = $request->status;
         $val = $usuario->save();
 
 
@@ -354,8 +352,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         $usuario=User::find($id);
+        $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
+        $persona = Persona::find($persona[0]->id_persona);
 
         $usuario->status = false;
+        $persona->status = false;
+        $persona->save();
         $val = $usuario->save();
 
         return $val;
