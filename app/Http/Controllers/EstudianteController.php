@@ -17,9 +17,125 @@ class EstudianteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('layouts.index');
+        $estudiante = Estudiante::with('persona')->cedulaEstudiante($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+
+        $action = "estudiante/listar";
+
+        $fields = array(
+
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($request))? '' : $request->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'carrera_estudiante' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->carrera_estudiante))? $request->carrera_estudiante:'',
+                'id'        => 'carrera_estudiante',
+                'label'     => 'Carrera',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'Informática',
+                    '2'         =>'Electricidad',
+                    '3'         =>'Tecnología de los materiales',
+                    '4'         =>'Quimica')
+                ),
+
+            'semestre_estudiante' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->carrera_estudiante))? $request->carrera_estudiante:'',
+                'id'        => 'semestre_estudiante',
+                'label'     => 'Semestre/Trimestre',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'1',
+                    '2'         =>'2',
+                    '3'         =>'3',
+                    '4'         =>'4')
+            ),
+
+            'id_proyecto' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->id_proyecto))? $request->id_proyecto:'',
+                'id'        => 'id_proyecto',
+                'label'     => 'Proyecto',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'1',
+                    '2'         =>'2',
+                    '3'         =>'3',
+                    '4'         =>'4')
+            ),
+
+            'status' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->status))? $request->status:'',
+                'id'        => 'status',
+                'label'     => 'Status',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        $data=array(
+
+            'title'             => 'Estudiantes',
+            'principal_search'  => 'cedula_persona',
+            'registros'         => $estudiante,
+            'carpeta'           => 'estudiante'
+
+        );
+
+
+
+
+
+        return view('layouts.index',compact('data','action','fields','request'));
     }
 
     public function renderForm(Request $request)
@@ -30,15 +146,21 @@ class EstudianteController extends Controller
         }
         elseif($request->typeform == 'modify')
         {
-            $action = "estudiante/modificar/".$request->field_id;
+            $action = "estudiante/editar/".$request->field_id;
         }
         elseif ($request->typeform == 'delete')
         {
             $action = "estudiante/eliminar/".$request->field_id;
         }
 
-        $persona = Persona::find($request->cedula);
-        $estudiante = Estudiante::find($request->cedula);
+
+        $estudiante = Estudiante::find($request->field_id);
+
+        if (isset($estudiante)){
+
+            $persona = Persona::buscarpersona($estudiante->cedula_persona)->get();
+            $persona = Persona::find($persona[0]->id_persona);
+        }
 
         if ($request->typeform == 'delete')
         {
@@ -100,30 +222,30 @@ class EstudianteController extends Controller
                         'solonumero',
                         'obligatorio' )),
 
-                'carrera' => array(
+                'carrera_estudiante' => array(
                     'type'      => 'text',
                     'value'     => (empty($estudiante))? '' : $estudiante->carrera_estudiante,
-                    'id'        => 'carrera',
+                    'id'        => 'carrera_estudiante',
                     'label'     => 'Carrera',
                     'validaciones'  => array(
                         'sololetras',
                         'obligatorio' )
                 ),
 
-                'semestre' => array(
+                'semestre_estudiante' => array(
                     'type'      => 'text',
                     'value'     => (empty($estudiante))? '' : $estudiante->semestre_estudiante,
-                    'id'        => 'semestre',
+                    'id'        => 'semestre_estudiante',
                     'label'     => 'Semestre/Trimestre',
                     'validaciones'  => array(
                         'solonumero',
                         'obligatorio' )
                 ),
 
-                'proyecto' => array(
+                'id_proyecto' => array(
                     'type'      => 'select',
                     'value'     => (empty($estudiante))? '' : $estudiante->id_proyecto,
-                    'id'        => 'proyecto',
+                    'id'        => 'id_proyecto',
                     'label'     => 'Proyecto',
                     'options'   => array(
                         ''          =>'Seleccione...',
@@ -196,9 +318,9 @@ class EstudianteController extends Controller
 
                 $estudiante = new Estudiante();
 
-                $estudiante->carrera_estudiante     = $request->carrera;
-                $estudiante->semestre_estudiante    = $request->semestre;
-                $estudiante->id_proyecto            = $request->proyecto;
+                $estudiante->carrera_estudiante     = $request->carrera_estudiante;
+                $estudiante->semestre_estudiante    = $request->semestre_estudiante;
+                $estudiante->id_proyecto            = $request->id_proyecto;
                 $estudiante->cedula_persona         = $request->cedula;
                 $estudiante->status                 = $request->status;
                 $val = $estudiante->save();
@@ -209,9 +331,9 @@ class EstudianteController extends Controller
             {
                 $estudiante = new Estudiante();
 
-                $estudiante->carrera_estudiante     = $request->carrera;
-                $estudiante->semestre_estudiante    = $request->semestre;
-                $estudiante->id_proyecto            = $request->proyecto;
+                $estudiante->carrera_estudiante     = $request->carrera_estudiante;
+                $estudiante->semestre_estudiante    = $request->semestre_estudiante;
+                $estudiante->id_proyecto            = $request->id_proyecto;
                 $estudiante->cedula_persona         = $request->cedula;
                 $estudiante->status                 = $request->status;
                 $val = $estudiante->save();
@@ -231,7 +353,7 @@ class EstudianteController extends Controller
     public function update(Request $request, $id)
     {
         $estudiante     = Estudiante::find($id);
-        $persona        = Persona::buscarpersona($request->cedula)->get();
+        $persona        = Persona::buscarpersona($estudiante->cedula_persona)->get();
         $persona        = Persona::find($persona[0]->id_persona);
 
         $persona->cedula    = $request->cedula;
@@ -243,9 +365,9 @@ class EstudianteController extends Controller
         $persona->save();
 
 
-        $estudiante->carrera_estudiante     = $request->carrera;
-        $estudiante->semestre_estudiante    = $request->semestre;
-        $estudiante->id_proyecto            = $request->proyecto;
+        $estudiante->carrera_estudiante     = $request->carrera_estudiante;
+        $estudiante->semestre_estudiante    = $request->semestre_estudiante;
+        $estudiante->id_proyecto            = $request->id_proyecto;
         $estudiante->cedula_persona         = $request->cedula;
         $estudiante->status                 = $request->status;
         $val = $estudiante->save();
@@ -262,9 +384,13 @@ class EstudianteController extends Controller
     public function destroy($id)
     {
         $estudiante = Estudiante::find($id);
+        $persona = Persona::buscarpersona($estudiante->cedula_persona)->get();
+        $persona = Persona::find($persona[0]->id_persona);
 
+        $persona->status = false;
         $estudiante->status = false;
 
+        $persona->save();
         $val = $estudiante->save();
 
         return $val;

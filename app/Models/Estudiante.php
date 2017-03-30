@@ -19,7 +19,7 @@ class Estudiante extends Model
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'cedula');
+        return $this->belongsTo(Persona::class,'cedula_persona','cedula');
     }
 
     public function scopeCarreraEstudiante($query,$search){

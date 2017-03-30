@@ -17,9 +17,112 @@ class TutorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('layouts.index');
+        $tutor = Tutor::with('persona')->cedulaTutor($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+
+        $action = "tutor/listar";
+
+        $fields = array(
+
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($request))? '' : $request->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'institucion' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->institucion))? $request->institucion:'',
+                'id'        => 'status',
+                'label'     => 'Status',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            ),
+
+            'id_departamento' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->id_departamento))? $request->id_departamento:'',
+                'id'        => 'departamento',
+                'label'     => 'Departamento',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'Informática',
+                    '2'         =>'Electricidad',
+                    '3'         =>'Tecnología de los materiales',
+                    '4'         =>'Quimica',
+
+                )
+            ),
+
+            'status' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->status))? $request->status:'',
+                'id'        => 'status',
+                'label'     => 'Status',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        $data=array(
+
+            'title'             => 'Tutores',
+            'principal_search'  => 'cedula_persona',
+            'registros'         => $tutor,
+            'carpeta'           => 'tutor'
+
+        );
+
+
+
+
+
+        return view('layouts.index',compact('data','action','fields','request'));
     }
 
     public function renderForm(Request $request)
@@ -30,15 +133,21 @@ class TutorController extends Controller
         }
         elseif($request->typeform == 'modify')
         {
-            $action = "tutor/modificar/".$request->field_id;
+            $action = "tutor/editar/".$request->field_id;
         }
         elseif ($request->typeform == 'delete')
         {
             $action = "tutor/eliminar/".$request->field_id;
         }
 
-        $persona = Persona::find($request->cedula);
-        $tutor = Tutor::find($request->cedula);
+
+        $tutor = Tutor::find($request->field_id);
+        if (isset($tutor)){
+
+            $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
+            $persona = Persona::find($persona[0]->id_persona);
+        }
+
 
         if ($request->typeform == 'delete')
         {
@@ -221,7 +330,7 @@ class TutorController extends Controller
     public function update(Request $request, $id)
     {
         $tutor      = Tutor::find($id);
-        $persona    = Persona::buscarpersona($request->cedula)->get();
+        $persona    = Persona::buscarpersona($tutor->cedula_persona)->get();
         $persona    = Persona::find($persona[0]->id_persona);
 
         $persona->cedula    = $request->cedula;
@@ -250,9 +359,13 @@ class TutorController extends Controller
     public function destroy($id)
     {
         $tutor = Tutor::find($id);
+        $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
+        $persona = Persona::find($persona[0]->id_persona);
 
+        $persona->status = false;
         $tutor->status = false;
 
+        $persona->save();
         $val = $tutor->save();
 
         return $val;

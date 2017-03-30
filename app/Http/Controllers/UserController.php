@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $usuario = Persona::with('usuario')->buscarPersona($request->cedula)->orderBy('cedula','asc')->paginate(20);
+        $usuario = User::with('persona')->cedulaUser($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
 
         $action = "usuario/listar";
 
@@ -122,23 +122,20 @@ class UserController extends Controller
 
     public function renderForm(Request $request)
     {
-        if ($request->typeform == 'add')
-        {
+        if ($request->typeform == 'add') {
             $action = "usuario/crear/";
-        }
-        elseif($request->typeform == 'modify')
-        {
-            $action = "usuario/modificar/".$request->field_id;
-        }
-        elseif ($request->typeform == 'delete')
-        {
-            $action = "usuario/eliminar/".$request->field_id;
+        } elseif ($request->typeform == 'modify') {
+            $action = "usuario/editar/" . $request->field_id;
+        } elseif ($request->typeform == 'delete') {
+            $action = "usuario/eliminar/" . $request->field_id;
         }
 
         $usuario = User::find($request->field_id);
-        $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
-        $persona = Persona::find($persona[0]->id_persona);
+        if (isset($usuario)){
 
+            $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
+            $persona = Persona::find($persona[0]->id_persona);
+        }
 
         if ($request->typeform == 'delete')
         {
@@ -210,7 +207,7 @@ class UserController extends Controller
 
                 'password'      => array(
                     'type'          => 'password',
-                    'value'         => (empty($usuario))? '' : $usuario->password,
+                    'value'         => '',
                     'id'            => 'password',
                     'label'         => 'Contraseña',
                     'validaciones'  => array('obligatorio')
@@ -227,7 +224,7 @@ class UserController extends Controller
 
                 'status' => array(
                     'type'      => 'select',
-                    'value'     => (isset($request->status))? $request->status:'',
+                    'value'     => (empty($usuario))? '': $usuario->status,
                     'id'        => 'status',
                     'label'     => 'Status',
                     'options'   => array(
@@ -304,6 +301,7 @@ class UserController extends Controller
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
                 $usuario->cedula_persona    = $request->cedula;
+                $usuario->status            = $request->status;
                 $val = $usuario->save();
             }
 
@@ -322,9 +320,8 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $usuario = User::find($id);
-        $persona = Persona::buscarpersona($request->cedula)->get();
+        $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
         $persona = Persona::find($persona[0]->id_persona);
-
 
         $persona->cedula    = $request->cedula;
         $persona->nombre    = $request->nombre;
@@ -339,6 +336,8 @@ class UserController extends Controller
         $usuario->password          = Hash::make($request->password);
         $usuario->id_rol            = $request->id_rol;
         $usuario->cedula_persona    = $request->cedula;
+        $usuario->status            = $request->status;
+
         $val = $usuario->save();
 
 
@@ -354,8 +353,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         $usuario=User::find($id);
+        $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
+        $persona = Persona::find($persona[0]->id_persona);
 
         $usuario->status = false;
+        $persona->status = false;
+        $persona->save();
         $val = $usuario->save();
 
         return $val;
