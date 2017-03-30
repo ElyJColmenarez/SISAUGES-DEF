@@ -116,9 +116,7 @@
 								        			<div class="col-md-4">
 									        			<button class="btn btn-default click" name="cargaimg">Agregar Archivos</button>
 									        			<div class="ocultos"><input type="file" name="imagenes[]"  multiple="true"></div>
-									        			<div class="borrados">
-									        				<input type="hidden" name="borrados[]" value="">
-									        			</div>
+									        			<div class="borrados"></div>
 									        		</div>
 
 								        		</div>
@@ -132,6 +130,7 @@
 								        							<th>Archivo</th>
 								        							<th>Tipo de Archivo</th>
 								        							<th>Tamaño</th>
+								        							<th>Fecha de Registro</th>
 								        							<th></th>
 								        						</tr>
 								        					</thead>

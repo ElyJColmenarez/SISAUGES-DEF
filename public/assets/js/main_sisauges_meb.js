@@ -87,15 +87,17 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
-        var form=$('#modalmicroform');
+        var form=new FormData($('#modalmicroform')[0]);
 
         var promise=$.ajax({
 
-            url:form.attr('action'),
+            url:$('#modalmicroform').attr('action'),
             cache: false,
-            data:form.serializeArray(),
+            data:form,
             type:"POST",
             dataType: "json",
+            processData: false,
+            contentType: false,
             beforeSend: function(){
             	$('#mdl-truebody').slideUp('fast','swing',function(){
             		$('#modalmicroform > .waitingimg').slideDown('fast','swing');
@@ -271,6 +273,7 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
+        var f = new Date();
 
         for (var i = 0; i < $(this)[0].files.length; i++) {
 
@@ -280,6 +283,7 @@ jQuery(document).ready(function() {
             htmlsect=htmlsect+"<td>"+aux.name+"</td>";
             htmlsect=htmlsect+"<td>"+aux.type+"</td>";
             htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
+            htmlsect=htmlsect+"<td>"+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+"</td>";
             htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
             htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
@@ -291,18 +295,19 @@ jQuery(document).ready(function() {
     });
 
 
-    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(4) a:nth-child(2)',function(event){
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(5) a:nth-child(2)',function(event){
 
         event.preventDefault();
 
         $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
             $(this).remove();
+            $('#modalForm .ocultos input')[0].files[$(this).attr('data-regid')];
             $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-regid')+'">');
         });
 
     });
 
-    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(4) a:nth-child(1)',function(event){
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(5) a:nth-child(1)',function(event){
 
         event.preventDefault();
 

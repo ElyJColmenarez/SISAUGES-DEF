@@ -151,15 +151,15 @@
 
 }
 
-.muestra-seccion table tbody tr td:nth-child(4){
+.muestra-seccion table tbody tr td:nth-child(5){
 	text-align: center;
 }
 
-.muestra-seccion table tbody tr td:nth-child(4) a{
+.muestra-seccion table tbody tr td:nth-child(5) a{
 	margin: 0px 5px;
 }
 
-.muestra-seccion table tbody tr td:nth-child(4) a i.fa{
+.muestra-seccion table tbody tr td:nth-child(5) a i.fa{
 	color: #fff;
 	text-decoration: none;
 }

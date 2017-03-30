@@ -73,8 +73,6 @@ class DepartamentoController extends Controller
           $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)
                //     StatusDepartamento($request->status)                   
                     ->orderBy('descripcion_departamento', 'desc')->paginate(20);
-
-                    dd($departamento);
  
 
          $action="departamento/listar";

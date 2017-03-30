@@ -12,6 +12,8 @@ use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
 use SISAUGES\Models\Proyecto;
+use Storage;
+use Imagick;
 
 use Illuminate\Support\Facades\View;
 
@@ -95,10 +97,16 @@ class MuestraController extends Controller
      */
 
 
-    public function generarImagenVisible($original_paht,$id){
+    public function generarImagenVisible($original_paht,$id,$proyecto){
 
 
-        $ruta=$_SERVER['DOCUMENT_ROOT']."/storage/";
+        $ruta=public_path()."/storage/";
+
+        /*if (file_exists($ruta)) {
+           $ruta=public_path()."/storage/"; 
+        }else{
+            Storage::makeDirectory($ruta);
+        }*/
 
         $image = new Imagick($original_paht);
 
@@ -236,10 +244,36 @@ class MuestraController extends Controller
 
         $aux=$request->all();
 
-        if (trim($request->codigo_muestra)=='' || trim($request->muestra->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion) || trim($request->status)=='') {
+        if (trim($request->codigo_muestra)=='' || trim($request->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion)=='' || trim($request->status)=='') {
             $val=false;
         }else{
 
+            $muestra->save();
+
+            $borrados=$request->borrados;
+
+            foreach ($request->file('imagenes') as $key => $value) {
+                
+                $cont=0;
+
+                if (count($borrados)>0) {
+                    foreach ($borrados as $key2 => $value2) {
+                        if ($value2==$key) {
+                            unset($borrados[$key2]);
+                            $cont=1;
+                        }
+                    }
+                    array_values($borrados);
+                }
+
+                if ($cont==0) {
+
+                    $img=$this->generarImagenVisible($request->imagenes[$key]->getRealPath(),$muestra->id_muestra,$request->proyecto);
+
+                    $muestra->proyecto()->attach($request->proyecto);
+                }
+                
+            }
 
             $val=true;
 
