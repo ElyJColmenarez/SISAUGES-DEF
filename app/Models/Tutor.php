@@ -20,6 +20,11 @@ class Tutor extends Model
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'cedula');
+        return $this->belongsTo(Persona::class,'cedula_persona','cedula');
+    }
+
+    public function scopeCedulaTutor($query,$search){
+
+        return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
     }
 }

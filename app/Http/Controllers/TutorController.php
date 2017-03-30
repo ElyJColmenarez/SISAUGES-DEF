@@ -17,11 +17,11 @@ class TutorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tutor =
+        $tutor = Tutor::with('persona')->cedulaTutor($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
 
-        $action = "usuario/listar";
+        $action = "tutor/listar";
 
         $fields = array(
 
@@ -69,6 +69,18 @@ class TutorController extends Controller
                     'solonumero',
                     'obligatorio' )),
 
+            'institucion' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->institucion))? $request->institucion:'',
+                'id'        => 'status',
+                'label'     => 'Status',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            ),
+
             'status' => array(
                 'type'      => 'select',
                 'value'     => (isset($request->status))? $request->status:'',
@@ -87,7 +99,7 @@ class TutorController extends Controller
             'title'             => 'Usuarios',
             'principal_search'  => 'username',
             'registros'         => $tutor,
-            'carpeta'           => ''
+            'carpeta'           => 'tutor'
 
         );
 
@@ -96,8 +108,6 @@ class TutorController extends Controller
 
 
         return view('layouts.index',compact('data','action','fields','request'));
-
-        return view('layouts.index');
     }
 
     public function renderForm(Request $request)
@@ -115,8 +125,14 @@ class TutorController extends Controller
             $action = "tutor/eliminar/".$request->field_id;
         }
 
-        $persona = Persona::find($request->cedula);
-        $tutor = Tutor::find($request->cedula);
+
+        $tutor = Tutor::find($request->field_id);
+        if (isset($tutor)){
+
+            $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
+            $persona = Persona::find($persona[0]->id_persona);
+        }
+
 
         if ($request->typeform == 'delete')
         {
@@ -299,7 +315,7 @@ class TutorController extends Controller
     public function update(Request $request, $id)
     {
         $tutor      = Tutor::find($id);
-        $persona    = Persona::buscarpersona($request->cedula)->get();
+        $persona    = Persona::buscarpersona($tutor->cedula)->get();
         $persona    = Persona::find($persona[0]->id_persona);
 
         $persona->cedula    = $request->cedula;
@@ -328,9 +344,13 @@ class TutorController extends Controller
     public function destroy($id)
     {
         $tutor = Tutor::find($id);
+        $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
+        $persona = Persona::find($persona[0]->id_persona);
 
+        $persona->status = false;
         $tutor->status = false;
 
+        $persona->save();
         $val = $tutor->save();
 
         return $val;

@@ -26,7 +26,7 @@ class User extends Authenticatable
 
     public function persona()
     {
-        return $this->belongsTo(Persona::class,'cedula');
+        return $this->belongsTo(Persona::class,'cedula_persona','cedula');
     }
 
     public function scopeDescripcionUser($query,$search)
