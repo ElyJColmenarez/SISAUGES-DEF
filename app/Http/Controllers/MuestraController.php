@@ -24,39 +24,40 @@ class MuestraController extends Controller
     public function index(Request $request)
     {
 
-        $muestras=Muestra::nombreinstitucion($request->nombre_institucion)->/*whereHas('departamento', function($query) use ($request){
-
-                $query->descripciondepartamento('');
-
-        })->*/orderBy('nombre_institucion', 'desc')->paginate(1);
+        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->statusmuestra($request->status)->orderBy('nombre_institucion', 'desc')->paginate(20);
 
         $action="institucion/listar";
 
         $fields=array(
 
-            'nombre_institucion' => array(
+            'codigo_muestra' => array(
                 'type'  => 'text',
-                'value' => (isset($request->nombre_institucion))? $request->nombre_institucion:'',
-                'id'    => 'nombre_institucion',
-                'label' => 'Nombre de la institucion'
+                'value' => (isset($request->codigo_muestra))? $request->codigo_muestra:'',
+                'id'    => 'codigo_muestra',
+                'label' => 'Codigo de la Muestra'
             ),
-            'correo_institucional' => array(
-                'type'  => 'text',
-                'value' => (isset($request->correo_institucional))? $request->correo_institucional:'',
-                'id'    => 'correo_institucional',
-                'label' => 'Correo de la institucion'
+            'tipo_muestra' => array(
+                'type'  => 'select',
+                'value' => (isset($request->tipo_muestra))? $request->tipo_muestra:'',
+                'id'    => 'tipo_muestra',
+                'label' => 'Tipo de Muestra',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Tipo1',
+                    '2'=>'Tipo2'
+                )
             ),
-            'direccion_institucion' => array(
+            'descripcion_muestra' => array(
                 'type'  => 'text',
-                'value' => (isset($request->direccion_institucion))? $request->direccion_institucion:'',
-                'id'    => 'direccion_institucion',
-                'label' => 'Direccion de la institucion'
+                'value' => (isset($request->descripcion_muestra))? $request->descripcion_muestra:'',
+                'id'    => 'descripcion_muestra',
+                'label' => 'Descripcion de la Muestra'
             ),
-            'telefono_institucion' => array(
-                'type'  => 'text',
-                'value' => (isset($request->telefono_institucion))? $request->telefono_institucion:'',
-                'id'    => 'telefono_institucion',
-                'label' => 'Telefono de la institucion'
+            'fecha_recepcion' => array(
+                'type'  => 'date',
+                'value' => (isset($request->fecha_recepcion))? $fecha_recepcion:'',
+                'id'    => 'fecha_recepcion',
+                'label' => 'Fecha de Recepción de la Muestra'
             ),
             'status' => array(
                 'type'      => 'select',
@@ -73,10 +74,10 @@ class MuestraController extends Controller
 
         $data=array(
 
-            'title'=>'Instituciones',
-            'principal_search'=>'nombre_institucion',
-            'registros'=>$instituciones,
-            'carpeta'=>'institucion'
+            'title'=>'Muestras',
+            'principal_search'=>'codigo_muestra',
+            'registros'=>$muestras,
+            'carpeta'=>'muestra'
 
         );
 
@@ -88,16 +89,14 @@ class MuestraController extends Controller
 
         
         if ($request->typeform=='add') {
-            $action="institucion/crear";
+            $action="muestra/crear";
         }elseif($request->typeform=='modify'){
-            $action="institucion/editar/".$request->field_id;
+            $action="muestra/editar/".$request->field_id;
         }elseif($request->typeform=='deleted'){
-            $action="institucion/eliminar/".$request->field_id;
-        }elseif($request->typeform=='search'){
-            $action="institucion/buscar";
+            $action="muestra/eliminar/".$request->field_id;
         }
 
-        $institucion = Institucion::find($request->field_id);
+        $muestra = Muestra::find($request->field_id);
 
         if ($request->typeform=='deleted') {
             $fields=false;
@@ -114,45 +113,54 @@ class MuestraController extends Controller
 
             $fields=array(
 
-                'nombre_institucion' => array(
+                'codigo_muestra' => array(
                     'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->nombre_institucion,
-                    'id'    => 'nombre_institucion',
-                    'label' => 'Nombre de la institucion'
+                    'value' => (isset($muestra->codigo_muestra))? $muestra->codigo_muestra:'',
+                    'id'    => 'codigo_muestra',
+                    'label' => 'Codigo de la Muestra'
                 ),
-                'correo_institucional' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->correo_institucional,
-                    'id'    => 'correo_institucional',
-                    'label' => 'Correo de la institucion'
+                'tipo_muestra' => array(
+                    'type'  => 'select',
+                    'value' => (isset($muestra->tipo_muestra))? $muestra->tipo_muestra:'',
+                    'id'    => 'tipo_muestra',
+                    'label' => 'Tipo de Muestra',
+                    'options'   => array(
+                        ''=>'Seleccione...',
+                        '1'=>'Tipo1',
+                        '2'=>'Tipo2'
+                    )
                 ),
-                'direccion_institucion' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->direccion_institucion,
-                    'id'    => 'direccion_institucion',
-                    'label' => 'Direccion de la institucion'
+                'separador1'=>array('type'=>'separador'),
+                'descripcion_muestra' => array(
+                    'type'  => 'textarea',
+                    'value' => (isset($muestra->descripcion_muestra))? $muestra->descripcion_muestra:'',
+                    'id'    => 'descripcion_muestra',
+                    'label' => 'Descripcion de la Muestra'
                 ),
-                'telefono_institucion' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->telefono_institucion,
-                    'id'    => 'telefono_institucion',
-                    'label' => 'Telefono de la institucion'
+                'fecha_recepcion' => array(
+                    'type'  => 'date',
+                    'value' => (isset($muestra->fecha_recepcion))? $fecha_recepcion:'',
+                    'id'    => 'fecha_recepcion',
+                    'label' => 'Fecha de Recepción de la Muestra'
                 ),
                 'status' => array(
                     'type'      => 'select',
-                    'value'     => (empty($institucion))? '' : $institucion->status,
+                    'value'     => (isset($muestra->status))? $muestra->status:'',
                     'id'        => 'status',
-                    'validaciones'=>array(
-
-                        'obligatorio'
-
-                    ),
                     'label'     => 'Status',
                     'options'   => array(
                         ''=>'Seleccione...',
                         '1'=>'Activo',
-                        '0'=>'Inactivo'
+                        '2'=>'Inactivo'
                     )
+                ),
+                'muestras'=>array(
+
+                    'type'      => 'muestra',
+                    'id'        => 'muestra',
+                    'label'     => 'Archivos',
+                    'data'      => $muestra
+
                 )
             );
 

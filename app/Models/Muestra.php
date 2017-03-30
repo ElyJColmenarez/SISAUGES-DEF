@@ -35,12 +35,12 @@ class Muestra extends Model
             'id_tecnica_estudio');
     }
 
-    public function scopeNombreOriginalMuestra($query,$search){
+    public function scopeCodigoMuestra($query,$search){
 
-        return $query->where('nombre_original_muestra', 'LIKE', '%'.$search.'%');
+        return $query->where('codigo_muestra', 'LIKE', '%'.$search.'%');
     }
 
-    public function scopeTipoDeMuestra($query,$search){
+    public function scopeTipoMuestra($query,$search){
 
         return $query->where('tipo_muestra', '=', $search);
     }
@@ -55,7 +55,7 @@ class Muestra extends Model
         return $query->where('fecha_recepcion', '=', $search);
     } 
 
-    public function scopeStatusInstitucion($query,$search){
+    public function scopeStatusMuestra($query,$search){
 
         return $query->where('status', '=', $search);
     }

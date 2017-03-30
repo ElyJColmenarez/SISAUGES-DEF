@@ -137,6 +137,39 @@
 	cursor: pointer;
 }
 
+.ocultos{
+	display: none;
+}
+
+.muestra-seccion > div:nth-child(1){
+	margin-bottom: 15px;
+}
+
+.muestra-seccion > div:nth-child(2){
+	max-height: 300px;
+	overflow-y: scroll;
+
+}
+
+.muestra-seccion table tbody tr td:nth-child(4){
+	text-align: center;
+}
+
+.muestra-seccion table tbody tr td:nth-child(4) a{
+	margin: 0px 5px;
+}
+
+.muestra-seccion table tbody tr td:nth-child(4) a i.fa{
+	color: #fff;
+	text-decoration: none;
+}
+
+.waitingprev{
+	text-align: center;
+	max-height: 300px;
+	overflow-y: scroll;
+}
+
 @media only screen and (min-width: 992px){
 
 	.form-control{

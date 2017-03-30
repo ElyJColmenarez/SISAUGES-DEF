@@ -256,4 +256,71 @@ jQuery(document).ready(function() {
 
     });
 
+
+    /*Muestras Functions*/
+
+    $('#modalForm').on('click','button[name=cargaimg]',function(event){
+
+        event.preventDefault();
+
+        $('#modalForm .ocultos input').click();
+
+    });
+
+    $('#modalForm').on('change','.ocultos input',function(event){
+
+        event.preventDefault();
+
+
+        for (var i = 0; i < $(this)[0].files.length; i++) {
+
+            var aux= $(this)[0].files[i];
+
+            var htmlsect="<tr id='tablereg"+i+"' data-regid='"+i+"'>";
+            htmlsect=htmlsect+"<td>"+aux.name+"</td>";
+            htmlsect=htmlsect+"<td>"+aux.type+"</td>";
+            htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
+            htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
+            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
+            htmlsect=htmlsect+"</tr>";
+
+            $('#modalForm .muestra-seccion table tbody').append(htmlsect);
+        }
+
+
+    });
+
+
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(4) a:nth-child(2)',function(event){
+
+        event.preventDefault();
+
+        $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
+            $(this).remove();
+            $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-regid')+'">');
+        });
+
+    });
+
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(4) a:nth-child(1)',function(event){
+
+        event.preventDefault();
+
+        $('#mdl-truebody').slideUp('fast','swing',function(){
+            $('#modalForm .imgpreview').slideDown('fast','swing');
+        });
+
+    });
+
+    $('#modalForm').on('click','.imgpreview button',function(event){
+
+        event.preventDefault();
+
+        $('#modalForm .imgpreview').slideUp('fast','swing',function(){
+            $('#mdl-truebody').slideDown('fast','swing');
+        });
+    })
+
+
+
 });

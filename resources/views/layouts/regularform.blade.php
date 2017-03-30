@@ -18,6 +18,21 @@
 				</footer>
 		    </div>
 
+		    <div class="imgpreview" style="display: none;">
+		    	<div class="panel-body">
+			    	<div class="waitingprev">
+			    		<img src="{{asset('assets/images/!logged-user.jpg')}}">
+			    	</div>
+			    </div>
+		    	<footer class="panel-footer">
+					<div class="row">
+						<div class="col-md-12 text-right">
+							<button class="btn btn-primary">Atras</button>
+						</div>
+					</div>
+				</footer>
+		    </div>
+
 		    <div id="result-mdl" style="display: none;" data-tmodalorigin="{{(!$fields)?'modal-block-warning':'modal-block-primary'}}">
 		    	<div class="panel-body ">
 					<div class="modal-wrapper">
@@ -79,10 +94,56 @@
 								                </div>
 								            </div>
 
-								        @elseif( $value['type']=='field' )
+								        @elseif( $value['type']=='textarea' )
+
+								        	<div class="col-md-12">
+								                <label class="col-md-2 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+								                <div class="col-md-10">
+								                	<textarea class="form-control" rows="3"  id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif></textarea>
+								                </div>
+								            </div>
+
+								        @elseif( $value['type']=='separador' )
 
 
-								        	
+
+
+								        @elseif( $value['type']=='muestra' )
+
+								        	<div class="col-md-12 muestra-seccion">
+
+								        		<div class="row">
+								        			<div class="col-md-4">
+									        			<button class="btn btn-default click" name="cargaimg">Agregar Archivos</button>
+									        			<div class="ocultos"><input type="file" name="imagenes[]"  multiple="true"></div>
+									        			<div class="borrados">
+									        				<input type="hidden" name="borrados[]" value="">
+									        			</div>
+									        		</div>
+
+								        		</div>
+
+								        		<div class="row">
+								        			<div class="col-md-12">
+								        				<table class="table table-bordered table-striped mb-none">
+
+								        					<thead>
+								        						<tr>
+								        							<th>Archivo</th>
+								        							<th>Tipo de Archivo</th>
+								        							<th>Tamaño</th>
+								        							<th></th>
+								        						</tr>
+								        					</thead>
+								        					<tbody>
+								        						
+								        					</tbody>
+
+								        				</table>
+								        			</div>
+								        		</div>
+								        		
+								        	</div>
 
 
 
@@ -176,6 +237,8 @@
 							        @endforeach
 							    
 							    </div>
+
+
 							@endforeach
 
 							@foreach( $hiddenfields as $key => $value )
