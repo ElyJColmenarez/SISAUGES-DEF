@@ -81,6 +81,21 @@ class TutorController extends Controller
                 )
             ),
 
+            'id_departamento' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->id_departamento))? $request->id_departamento:'',
+                'id'        => 'departamento',
+                'label'     => 'Departamento',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'Informática',
+                    '2'         =>'Electricidad',
+                    '3'         =>'Tecnología de los materiales',
+                    '4'         =>'Quimica',
+
+                )
+            ),
+
             'status' => array(
                 'type'      => 'select',
                 'value'     => (isset($request->status))? $request->status:'',
@@ -96,8 +111,8 @@ class TutorController extends Controller
 
         $data=array(
 
-            'title'             => 'Usuarios',
-            'principal_search'  => 'username',
+            'title'             => 'Tutores',
+            'principal_search'  => 'cedula_persona',
             'registros'         => $tutor,
             'carpeta'           => 'tutor'
 
@@ -118,7 +133,7 @@ class TutorController extends Controller
         }
         elseif($request->typeform == 'modify')
         {
-            $action = "tutor/modificar/".$request->field_id;
+            $action = "tutor/editar/".$request->field_id;
         }
         elseif ($request->typeform == 'delete')
         {
@@ -315,7 +330,7 @@ class TutorController extends Controller
     public function update(Request $request, $id)
     {
         $tutor      = Tutor::find($id);
-        $persona    = Persona::buscarpersona($tutor->cedula)->get();
+        $persona    = Persona::buscarpersona($tutor->cedula_persona)->get();
         $persona    = Persona::find($persona[0]->id_persona);
 
         $persona->cedula    = $request->cedula;
