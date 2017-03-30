@@ -23,8 +23,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $persona = Persona::buscarpersona($request->cedula)->orderBy('cedula','desc')->paginate(20);
-        $usuario = User::cedulauser($request->cedula)->orderBy('username','desc')->paginate(20);
+        $usuario = Persona::with('usuario')->buscarPersona($request->cedula)->orderBy('cedula','asc')->paginate(20);
+
         $action = "usuario/listar";
 
         $fields = array(
@@ -107,7 +107,7 @@ class UserController extends Controller
 
             'title'             => 'Usuarios',
             'principal_search'  => 'username',
-            'registros'         => $persona,
+            'registros'         => $usuario,
             'carpeta'           => 'users'
 
         );

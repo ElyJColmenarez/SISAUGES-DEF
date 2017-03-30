@@ -19,12 +19,12 @@ class Persona extends Model
 
     public function estudiante()
     {
-        return $this->hasOne(Estudiante::class,'cedula_persona');
+        return $this->hasOne(Estudiante::class,'cedula_persona','cedula');
     }
 
     public function tutor()
     {
-        return $this->hasOne(Tutor::class,'cedula_persona');
+        return $this->hasOne(Tutor::class,'cedula_persona','cedula');
     }
 
     public function scopeBuscarPersona($query,$search)
