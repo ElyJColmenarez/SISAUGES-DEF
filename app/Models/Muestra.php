@@ -10,11 +10,11 @@ class Muestra extends Model
     protected $table="muestra";
     protected $primaryKey="id_muestra";
     protected $fillable = [ 'codigo_muestra',
-        'nombre_original_muestra',
-        'tipo_muestra',
-        'descripcion_muestra',
-        'fecha_recepcion',
-        'status'];
+                            'nombre_original_muestra',
+                            'tipo_muestra',
+                            'descripcion_muestra',
+                            'fecha_recepcion',
+                            'status'];
     protected $guarded = ['id_muestra','id_usuario'];
 
     public function usuario()

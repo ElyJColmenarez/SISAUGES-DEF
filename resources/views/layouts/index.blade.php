@@ -71,7 +71,7 @@
                             <div class="col-md-6">
                             </div>
                             <div class="col-md-6">
-                                {!!$data['registros']->appends($request->all())->render()!!}
+                                {!!$data['registros']->appends($request->all()->render())!!}
                             </div>
 
                         </div>
