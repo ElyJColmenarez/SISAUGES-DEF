@@ -9,7 +9,7 @@ class TecnicaEstudio extends Model
     public $timestamps = false;
     protected $table = 'tecnica_estudio';
     protected $primaryKey = 'id_tecnica_estudio';
-    protected $fillable = ['descripcion_tecnica_estudio','status'];
+    protected $fillable = ['descripcion_tecnica_estudio','estatus'];
     protected $guarded = ['id_tecnica_estudio'];
 
     public function muestra()
@@ -27,6 +27,6 @@ class TecnicaEstudio extends Model
 
     public function scopeStatusTecnicaE($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 }

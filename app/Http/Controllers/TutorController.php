@@ -72,8 +72,8 @@ class TutorController extends Controller
             'institucion' => array(
                 'type'      => 'select',
                 'value'     => (isset($request->institucion))? $request->institucion:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'id'        => 'institucion',
+                'label'     => 'Institución',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true' =>'Activo',
@@ -96,11 +96,11 @@ class TutorController extends Controller
                 )
             ),
 
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->status))? $request->status:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true' =>'Activo',
@@ -237,11 +237,11 @@ class TutorController extends Controller
                     )
                 ),
 
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (!empty($tutor->status))? $tutor->status:'',
-                    'id'        => 'status',
-                    'label'     => 'Status',
+                    'value'     => (!empty($tutor->estatus))? $tutor->estatus:'',
+                    'id'        => 'estatus',
+                    'label'     => 'estatus',
                     'options'   => array(
                         ''=>'Seleccione...',
                         'true' =>'Activo',
@@ -292,14 +292,14 @@ class TutorController extends Controller
                 $persona->apellido  = $request->apellido;
                 $persona->email     = $request->email;
                 $persona->telefono  = $request->telefono;
-                $persona->status    = $request->status;
+                $persona->estatus    = $request->estatus;
                 $persona->save();
 
                 $tutor = new Tutor();
 
                 $tutor->id_departamento     = $request->departamento;
                 $tutor->cedula_persona      = $request->cedula;
-                $tutor->status              = $request->status;
+                $tutor->estatus              = $request->estatus;
                 $val = $tutor->save();
 
 
@@ -310,7 +310,7 @@ class TutorController extends Controller
 
                 $tutor->id_departamento     = $request->departamento;
                 $tutor->cedula_persona      = $request->cedula;
-                $tutor->status              = $request->status;
+                $tutor->estatus              = $request->estatus;
                 $val = $tutor->save();
             }
 
@@ -338,13 +338,13 @@ class TutorController extends Controller
         $persona->apellido  = $request->apellido;
         $persona->email     = $request->email;
         $persona->telefono  = $request->telefono;
-        $persona->status    = $request->status;
+        $persona->estatus    = $request->estatus;
         $persona->save();
 
 
         $tutor->id_departamento     = $request->departamento;
         $tutor->cedula_persona      = $request->cedula;
-        $tutor->status              = $request->status;
+        $tutor->estatus              = $request->estatus;
         $val = $tutor->save();
 
         return $val;
@@ -362,8 +362,8 @@ class TutorController extends Controller
         $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
         $persona = Persona::find($persona[0]->id_persona);
 
-        $persona->status = false;
-        $tutor->status = false;
+        $persona->estatus = false;
+        $tutor->estatus = false;
 
         $persona->save();
         $val = $tutor->save();

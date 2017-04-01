@@ -49,16 +49,16 @@ class DepartamentoController extends Controller
     {
 
  /*    var_dump($request->descripcion_departamento);
-     var_dump($request->status);*/
+     var_dump($request->estatus);*/
       
 
-        /* if (!is_null($request->status)){
+        /* if (!is_null($request->estatus)){
       
              $departamento = Departamento::descripciondepartamento($request->descripcion_departamento)->    
                 whereHas('Institucion', function($query) use ($request){
                         $query->nombreinstitucion($request->nombre_institucion);
                 })-> 
-                   statusdepartamento($request->status)->
+                   statusdepartamento($request->estatus)->
                 orderBy('descripcion_departamento', 'desc')->paginate(20);
 
         }else{
@@ -66,12 +66,12 @@ class DepartamentoController extends Controller
                 whereHas('Institucion', function($query) use ($request){
                         $query->nombreinstitucion($request->nombre_institucion);
                 })-> 
-                //   statusdepartamento($request->status)->
+                //   statusdepartamento($request->estatus)->
                 orderBy('descripcion_departamento', 'desc')->paginate(20);
         }*/
 
           $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)
-               //     StatusDepartamento($request->status)                   
+               //     StatusDepartamento($request->estatus)
                     ->orderBy('descripcion_departamento', 'desc')->paginate(20);
  
 
@@ -94,11 +94,11 @@ class DepartamentoController extends Controller
                     'label' => 'institucion '
                 ),
 
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (isset($request->status))? $request->status: '',
-                    'id'        => 'status',
-                    'label'     => 'Status',
+                    'value'     => (isset($request->estatus))? $request->estatus: '',
+                    'id'        => 'estatus',
+                    'label'     => 'estatus',
                     'validaciones'=>array(
                         'obligatorio'
                     ),                    
@@ -187,14 +187,14 @@ class DepartamentoController extends Controller
                     'options'   => $res
                 ),
 
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (empty($departamento))? '' : $departamento->status,
-                    'id'        => 'status',
+                    'value'     => (empty($departamento))? '' : $departamento->estatus,
+                    'id'        => 'estatus',
                     'validaciones'=>array(
                         'obligatorio'
                     ),
-                    'label'     => 'Status',
+                    'label'     => 'estatus',
                     'options'   => array(
                         ''=>'Seleccione...',
                         'true'=>'Activo',
@@ -296,7 +296,7 @@ class DepartamentoController extends Controller
 
             $departamento->descripcion_departamento=$request->descripcion_departamento;
             $departamento->id_institucion=$request->id_institucion;
-            $departamento->status=$request->status;
+            $departamento->estatus=$request->estatus;
 
             $val=$departamento->save();
         }
@@ -319,7 +319,7 @@ class DepartamentoController extends Controller
 
     public function destroy($id){
         $departamento=Departamento::find($id);
-        $departamento->status='false';
+        $departamento->estatus='false';
         $val=$departamento->save();
         return $val;
     }

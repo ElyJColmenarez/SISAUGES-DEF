@@ -24,7 +24,7 @@ class PersonaController extends Controller
         $persona->apellido=$request->apellido;
         $persona->email=$request->email;
         $persona->telefono=$request->telefono;
-        $persona->status = $request->status;
+        $persona->estatus = $request->estatus;
 
         $persona->save();
 
@@ -33,7 +33,7 @@ class PersonaController extends Controller
     public function destroy($id)
     {
         $persona = Persona::find($id);
-        $persona->status = false ;
+        $persona->estatus = false ;
         $persona->save();
     }
 }

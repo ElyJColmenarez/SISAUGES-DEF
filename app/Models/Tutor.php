@@ -9,7 +9,7 @@ class Tutor extends Model
     public $timestamps = false;
     protected $table = "tutor";
     protected $primaryKey = "id_tutor";
-    protected $fillable = ['cedula_persona'];
+    protected $fillable = ['cedula_persona','estatus'];
     protected $guarded = ['id_tutor','id_departamento'];
 
     public function departamento()

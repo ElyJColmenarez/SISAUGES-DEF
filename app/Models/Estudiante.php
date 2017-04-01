@@ -9,7 +9,7 @@ class Estudiante extends Model
     public $timestamps=false;
     protected $table="estudiante";
     protected $primaryKey="id_estudiante";
-    protected $fillable=['carrera_estudiante', 'semestre_estudiante','cedula_persona'];
+    protected $fillable=['carrera_estudiante', 'semestre_estudiante','cedula_persona','estatus'];
     protected $guarded=['id_persona','id_estudiante', 'id_proyecto'];
 
     public function proyecto()

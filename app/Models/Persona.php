@@ -9,7 +9,7 @@ class Persona extends Model
     public $timestamps = false;
     protected $table = "persona";
     protected $primaryKey = "id_persona";
-    protected $fillable = ['cedula','nombre','apellido','email','telefono','status'];
+    protected $fillable = ['cedula','nombre','apellido','email','telefono','estatus'];
     protected $guarded = ['id_persona'];
 
     public function usuario()
@@ -55,6 +55,6 @@ class Persona extends Model
 
     public function scopeStatusPersona($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 }

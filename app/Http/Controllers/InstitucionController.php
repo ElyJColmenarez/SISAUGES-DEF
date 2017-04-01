@@ -86,11 +86,11 @@ class InstitucionController extends Controller
                 'id'    => 'telefono_institucion',
                 'label' => 'Telefono de la institucion'
             ),
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->status))? $request->status:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
@@ -166,16 +166,16 @@ class InstitucionController extends Controller
                     'id'    => 'telefono_institucion',
                     'label' => 'Telefono de la institucion'
                 ),
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (empty($institucion))? '' : $institucion->status,
-                    'id'        => 'status',
+                    'value'     => (empty($institucion))? '' : $institucion->estatus,
+                    'id'        => 'estatus',
                     'validaciones'=>array(
 
                         'obligatorio'
 
                     ),
-                    'label'     => 'Status',
+                    'label'     => 'estatus',
                     'options'   => array(
                         ''=>'Seleccione...',
                         '1'=>'Activo',
@@ -272,7 +272,7 @@ class InstitucionController extends Controller
             $institucion->direccion_institucion = $request->direccion_institucion;
             $institucion->correo_institucional  = $request->correo_institucional;
             $institucion->telefono_institucion  = $request->telefono_institucion;
-            $institucion->status                = $request->status;
+            $institucion->estatus                = $request->estatus;
 
             $val=$institucion->save();
         }
@@ -292,7 +292,7 @@ class InstitucionController extends Controller
 
         $institucion=Institucion::find($id);
 
-        $institucion->status = $request->status;
+        $institucion->estatus = $request->estatus;
         $val = $institucion->save();
 
         return $val;

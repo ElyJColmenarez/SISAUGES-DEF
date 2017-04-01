@@ -11,7 +11,7 @@ class Laboratorio extends Model
 	public $timestamps=false;
     protected $table="laboratorio";
     protected $primaryKey="id_laboratorio";
-    protected $fillable = ['nombre_laboratorio','ubicacion_laboratorio','telefono_laboratorio','status'];
+    protected $fillable = ['nombre_laboratorio','ubicacion_laboratorio','telefono_laboratorio','estatus'];
     protected $guarded = ['id_Laboratorio'];
 
    /* public function muestraLaboratorio()
@@ -39,7 +39,7 @@ class Laboratorio extends Model
     
     public function scopeStatusLaboratorio($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 
 }

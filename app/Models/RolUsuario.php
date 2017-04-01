@@ -9,7 +9,7 @@ class RolUsuario extends Model
     public $timestamps=false;
     protected $table='rol_usuario';
     protected $primaryKey='id_rol';
-    protected $fillable = ['descripcion_rol','status'];
+    protected $fillable = ['descripcion_rol','estatus'];
     protected $guarded = ['id_rol'];
 
     public function usuarios()
@@ -24,6 +24,6 @@ class RolUsuario extends Model
 
     public function scopeStatusRol($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 }

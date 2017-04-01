@@ -10,7 +10,7 @@ class Departamento extends Model
     public $timestamps = false;
     protected  $table = "departamento";
     protected  $primaryKey = "id_departamento";
-    protected $fillable = ['descripcion_departamento','id_institucion','status'];
+    protected $fillable = ['descripcion_departamento','id_institucion','estatus'];
     protected $guarded = ['id_departamento'];
 
 
@@ -31,7 +31,7 @@ class Departamento extends Model
 
     public function scopeStatusDepartamento($query,$search){
 
-      return $query->where('status', $search);
+      return $query->where('estatus', $search);
     }
 
     public function scopeInstitutoDepartamento($query,$search){

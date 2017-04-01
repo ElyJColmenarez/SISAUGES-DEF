@@ -9,7 +9,7 @@ class Proyecto extends Model
     public $timestamps = false;
     protected $table = "proyecto";
     protected $primaryKey = "id_proyecto";
-    protected $fillable = ['nombre_proyecto','status_proyecto','permiso_proyecto','fecha_inicio','fecha_final'];
+    protected $fillable = ['nombre_proyecto','estatus_proyecto','permiso_proyecto','fecha_inicio','fecha_final'];
     protected $guarded = ['id_proyecto','id_sector_pr'];
 
     public function institucion()
@@ -54,7 +54,7 @@ class Proyecto extends Model
 
     public function scopeStatusProyecto($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 
 }

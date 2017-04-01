@@ -9,7 +9,7 @@ class User extends Authenticatable
     public $timestamps = false;
     protected $table="usuario";
     protected $primaryKey = "id_usuario";
-    protected $fillable = ['username', 'password','cedula_persona','status'];
+    protected $fillable = ['username', 'password','cedula_persona','estatus'];
     protected $casts = ['id_rol' => 'integer'];
     protected $guarded = ['id_usuario','id_rol'];
     protected $hidden = ['remember_token'];
@@ -41,7 +41,7 @@ class User extends Authenticatable
 
     public function scopeStatusUser($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
     
 }

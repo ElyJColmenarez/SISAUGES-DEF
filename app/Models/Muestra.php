@@ -14,7 +14,7 @@ class Muestra extends Model
                             'tipo_muestra',
                             'descripcion_muestra',
                             'fecha_recepcion',
-                            'status'];
+                            'estatus'];
     protected $guarded = ['id_muestra','id_usuario'];
 
     public function usuario()
@@ -67,7 +67,7 @@ class Muestra extends Model
     public function scopeStatusMuestra($query,$search){
 
         if (count(trim($search))>1) {
-            return $query->where('status', '=', $search);
+            return $query->where('estatus', '=', $search);
         }
     }
 }

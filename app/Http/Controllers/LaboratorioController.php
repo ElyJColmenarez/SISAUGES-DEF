@@ -22,17 +22,17 @@ class LaboratorioController extends Controller
 
         
 //$Laboratorio=Laboratorio::find(1);
-   // if (!is_null($request->status)){
+   // if (!is_null($request->estatus)){
          $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
          ubicacionlaboratorio($request->ubicacion_laboratorio)->
          telefonolaboratorio($request->telefono_laboratorio)->
-      //   statuslaboratorio($request->status)->
+      //   statuslaboratorio($request->estatus)->
             orderBy('nombre_laboratorio', 'desc')->paginate(20);
    /* }else{
         $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
          ubicacionlaboratorio($request->ubicacion_laboratorio)->
          telefonolaboratorio($request->telefono_laboratorio)->    
-         statuslaboratorio($request->status)->      
+         statuslaboratorio($request->estatus)->
          orderBy('nombre_laboratorio', 'desc')->paginate(20);
     }*/
      
@@ -61,11 +61,11 @@ class LaboratorioController extends Controller
                 'id'    => 'telefono_laboratorio',
                 'label' => 'Telefono de la laboratorio'
             ),
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->status))? $request->status:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true'=>'Activo',
@@ -141,11 +141,11 @@ class LaboratorioController extends Controller
                 'id'    => 'telefono_laboratorio',
                 'label' => 'Telefono de la laboratorio'
             ),
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',               
-                'value'     => (empty($laboratorio))? '' : $laboratorio->status,
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (empty($laboratorio))? '' : $laboratorio->estatus,
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
@@ -247,7 +247,7 @@ class LaboratorioController extends Controller
             $Laboratorio->nombre_laboratorio           =$request->nombre_laboratorio;
             $Laboratorio->ubicacion_laboratorio        =$request->ubicacion_laboratorio;
             $Laboratorio->telefono_laboratorio         =$request->telefono_laboratorio;            
-            $Laboratorio->status                       =$request->status;
+            $Laboratorio->estatus                       =$request->estatus;
 
             $val=$Laboratorio->save();
         }
@@ -270,7 +270,7 @@ class LaboratorioController extends Controller
 
     public function destroy($id){
         $Laboratorio=Laboratorio::find($id);
-        $Laboratorio->status='false';
+        $Laboratorio->estatus='false';
         $val=$Laboratorio->save();
         return $val;
     }

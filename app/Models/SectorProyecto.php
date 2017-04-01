@@ -9,7 +9,7 @@ class SectorProyecto extends Model
     public $timestamps = false;
     protected $table = 'sector_proyecto';
     protected $primaryKey = 'id_sector_pr';
-    protected $fillable = ['descripcion_sector','status'];
+    protected $fillable = ['descripcion_sector','estatus'];
     protected $guarded = ['id_sector_pr'];
 
     public function proyecto()
@@ -24,6 +24,6 @@ class SectorProyecto extends Model
 
     public function scopeStatusSector($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 }

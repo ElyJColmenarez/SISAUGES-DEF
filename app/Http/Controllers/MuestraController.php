@@ -58,15 +58,15 @@ class MuestraController extends Controller
             ),
             'fecha_recepcion' => array(
                 'type'  => 'date',
-                'value' => (isset($request->fecha_recepcion))? $fecha_recepcion:'',
+                'value' => (isset($request->fecha_recepcion))? $request->fecha_recepcion:'',
                 'id'    => 'fecha_recepcion',
                 'label' => 'Fecha de Recepción de la Muestra'
             ),
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->status))? $request->status:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
@@ -134,7 +134,7 @@ class MuestraController extends Controller
         }
 
         $muestra = Muestra::find($request->field_id);
-        $proyectos = Proyecto::where('status_proyecto','<>','Culminado')->get();
+        $proyectos = Proyecto::where('estatus_proyecto','<>','Culminado')->get();
 
         if ($request->typeform=='deleted') {
             $fields=false;
@@ -181,11 +181,11 @@ class MuestraController extends Controller
                     'id'    => 'fecha_recepcion',
                     'label' => 'Fecha de Recepción de la Muestra'
                 ),
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (isset($muestra->status))? $muestra->status:'',
-                    'id'        => 'status',
-                    'label'     => 'Status',
+                    'value'     => (isset($muestra->estatus))? $muestra->estatus:'',
+                    'id'        => 'estatus',
+                    'label'     => 'estatus',
                     'options'   => array(
                         ''=>'Seleccione...',
                         '1'=>'Activo',
@@ -194,7 +194,7 @@ class MuestraController extends Controller
                 ),
                 'proyecto'  => array(
                     'type'      => 'select',
-                    'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->status:'',
+                    'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->estatus:'',
                     'id'        => 'id_proyecto',
                     'label'     => 'Proyecto',
                     'selecttype'=> 'obj',
@@ -244,7 +244,7 @@ class MuestraController extends Controller
 
         $aux=$request->all();
 
-        if (trim($request->codigo_muestra)=='' || trim($request->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion)=='' || trim($request->status)=='') {
+        if (trim($request->codigo_muestra)=='' || trim($request->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion)=='' || trim($request->estatus)=='') {
             $val=false;
         }else{
 
@@ -319,7 +319,7 @@ class MuestraController extends Controller
             $institucion->direccion_institucion = $request->direccion_institucion;
             $institucion->correo_institucional  = $request->correo_institucional;
             $institucion->telefono_institucion  = $request->telefono_institucion;
-            $institucion->status                = $request->status;
+            $institucion->estatus                = $request->estatus;
 
             $val=$institucion->save();
         }
@@ -339,7 +339,7 @@ class MuestraController extends Controller
 
         $institucion=Institucion::find($id);
 
-        $institucion->status = $request->status;
+        $institucion->estatus = $request->estatus;
         $val = $institucion->save();
 
         return $val;

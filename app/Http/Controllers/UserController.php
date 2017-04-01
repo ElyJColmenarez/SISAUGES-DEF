@@ -90,11 +90,11 @@ class UserController extends Controller
                 'options'       => array('2' => 'Administrador', '3' => 'Operador')
             ),
 
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->status))? $request->status:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true' =>'Activo',
@@ -222,11 +222,11 @@ class UserController extends Controller
                     'options'       => array('2' => 'Administrador', '3' => 'Operador')
                 ),
 
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (empty($usuario))? '': $usuario->status,
-                    'id'        => 'status',
-                    'label'     => 'Status',
+                    'value'     => (empty($usuario))? '': $usuario->estatus,
+                    'id'        => 'estatus',
+                    'label'     => 'estatus',
                     'options'   => array(
                                     ''=>'Seleccione...',
                                     'true' =>'Activo',
@@ -279,7 +279,7 @@ class UserController extends Controller
                 $persona->apellido  = $request->apellido;
                 $persona->email     = $request->email;
                 $persona->telefono  = $request->telefono;
-                $persona->status    = $request->status;
+                $persona->estatus    = $request->estatus;
                 $persona->save();
 
                 $usuario = new User();
@@ -288,7 +288,7 @@ class UserController extends Controller
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
                 $usuario->cedula_persona    = $request->cedula;
-                $usuario->status            = $request->status;
+                $usuario->estatus            = $request->estatus;
                 $val = $usuario->save();
 
 
@@ -301,7 +301,7 @@ class UserController extends Controller
                 $usuario->password          = Hash::make($request->password);
                 $usuario->id_rol            = $request->id_rol;
                 $usuario->cedula_persona    = $request->cedula;
-                $usuario->status            = $request->status;
+                $usuario->estatus            = $request->estatus;
                 $val = $usuario->save();
             }
 
@@ -328,7 +328,7 @@ class UserController extends Controller
         $persona->apellido  = $request->apellido;
         $persona->email     = $request->email;
         $persona->telefono  = $request->telefono;
-        $persona->status    = $request->status;
+        $persona->estatus    = $request->estatus;
         $persona->save();
 
 
@@ -336,7 +336,7 @@ class UserController extends Controller
         $usuario->password          = Hash::make($request->password);
         $usuario->id_rol            = $request->id_rol;
         $usuario->cedula_persona    = $request->cedula;
-        $usuario->status            = $request->status;
+        $usuario->estatus            = $request->estatus;
 
         $val = $usuario->save();
 
@@ -356,8 +356,8 @@ class UserController extends Controller
         $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
         $persona = Persona::find($persona[0]->id_persona);
 
-        $usuario->status = false;
-        $persona->status = false;
+        $usuario->estatus = false;
+        $persona->estatus = false;
         $persona->save();
         $val = $usuario->save();
 

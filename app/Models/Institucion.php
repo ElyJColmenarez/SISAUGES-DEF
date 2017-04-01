@@ -9,7 +9,7 @@ class Institucion extends Model
     public $timestamps=false;
     protected $table="institucion";
     protected $primaryKey="id_institucion";
-    protected $fillable = ['nombre_institucion','direccion_institucion','correo_institucional','telefono_institucion','status'];
+    protected $fillable = ['nombre_institucion','direccion_institucion','correo_institucional','telefono_institucion','estatus'];
     protected $guarded = ['id_institucion'];
 
     public function proyecto()
@@ -47,6 +47,6 @@ class Institucion extends Model
     
     public function scopeStatusInstitucion($query,$search){
 
-        return $query->where('status', '=', $search);
+        return $query->where('estatus', '=', $search);
     }
 }

@@ -109,11 +109,11 @@ class EstudianteController extends Controller
                     '4'         =>'4')
             ),
 
-            'status' => array(
+            'estatus' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->status))? $request->status:'',
-                'id'        => 'status',
-                'label'     => 'Status',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true' =>'Activo',
@@ -255,11 +255,11 @@ class EstudianteController extends Controller
                         '4'         =>'Quimica')
                 ),
 
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (!empty($estudiante->status))? $estudiante->status:'',
-                    'id'        => 'status',
-                    'label'     => 'Status',
+                    'value'     => (!empty($estudiante->estatus))? $estudiante->estatus:'',
+                    'id'        => 'estatus',
+                    'label'     => 'estatus',
                     'options'   => array(
                         ''=>'Seleccione...',
                         'true' =>'Activo',
@@ -313,7 +313,7 @@ class EstudianteController extends Controller
                 $persona->apellido  = $request->apellido;
                 $persona->email     = $request->email;
                 $persona->telefono  = $request->telefono;
-                $persona->status    = $request->status;
+                $persona->estatus    = $request->estatus;
                 $persona->save();
 
                 $estudiante = new Estudiante();
@@ -322,7 +322,7 @@ class EstudianteController extends Controller
                 $estudiante->semestre_estudiante    = $request->semestre_estudiante;
                 $estudiante->id_proyecto            = $request->id_proyecto;
                 $estudiante->cedula_persona         = $request->cedula;
-                $estudiante->status                 = $request->status;
+                $estudiante->estatus                 = $request->estatus;
                 $val = $estudiante->save();
 
 
@@ -335,7 +335,7 @@ class EstudianteController extends Controller
                 $estudiante->semestre_estudiante    = $request->semestre_estudiante;
                 $estudiante->id_proyecto            = $request->id_proyecto;
                 $estudiante->cedula_persona         = $request->cedula;
-                $estudiante->status                 = $request->status;
+                $estudiante->estatus                 = $request->estatus;
                 $val = $estudiante->save();
             }
 
@@ -361,7 +361,7 @@ class EstudianteController extends Controller
         $persona->apellido  = $request->apellido;
         $persona->email     = $request->email;
         $persona->telefono  = $request->telefono;
-        $persona->status    = $request->status;
+        $persona->estatus    = $request->estatus;
         $persona->save();
 
 
@@ -369,7 +369,7 @@ class EstudianteController extends Controller
         $estudiante->semestre_estudiante    = $request->semestre_estudiante;
         $estudiante->id_proyecto            = $request->id_proyecto;
         $estudiante->cedula_persona         = $request->cedula;
-        $estudiante->status                 = $request->status;
+        $estudiante->estatus                 = $request->estatus;
         $val = $estudiante->save();
 
         return $val;
@@ -387,8 +387,8 @@ class EstudianteController extends Controller
         $persona = Persona::buscarpersona($estudiante->cedula_persona)->get();
         $persona = Persona::find($persona[0]->id_persona);
 
-        $persona->status = false;
-        $estudiante->status = false;
+        $persona->estatus = false;
+        $estudiante->estatus = false;
 
         $persona->save();
         $val = $estudiante->save();

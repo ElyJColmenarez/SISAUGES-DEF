@@ -14,9 +14,9 @@ class TecnicaEstudioController extends Controller
     public function index(Request $request)
     {
 
-        if (!is_null($request->status)){
+        if (!is_null($request->estatus)){
             $tecnicas=TecnicaEstudio::DescripcionTecnicaE($request->descripcion_tecnica_estudio)->
-            StatusTecnicaE($request->status)->
+            StatusTecnicaE($request->estatus)->
             orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
         }else{
             $tecnicas=TecnicaEstudio::DescripcionTecnicaE($request->descripcion_tecnica_estudio)->
@@ -34,11 +34,11 @@ class TecnicaEstudioController extends Controller
                     'label' => 'Nombre'
                 ),
                
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (isset($request->status))? $request->status: '',
-                    'id'        => 'status',
-                    'label'     => 'Status',
+                    'value'     => (isset($request->estatus))? $request->estatus: '',
+                    'id'        => 'estatus',
+                    'label'     => 'estatus',
                     'validaciones'=>array(
                         'obligatorio'
                     ),                    
@@ -102,14 +102,14 @@ class TecnicaEstudioController extends Controller
                 ),
 
 
-                'status' => array(
+                'estatus' => array(
                     'type'      => 'select',
-                    'value'     => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->status,
-                    'id'        => 'status',
+                    'value'     => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->estatus,
+                    'id'        => 'estatus',
                     'validaciones'=>array(
                         'obligatorio'
                     ),
-                    'label'     => 'Status',
+                    'label'     => 'estatus',
                     'options'   => array(
                         ''=>'Seleccione...',
                         '1'=>'Activo',
@@ -210,7 +210,7 @@ class TecnicaEstudioController extends Controller
         }else{
 
             $tecnicasEstudio->descripcion_tecnica_estudio=$request->descripcion_tecnica_estudio;
-            $tecnicasEstudio->status=$request->status;
+            $tecnicasEstudio->estatus=$request->estatus;
 
             $val=$tecnicasEstudio->save();
         }
@@ -233,7 +233,7 @@ class TecnicaEstudioController extends Controller
 
     public function destroy($id){
         $tecnicasEstudio=TecnicaEstudio::find($id);
-        $tecnicasEstudio->status='false';
+        $tecnicasEstudio->estatus='false';
         $val=$tecnicasEstudio->save();
         return $val;
     }
