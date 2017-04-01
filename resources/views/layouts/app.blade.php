@@ -66,8 +66,8 @@
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li>
-                                    <a href="{{asset('/')}}">
-                                        <i class="fa fa-home"></i>
+                                    <a href="{{asset('/logout')}}">
+                                        <i class="fa fa-sign-out fa-2x"></i>
                                     </a>
                                 </li>
                             </ol>
