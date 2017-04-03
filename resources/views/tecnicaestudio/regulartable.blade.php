@@ -14,7 +14,7 @@
     <tr class="gradeX">
         <td>{{$data->descripcion_tecnica_estudio}}</td> 
         
-        <td> @if ($data->status == true)  
+        <td> @if ($data->estatus == 1)  
         		{{ 'activo'  }}
  			 @else
  			 	{{ 'inactivo '}}

@@ -16,7 +16,7 @@
         <td>{{$data->descripcion_departamento}}</td>
         <td>{{$data->nombre_institucion}}</td>
         
-        <td> @if ($data->status == true)  
+        <td> @if ($data->estatus == 1)  
         		{{ 'activo'  }}
  			 @else
  			 	{{ 'inactivo '}}

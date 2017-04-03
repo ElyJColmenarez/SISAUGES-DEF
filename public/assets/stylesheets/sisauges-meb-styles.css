@@ -24,13 +24,17 @@
 }
 
 .princpl-bnr{
-	width: 100%;
-	height: 100%;
+	width: 60%;
+	height: 114px;
 	position: relative;
 	background: url('../backgrounds/BANNER1.png');
 	background-size:  100% 120px;
 	background-position: center;
 	background-repeat: no-repeat;
+	left: 7%;
+	margin-left: 300px;
+	background-color: #171717;
+	color: #171717;
 }
 
 .separador{

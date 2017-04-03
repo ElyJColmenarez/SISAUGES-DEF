@@ -1407,11 +1407,11 @@ html.fixed .visible-xl-inline-block {
 
 /* Header */
 .header {
-	background-color: #f6f6f6;
-	background-image: -webkit-linear-gradient(#f6f6f6 0%, white 45%);
-	background-image: linear-gradient(#f6f6f6 0%, white 45%);
-	border-bottom: 1px solid #E9E9E6;
-	border-top: 3px solid #EDEDED;
+	background-color: #171717;
+	background-image: -webkit-linear-gradient(#171717 0%, white 95%);
+	background-image: linear-gradient(#171717 0%, white 95%);
+	border-bottom: 1px solid #171717;
+	border-top: 3px solid #171717;
 	z-index: 1000;
 }
 

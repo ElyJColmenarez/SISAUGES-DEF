@@ -31,7 +31,7 @@ class Departamento extends Model
 
     public function scopeStatusDepartamento($query,$search){
 
-      return $query->where('estatus', $search);
+      return $query->where('estatus', '=', $search);
     }
 
     public function scopeInstitutoDepartamento($query,$search){

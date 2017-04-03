@@ -157,13 +157,13 @@ Route::group(['middleware'=>'op'],function(){
 
     Route::group(['prefix'=>'proyecto'], function(){
 
-        Route::match(array('get','post'),'listar',['uses'=>'InstitucionController@index', 'as'=>'listar']);
-        Route::post('registerform',['uses'=>'InstitucionController@renderForm', 'as'=>'registerform']);
-        Route::match(array('get','post'),'buscar',['uses'=>'InstitucionController@renderForm', 'as'=>'buscar']);
-        Route::match(array('get','post'),'crear',['uses'=>'InstitucionController@ajaxRegularStore', 'as'=>'crear']);
-        Route::match(array('get','post'),'editar/{id}',['uses'=>'InstitucionController@ajaxRegularUpdate', 'as'=>'editar']);
-        Route::post('eliminar/{id}',['uses'=>'InstitucionController@ajaxRegularDestroy', 'as'=>'eliminar']);
-        Route::post('asignar-institucion-A-proyecto',['uses'=>'InstitucionController@ajaxRegularAssign', 'as'=>'asignar-institucion-a-proyecto']);
+        Route::match(array('get','post'),'listar',['uses'=>'ProyectoController@index', 'as'=>'listar']);
+        Route::post('registerform',['uses'=>'ProyectoController@renderForm', 'as'=>'registerform']);
+        Route::match(array('get','post'),'buscar',['uses'=>'ProyectoController@renderForm', 'as'=>'buscar']);
+        Route::match(array('get','post'),'crear',['uses'=>'ProyectoController@ajaxRegularStore', 'as'=>'crear']);
+        Route::match(array('get','post'),'editar/{id}',['uses'=>'ProyectoController@ajaxRegularUpdate', 'as'=>'editar']);
+        Route::post('eliminar/{id}',['uses'=>'ProyectoController@ajaxRegularDestroy', 'as'=>'eliminar']);
+        Route::post('asignar-institucion-A-proyecto',['uses'=>'ProyectoController@ajaxRegularAssign', 'as'=>'asignar-institucion-a-proyecto']);
 
     });
 

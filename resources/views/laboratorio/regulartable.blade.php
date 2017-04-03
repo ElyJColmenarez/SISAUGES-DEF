@@ -17,7 +17,7 @@
         <td>{{$data->nombre_laboratorio}}</td>
         <td>{{$data->ubicacion_laboratorio}}</td>
         <td>{{$data->telefono_laboratorio}}</td>
-        <td> @if ($data->status == true)  
+        <td> @if ($data->estatus == 1)  
         		{{ 'activo'  }}
  			 @else
  			 	{{ 'inactivo '}}

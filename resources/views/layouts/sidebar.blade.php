@@ -25,16 +25,17 @@
                         </li>
 
                         @if (Auth::user()->id_rol == 1)
+
+                         <li class="">
+                            <a href="{{url('auditoria/listar')}}">
+                                <i class="fa fa-key" aria-hidden="true"></i>
+                                <span>Auditoria</span>
+                            </a>
+                        </li>
                                      
                         @endif
 
-                        @if (Auth::user()->id_rol == 2)
-                          
-                        @endif
-
                         @if (Auth::user()->id_rol == 3)
-                          
-                        @endif
 
                         <li class="">
                             <a href="{{url('proyecto/listar')}}">
@@ -99,6 +100,17 @@
                                 <span>Muestras</span>
                             </a>
                         </li>
+                          
+                        @endif
+
+                        @if (Auth::user()->id_rol == 2)
+
+                         <li class="">
+                            <a href="{{url('auditoria/listar')}}">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <span>Auditoria</span>
+                            </a>
+                        </li>
 
                         <li class="">
                             <a href="{{url('usuario/listar')}}">
@@ -106,6 +118,11 @@
                                 <span>Usuarios</span>
                             </a>
                         </li>
+                          
+                        @endif
+
+
+                        
 
                     </ul>
                 </nav>

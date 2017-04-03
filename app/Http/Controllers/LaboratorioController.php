@@ -68,8 +68,8 @@ class LaboratorioController extends Controller
                 'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true'=>'Activo',
-                    'false'=>'Inactivo'
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
                 )
             )
         );
@@ -126,26 +126,37 @@ class LaboratorioController extends Controller
                 'type'  => 'text',               
                 'value'     => (empty($laboratorio))? '' : $laboratorio->nombre_laboratorio,
                 'id'    => 'nombre_laboratorio',
-                'label' => 'Nombre del laboratorio'
+                'label' => 'Nombre del laboratorio',
+                'validaciones'=>array(
+                        'obligatorio'
+                    ),
             ),
             'ubicacion_laboratorio' => array(
                 'type'  => 'text',               
                 'value'     => (empty($laboratorio))? '' : $laboratorio->ubicacion_laboratorio,
                 'id'    => 'ubicacion_laboratorio',
-                'label' => 'Ubicacion de laboratorio'
-            ),
-           
+                'label' => 'Ubicacion de laboratorio',
+                'validaciones'=>array(
+                        'obligatorio'
+                    ),
+            ),           
             'telefono_laboratorio' => array(
                 'type'  => 'text',                
                 'value'     => (empty($laboratorio))? '' : $laboratorio->telefono_laboratorio,
                 'id'    => 'telefono_laboratorio',
-                'label' => 'Telefono de la laboratorio'
+                'label' => 'Telefono de la laboratorio',
+                'validaciones'=>array(
+                        'obligatorio'
+                    )
             ),
             'estatus' => array(
                 'type'      => 'select',               
                 'value'     => (empty($laboratorio))? '' : $laboratorio->estatus,
                 'id'        => 'estatus',
                 'label'     => 'estatus',
+                'validaciones'=>array(
+                        'obligatorio'
+                    ),
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',

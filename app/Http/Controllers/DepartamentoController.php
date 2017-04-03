@@ -52,27 +52,21 @@ class DepartamentoController extends Controller
      var_dump($request->estatus);*/
       
 
-        /* if (!is_null($request->estatus)){
+         if (is_null($request->estatus)){
       
-             $departamento = Departamento::descripciondepartamento($request->descripcion_departamento)->    
-                whereHas('Institucion', function($query) use ($request){
-                        $query->nombreinstitucion($request->nombre_institucion);
-                })-> 
-                   statusdepartamento($request->estatus)->
-                orderBy('descripcion_departamento', 'desc')->paginate(20);
+             $departamento =Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)->
+                    StatusDepartamento($request->estatus)
+                    ->orderBy('descripcion_departamento', 'desc')->paginate(20);
 
         }else{
-             $departamento = Departamento::descripciondepartamento($request->descripcion_departamento)->    
-                whereHas('Institucion', function($query) use ($request){
-                        $query->nombreinstitucion($request->nombre_institucion);
-                })-> 
-                //   statusdepartamento($request->estatus)->
-                orderBy('descripcion_departamento', 'desc')->paginate(20);
-        }*/
+             $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)->
+            //        StatusDepartamento($request->estatus)
+                    orderBy('descripcion_departamento', 'desc')->paginate(20);
+        }
 
-          $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)
-               //     StatusDepartamento($request->estatus)
-                    ->orderBy('descripcion_departamento', 'desc')->paginate(20);
+         /* $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)->
+                    StatusDepartamento($request->estatus)
+                    ->orderBy('descripcion_departamento', 'desc')->paginate(20);*/
  
 
          $action="departamento/listar";
@@ -104,8 +98,8 @@ class DepartamentoController extends Controller
                     ),                    
                     'options'   => array(
                         ''=>'Seleccione...',
-                        'true'=>'Activo',
-                        'false'=>'Inactivo'
+                        '1'=>'Activo',
+                        '0'=>'Inactivo'
                     )
                 )
             );
@@ -178,7 +172,6 @@ class DepartamentoController extends Controller
                     'id'    => 'descripcion_departamento',
                     'label' => 'Nombre '
                 ),
-
                 'id_institucion' => array(
                     'type'  => 'select',
                     'value' => (empty($departamento))? '' : $departamento->id_institucion,
@@ -186,7 +179,6 @@ class DepartamentoController extends Controller
                     'label' => 'Institucion',
                     'options'   => $res
                 ),
-
                 'estatus' => array(
                     'type'      => 'select',
                     'value'     => (empty($departamento))? '' : $departamento->estatus,
