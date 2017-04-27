@@ -275,6 +275,8 @@ jQuery(document).ready(function() {
 
         var f = new Date();
 
+        $('#modalForm .muestra-seccion table tbody').empty();
+
         for (var i = 0; i < $(this)[0].files.length; i++) {
 
             var aux= $(this)[0].files[i];
@@ -284,7 +286,7 @@ jQuery(document).ready(function() {
             htmlsect=htmlsect+"<td>"+aux.type+"</td>";
             htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
             htmlsect=htmlsect+"<td>"+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+"</td>";
-            htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
+            htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
             htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
@@ -311,6 +313,10 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
+        if ($(this).attr('data-visible')=='true') {
+            $('.waitingprev > img').attr('src',$(this).attr('data-field-url'));
+        }
+
         $('#mdl-truebody').slideUp('fast','swing',function(){
             $('#modalForm .imgpreview').slideDown('fast','swing');
         });
@@ -322,9 +328,18 @@ jQuery(document).ready(function() {
         event.preventDefault();
 
         $('#modalForm .imgpreview').slideUp('fast','swing',function(){
+
             $('#mdl-truebody').slideDown('fast','swing');
         });
-    })
+    });
+
+    $('body').on('click', '.datepkr', function() {
+
+        $(this).datepicker({
+            format:'dd-mm-yyyy'
+        });
+        $(this).datepicker('show');
+    });
 
 
 

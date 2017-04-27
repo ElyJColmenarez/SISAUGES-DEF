@@ -13,6 +13,8 @@ use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
 use SISAUGES\Models\Proyecto;
 use Storage;
+use Validator;
+use File;
 use Imagick;
 
 use Illuminate\Support\Facades\View;
@@ -100,25 +102,47 @@ class MuestraController extends Controller
     public function generarImagenVisible($original_paht,$id,$proyecto){
 
 
-        $ruta=public_path()."/storage/";
+        $ruta=base_path() ."/public/storage/test/";
 
-        /*if (file_exists($ruta)) {
-           $ruta=public_path()."/storage/"; 
-        }else{
-            Storage::makeDirectory($ruta);
-        }*/
+        if (!file_exists($ruta)) {
+           File::makeDirectory($ruta,0777,true);
+        }
+
 
         $image = new Imagick($original_paht);
 
         $fecha=date("d_m_Y_H_i_s");
 
-        $ruta=$ruta.$id.'aux-'.$fecha.".jpg";
+        $name=rand(0,9).$id.rand(0,9).'aux-'.$fecha.".jpg";
+
+        $ruta=$ruta.$name;
 
         $image->setImageFormat('jpg');
 
         $image->writeImage($ruta);
 
-        return $id.'aux-'.$fecha.'.jpg';
+        return $name;
+
+    }
+
+
+    public function generarArchivo($file,$id,$proyecto){
+
+
+        $ruta=base_path() ."/public/storage/test/";
+
+        if (!file_exists($ruta)) {
+           File::makeDirectory($ruta,0777,true);
+        }
+
+
+        $fecha=date("d_m_Y_H_i_s");
+
+        $name=rand(0,9).$id.rand(0,9).'aux-'.$fecha.'.'.$file->getClientOriginalExtension();
+
+        $file->move($ruta,$name);
+
+        return $name;
 
     }
 
@@ -134,7 +158,7 @@ class MuestraController extends Controller
         }
 
         $muestra = Muestra::find($request->field_id);
-        $proyectos = Proyecto::where('estatus_proyecto','<>','Culminado')->get();
+        $proyectos = Proyecto::where('status_proyecto','<>','Culminado')->get();
 
         if ($request->typeform=='deleted') {
             $fields=false;
@@ -189,12 +213,12 @@ class MuestraController extends Controller
                     'options'   => array(
                         ''=>'Seleccione...',
                         '1'=>'Activo',
-                        '2'=>'Inactivo'
+                        '0'=>'Inactivo'
                     )
                 ),
                 'proyecto'  => array(
                     'type'      => 'select',
-                    'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->estatus:'',
+                    'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->proyecto->id_proyecto:'',
                     'id'        => 'id_proyecto',
                     'label'     => 'Proyecto',
                     'selecttype'=> 'obj',
@@ -238,49 +262,63 @@ class MuestraController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function imagenVal($request,$muestra){
+
+        $retorno=array();
+
+        //$borrados=$request->borrados;
+
+        foreach ($request->file('imagenes') as $key => $value) {
+
+
+            if (strpos($value->getClientMimeType(),'image')!==false) {
+
+                $img=$this->generarImagenVisible($request->imagenes[$key]->getRealPath(),$muestra->id_muestra,$request->proyecto);
+
+                $muestra->proyecto()->attach($request->proyecto,array('ruta_img_muestra'=>$img,'fecha_analisis'=>date('d-m-Y')));
+
+            }elseif(strpos($value->getClientMimeType(),'pdf')!==false){
+
+                $this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
+
+            }else{
+                $retorno=$value;
+            }
+
+             
+        }
+
+    }
+
     public function store($request){
 
         $muestra=new Muestra($request->all());
 
         $aux=$request->all();
 
-        if (trim($request->codigo_muestra)=='' || trim($request->tipo_muestra)=='' || trim($request->descripcion_muestra)=='' || trim($request->fecha_recepcion)=='' || trim($request->estatus)=='') {
-            $val=false;
-        }else{
+        $validator=Validator::make($request->all(),[
 
-            $muestra->save();
+            'codigo_muestra'=>'required|min:1|max:255',
+            'tipo_muestra'=>'required|min:1|max:255',
+            'descripcion_muestra'=>'required|min:1|max:255',
+            'fecha_recepcion'=>'required|min:1|max:255',
+            'estatus'=>'required|min:1|max:255'
 
-            $borrados=$request->borrados;
+        ]);
 
-            foreach ($request->file('imagenes') as $key => $value) {
-                
-                $cont=0;
+        //var_dump($validator->errors());
 
-                if (count($borrados)>0) {
-                    foreach ($borrados as $key2 => $value2) {
-                        if ($value2==$key) {
-                            unset($borrados[$key2]);
-                            $cont=1;
-                        }
-                    }
-                    array_values($borrados);
-                }
+        if ($validator->passes()) {
 
-                if ($cont==0) {
+            $val=$muestra->save();
 
-                    $img=$this->generarImagenVisible($request->imagenes[$key]->getRealPath(),$muestra->id_muestra,$request->proyecto);
-
-                    $muestra->proyecto()->attach($request->proyecto,array('ruta_img_muestra'=>$img,'fecha_analisis'=>date('d-m-Y')));
-                }
-                
+            if ($val) {
+                $procesados=$this->imagenVal($request,$muestra);
             }
-
-            $val=true;
-
 
         }
 
-        return $val;
+        return $validator->passes();
 
     }
 
@@ -295,33 +333,37 @@ class MuestraController extends Controller
 
     public function update($request, $id){
 
-        $institucion=Institucion::find($id);
+        $muestra=Muestra::find($id);
+
+        $validator=Validator::make($request->all(),[
+
+            'codigo_muestra'=>'required|min:1|max:255',
+            'tipo_muestra'=>'required|min:1|max:255',
+            'descripcion_muestra'=>'required|min:1|max:255',
+            'fecha_recepcion'=>'required|min:1|max:255',
+            'estatus'=>'required|min:1|max:255'
+
+        ]);
+
+        //var_dump($validator->errors());
+
+        if ($validator->passes()) {
 
 
-        $aux=$request->all();
+            $muestra->codigo_muestra($request->codigo_muestra);
+            $muestra->tipo_muestra($request->tipo_muestra);
+            $muestra->descripcion_muestra($request->descripcion_muestra);
+            $muestra->fecha_recepcion($request->fecha_recepcion);
+            $muestra->estatus($request->estatus);
 
-        $cont=0;
+            $val=$muestra->save();
 
-        foreach ($aux as $key => $value) {
-            
-            $value=trim($value);
-
-            if ($value=='' && $key!='_token') {
-                $cont++;
+            if ($val) {
+                $procesados=$this->imagenVal($request,$muestra);
             }
-        }
 
-        if ($cont>0) {
-            $val=false;
         }else{
-
-            $institucion->nombre_institucion    = $request->nombre_institucion;
-            $institucion->direccion_institucion = $request->direccion_institucion;
-            $institucion->correo_institucional  = $request->correo_institucional;
-            $institucion->telefono_institucion  = $request->telefono_institucion;
-            $institucion->estatus                = $request->estatus;
-
-            $val=$institucion->save();
+            $val=$validator->passes();
         }
 
         return $val;
@@ -337,12 +379,7 @@ class MuestraController extends Controller
 
     public function destroy($request, $id){
 
-        $institucion=Institucion::find($id);
-
-        $institucion->estatus = $request->estatus;
-        $val = $institucion->save();
-
-        return $val;
+        $institucion=Muestra::find($id);
 
     }
 

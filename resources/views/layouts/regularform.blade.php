@@ -1,7 +1,7 @@
 	<section class="panel">
 									
 
-		{!!Form::open(['url'=>$action, 'class'=>'form-horizontal form-bordered', 'method' => 'post', 'id'=>'modalmicroform'])!!}
+		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered', 'method' => 'post', 'id'=>'modalmicroform'])!!}
 
 	        <header class="panel-heading">
 				<h2 class="panel-title">Formulario de Registro</h2>
@@ -135,7 +135,39 @@
 								        						</tr>
 								        					</thead>
 								        					<tbody>
-								        						
+								        						<?php
+
+								        							if (count($value['data'])>0) {
+								        								foreach ($value['data']->proyecto as $mkey => $muestra) {
+								        								
+								        									$ruta=base_path() ."/public/storage/test/".$muestra->pivot->ruta_img_muestra;
+
+								        									$rutaweb="/storage/test/".$muestra->pivot->ruta_img_muestra;
+
+								        									if (file_exists($ruta)) {
+								        										$finfo = new finfo(FILEINFO_MIME);
+
+										        								$type = explode(';', $finfo->file($ruta));
+
+										        								echo "<tr id='tableregd".$key."' data-regid='d".$mkey."'>";
+											        								echo "<td>".$muestra->pivot->ruta_img_muestra."</td>";
+											        								echo "<td>".$type[0]."</td>";
+											        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
+											        								echo "<td>".$muestra->pivot->fecha_analisis."</td>";
+											        								echo '<td>
+											        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
+											        									<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
+											        								</td>';
+											        							echo "</tr>";
+								        									}
+
+									        								
+
+									        							}
+								        							}
+
+
+								        						?>
 								        					</tbody>
 
 								        				</table>
