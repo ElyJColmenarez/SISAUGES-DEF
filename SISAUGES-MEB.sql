@@ -245,12 +245,10 @@ CREATE TABLE IF NOT EXISTS MUESTRA_TECNICA_ESTUDIO
 CREATE TABLE IF NOT EXISTS MUESTRA_PROYECTO
 (
 
-	id_proyecto integer,
-	id_muestra integer,
+	id_proyecto integer not null,
+	id_muestra integer not null,
 	ruta_img_muestra varchar(200),
 	fecha_analisis date,
-	constraint pk_proyecto_muestra 
-		primary key (id_proyecto,id_muestra,ruta_img_muestra),
 	constraint fk_proyecto
 		foreign key (id_proyecto) references proyecto(id_proyecto),
 	constraint fk_muestra
