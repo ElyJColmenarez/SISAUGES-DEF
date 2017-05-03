@@ -78,6 +78,36 @@ jQuery(document).ready(function() {
     });
 
 
+    /*Modal Dismiss*/
+
+
+    $('#modalForm').on('click','.dismisslastmodal',function(event){
+                   
+        event.preventDefault();
+
+        var num= (parseInt($('#modalsteps').attr('data-laststep'))-1);
+
+        $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+
+            $('#modalForm').empty();
+            $('#modalForm').append('<div class="ocultos">'+$('#lastmodalstep'+num).html()+'</div>');
+            $('#lastmodalstep'+num).remove();
+            $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                $('#modalForm .mdl-truebody').slideDown('fast','swing',function(){
+                    $('#modalForm > .ocultos').slideDown('fast','swing');
+                });
+                
+            });
+
+        });
+
+    });
+
+    $('#modalForm').on('click','.mld-dismiss-fin',function(event){
+        location.reload();  
+    });
+
+
     /*Ajax modal form section request*/
 
     
@@ -94,6 +124,8 @@ jQuery(document).ready(function() {
 
         var inform= form.serializeArray();
 
+        inform.push({name: 'stepform', value: 'true'})
+
         var promise=$.ajax({
 
             url:altaction,
@@ -101,7 +133,11 @@ jQuery(document).ready(function() {
             data:inform,
             type:"POST",
             dataType: "json",
-            beforeSend: function(){},
+            beforeSend: function(){
+                $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+                    $('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
+                });
+            },
             success:    function(data){
 
                 if (data.result) {
@@ -111,15 +147,37 @@ jQuery(document).ready(function() {
 
                     );
 
-                    $('#modalsteps').attr('data-laststep',($('#modalsteps').attr('data-laststep')+1));
+                    $('#modalsteps').attr('data-laststep',(parseInt($('#modalsteps').attr('data-laststep'))+1));
 
-                    $('#modalForm').empty();
-                    $('#modalForm').append(data.html);
+                    $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                        $('#modalForm').empty();
+                        $('#modalForm').append('<div class="ocultos">'+data.html+'</div>');
+                        $('#modalForm > .ocultos').slideDown('fast','swing');
+                        
+                    });
+
+
                     $('.openmodalbtn').click();
                 }
 
             },
-            error:      function(){}
+            error:      function(){
+
+                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
+                $('#modalForm').addClass('modal-block-danger');
+
+                $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+                $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+                $('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
+
+                $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+
+                $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                    $('#modalForm .result-mdl').slideDown('fast','swing');
+                });
+
+            }
 
         });
 
@@ -142,7 +200,7 @@ jQuery(document).ready(function() {
             processData: false,
             contentType: false,
             beforeSend: function(){
-            	$('.mdl-truebody').slideUp('fast','swing',function(){
+            	$('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
             		$('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
             	});
             },
@@ -156,14 +214,11 @@ jQuery(document).ready(function() {
 
             		$('#modalForm').addClass('modal-block-success');
 
-            		$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
-            		$('.msn-alerta-header').text('Solicitud completa!');
-            		$('.msn-alerta-body').text(data.mensaje);
-            		$('.mld-dismiss-fin').attr('class','btn btn-success modal-dismiss');
+            		$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
+            		$('#modalForm .msn-alerta-header').text('Solicitud completa!');
+            		$('#modalForm .msn-alerta-body').text(data.mensaje);
+            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-success modal-dismiss');
 
-                   $('#modalForm').on('click','.mld-dismiss-fin',function(event){
-                        location.reload();  
-                     }) 
 
             	}else{
 
@@ -171,21 +226,21 @@ jQuery(document).ready(function() {
 
             			$('#modalForm').addClass('modal-block-warning');
 
-            			$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
-	            		$('.msn-alerta-header').text('Alerta!');
-	            		$('.msn-alerta-body').text(data.mensaje);
+            			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
+	            		$('#modalForm .msn-alerta-header').text('Alerta!');
+	            		$('#modalForm .msn-alerta-body').text(data.mensaje);
 
-	            		$('.mld-dismiss-fin').attr('class','btn btn-warning regresar');
+	            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-warning regresar');
 
             		}else{
 
             			$('#modalForm').addClass('modal-block-danger');
 
-            			$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-	            		$('.msn-alerta-header').text('Ocurrio un error!');
-	            		$('.msn-alerta-body').text(data.mensaje);
+            			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+	            		$('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+	            		$('#modalForm .msn-alerta-body').text(data.mensaje);
 
-	            		$('.mld-dismiss-fin').attr('class','btn btn-danger regresar');
+	            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
             		}
             	}
@@ -193,7 +248,7 @@ jQuery(document).ready(function() {
             	setTimeout(function(){
 
 	            	$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-	            		$('.result-mdl').slideDown('fast','swing');
+	            		$('#modalForm .result-mdl').slideDown('fast','swing');
 	            	});
 
 	            },1200);
@@ -201,16 +256,18 @@ jQuery(document).ready(function() {
             },
             error:      function(){
 
+                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
             	$('#modalForm').addClass('modal-block-danger');
 
-    			$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-        		$('.msn-alerta-header').text('Ocurrio un error!');
-        		$('.msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
+    			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+        		$('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+        		$('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
 
-        		$('.mld-dismiss-fin').attr('class','btn btn-danger regresar');
+        		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
         		$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-            		$('.result-mdl').slideDown('fast','swing');
+            		$('#modalForm .result-mdl').slideDown('fast','swing');
             	});
 
             }
@@ -220,6 +277,103 @@ jQuery(document).ready(function() {
         //Table data update
 
     });
+
+
+    //voy x aqui
+
+    $('#modalForm').on('click','button[name=lastcallmodal]',function(event){
+
+        event.preventDefault();
+
+        var form=new FormData($('#modalForm .modalmicroform')[0]);
+
+        var promise=$.ajax({
+
+            url:$('#modalForm .modalmicroform').attr('action'),
+            cache: false,
+            data:form,
+            type:"POST",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            beforeSend: function(){
+                $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+                    $('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
+                });
+            },
+            success:    function(data){
+
+
+                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
+
+                if (data.resultado=='success') {
+
+                    $('#modalForm').addClass('modal-block-success');
+
+                    $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
+                    $('#modalForm .msn-alerta-header').text('Solicitud completa!');
+                    $('#modalForm .msn-alerta-body').text(data.mensaje);
+                    $('#modalForm .mld-dismiss-fin').attr('class','btn btn-success dismisslastmodal');
+
+                }else{
+
+                    if (data.resultado=='warning'){
+
+                        $('#modalForm').addClass('modal-block-warning');
+
+                        $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
+                        $('#modalForm .msn-alerta-header').text('Alerta!');
+                        $('#modalForm .msn-alerta-body').text(data.mensaje);
+
+                        $('#modalForm .mld-dismiss-fin').attr('class','btn btn-warning regresar');
+
+                    }else{
+
+                        $('#modalForm').addClass('modal-block-danger');
+
+                        $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+                        $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+                        $('#modalForm .msn-alerta-body').text(data.mensaje);
+
+                        $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+
+                    }
+                }
+
+                setTimeout(function(){
+
+                    $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                        $('#modalForm .result-mdl').slideDown('fast','swing');
+                    });
+
+                },1200);
+                
+            },
+            error:      function(){
+
+                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
+                $('#modalForm').addClass('modal-block-danger');
+
+                $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+                $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+                $('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
+
+                $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+
+                $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                    $('#modalForm .result-mdl').slideDown('fast','swing');
+                });
+
+            }
+
+        });
+
+        //Table data update
+
+    });
+
 
     /*Ajax table pagination request*/
 

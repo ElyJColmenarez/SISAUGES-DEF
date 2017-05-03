@@ -245,25 +245,66 @@
 									                </div>
 									            </div>
 
+
 									        @elseif(isset($value['selecttype']))
 
-									        	<div class="col-md-6">
-									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
-									                <div class="col-md-8">
-									                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
-									                        
-									                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
 
-								                        	@foreach( $value['options'] as $key2 => $value2 )
+									        	@if(isset($value['selectadd']))
 
-								                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+									        		<?php
 
-								                        	@endforeach
+									        			$lasmodalcall[]=$value;
 
-									                    </select>
-									                </div>
-									            </div>
+									        		?>
 
+								        			<div class="col-md-8">
+										                <label class="col-md-3 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+										                <div class="col-md-8" style="padding: 0px">
+										                    
+										                    <div class="col-md-7">
+										                    
+										                        <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+										                        
+											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
+
+										                        	@foreach( $value['options'] as $key2 => $value2 )
+
+										                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+										                        	@endforeach
+
+										                    	</select>
+
+										                    </div>
+
+										                    <div class="col-md-5">
+										                        <button class="btn btn-primary" name="nextstep" value="{!! $value['selectadd']['url'] !!}" data-idpointer="{!! $value['id'] !!}">{!! $value['selectadd']['btnlabel'] !!}</button>
+										                    </div>
+
+
+										                </div>
+										            </div>
+
+										        @else
+
+										        	<div class="col-md-6">
+										                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+										                <div class="col-md-8">
+										                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+										                        
+										                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
+
+									                        	@foreach( $value['options'] as $key2 => $value2 )
+
+									                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+									                        	@endforeach
+
+										                    </select>
+										                </div>
+										            </div>
+
+										        @endif
 
 							        		@else
 
@@ -309,8 +350,19 @@
 					<footer class="panel-footer">
 						<div class="row">
 							<div class="col-md-12 text-right">
-								<button class="btn btn-primary" name="finregistro">Finalizar Registro</button>
-								<button class="btn btn-default modal-dismiss">Cancelar</button>
+
+								@if(isset($request->stepform))
+
+									<button class="btn btn-primary" name="lastcallmodal">{!! $lasmodalcall[0]['selectadd']['btnfinlavel'] !!}</button>
+									<button class="btn btn-default dismisslastmodal">Regresar</button>
+
+								@else
+
+									<button class="btn btn-primary" name="finregistro">Finalizar Registro</button>
+									<button class="btn btn-default modal-dismiss">Cancelar</button>
+
+								@endif
+
 							</div>
 						</div>
 					</footer>

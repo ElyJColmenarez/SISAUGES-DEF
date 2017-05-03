@@ -150,6 +150,10 @@
 	display: none;
 }
 
+.ocultos{
+	display: none;
+}
+
 .muestra-seccion > div:nth-child(1){
 	margin: 15px 0px;
 }

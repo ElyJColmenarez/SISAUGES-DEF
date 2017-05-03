@@ -29,13 +29,6 @@ class MuestraController extends Controller
     public function index(Request $request)
     {
 
-        //test
-
-            $test=Muestra::find(33);
-            $test->proyecto()->ruta_img_muestra->where('ruta_img_muestra',"1337aux-27_04_2017_01_02_44.jpg");;
-
-        //
-
         $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->orderBy('codigo_muestra', 'desc')->paginate(20);
 
         $action="institucion/listar";
@@ -230,7 +223,12 @@ class MuestraController extends Controller
                     'label'     => 'Proyecto',
                     'selecttype'=> 'obj',
                     'objkeys'   => array('id_proyecto','nombre_proyecto'),
-                    'options'   => $proyectos
+                    'options'   => $proyectos,
+                    'selectadd' => array(
+                        'btnlabel'=>'Agegar Proyecto',
+                        'btnfinlavel'=>'Registrar Proyecto',
+                        'url'=> url('proyecto/registerform')
+                    )
                 ),
                 'muestras'=>array(
 
@@ -245,7 +243,7 @@ class MuestraController extends Controller
 
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request'))->render();
 
         if ($htmlbody) {
             $retorno=array(
