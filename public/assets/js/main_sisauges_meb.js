@@ -81,17 +81,60 @@ jQuery(document).ready(function() {
     /*Ajax modal form section request*/
 
     
+    $('#modalForm').on('click','button[name=nextstep]',function(event){
+
+        event.preventDefault();
+
+        var altaction=$(this).val();
+
+        var form=$('#principalform');
+
+        $('#principalform> input[name=typeform]').attr('value','add');
+        $('#principalform> input[name=field_id]').attr('value','0');
+
+        var inform= form.serializeArray();
+
+        var promise=$.ajax({
+
+            url:altaction,
+            cache: false,
+            data:inform,
+            type:"POST",
+            dataType: "json",
+            beforeSend: function(){},
+            success:    function(data){
+
+                if (data.result) {
+
+                    $('#modalsteps').append(
+                        '<div id="lastmodalstep'+$('#modalsteps').attr('data-laststep')+'">'+$('#modalForm').html()+'</div>'
+
+                    );
+
+                    $('#modalsteps').attr('data-laststep',($('#modalsteps').attr('data-laststep')+1));
+
+                    $('#modalForm').empty();
+                    $('#modalForm').append(data.html);
+                    $('.openmodalbtn').click();
+                }
+
+            },
+            error:      function(){}
+
+        });
+
+    });
 
 
     $('#modalForm').on('click','button[name=finregistro]',function(event){
 
         event.preventDefault();
 
-        var form=new FormData($('#modalmicroform')[0]);
+        var form=new FormData($('#modalForm .modalmicroform')[0]);
 
         var promise=$.ajax({
 
-            url:$('#modalmicroform').attr('action'),
+            url:$('#modalForm .modalmicroform').attr('action'),
             cache: false,
             data:form,
             type:"POST",
@@ -99,8 +142,8 @@ jQuery(document).ready(function() {
             processData: false,
             contentType: false,
             beforeSend: function(){
-            	$('#mdl-truebody').slideUp('fast','swing',function(){
-            		$('#modalmicroform > .waitingimg').slideDown('fast','swing');
+            	$('.mdl-truebody').slideUp('fast','swing',function(){
+            		$('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
             	});
             },
             success:    function(data){
@@ -113,12 +156,12 @@ jQuery(document).ready(function() {
 
             		$('#modalForm').addClass('modal-block-success');
 
-            		$('#result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
+            		$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
             		$('.msn-alerta-header').text('Solicitud completa!');
             		$('.msn-alerta-body').text(data.mensaje);
-            		$('#mld-dismiss-fin').attr('class','btn btn-success modal-dismiss');
+            		$('.mld-dismiss-fin').attr('class','btn btn-success modal-dismiss');
 
-                   $('#modalForm').on('click','#mld-dismiss-fin',function(event){
+                   $('#modalForm').on('click','.mld-dismiss-fin',function(event){
                         location.reload();  
                      }) 
 
@@ -128,29 +171,29 @@ jQuery(document).ready(function() {
 
             			$('#modalForm').addClass('modal-block-warning');
 
-            			$('#result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
+            			$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
 	            		$('.msn-alerta-header').text('Alerta!');
 	            		$('.msn-alerta-body').text(data.mensaje);
 
-	            		$('#mld-dismiss-fin').attr('class','btn btn-warning regresar');
+	            		$('.mld-dismiss-fin').attr('class','btn btn-warning regresar');
 
             		}else{
 
             			$('#modalForm').addClass('modal-block-danger');
 
-            			$('#result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+            			$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
 	            		$('.msn-alerta-header').text('Ocurrio un error!');
 	            		$('.msn-alerta-body').text(data.mensaje);
 
-	            		$('#mld-dismiss-fin').attr('class','btn btn-danger regresar');
+	            		$('.mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
             		}
             	}
 
             	setTimeout(function(){
 
-	            	$('#modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-	            		$('#result-mdl').slideDown('fast','swing');
+	            	$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+	            		$('.result-mdl').slideDown('fast','swing');
 	            	});
 
 	            },1200);
@@ -160,14 +203,14 @@ jQuery(document).ready(function() {
 
             	$('#modalForm').addClass('modal-block-danger');
 
-    			$('#result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+    			$('.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
         		$('.msn-alerta-header').text('Ocurrio un error!');
         		$('.msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
 
-        		$('#mld-dismiss-fin').attr('class','btn btn-danger regresar');
+        		$('.mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
-        		$('#modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-            		$('#result-mdl').slideDown('fast','swing');
+        		$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+            		$('.result-mdl').slideDown('fast','swing');
             	});
 
             }
@@ -209,13 +252,13 @@ jQuery(document).ready(function() {
 
     	event.preventDefault();
 
-		$('#result-mdl').slideUp('fast','swing',function(){
+		$('.result-mdl').slideUp('fast','swing',function(){
 
 			$('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
 
-			$('#modalForm').addClass($('#result-mdl').data('tmodalorigin'));
+			$('#modalForm').addClass($('.result-mdl').data('tmodalorigin'));
 
-			$('#mdl-truebody').slideDown('fast','swing');
+			$('.mdl-truebody').slideDown('fast','swing');
 
 		});   	
 
@@ -317,7 +360,7 @@ jQuery(document).ready(function() {
             $('.waitingprev > img').attr('src',$(this).attr('data-field-url'));
         }
 
-        $('#mdl-truebody').slideUp('fast','swing',function(){
+        $('.mdl-truebody').slideUp('fast','swing',function(){
             $('#modalForm .imgpreview').slideDown('fast','swing');
         });
 
@@ -329,7 +372,7 @@ jQuery(document).ready(function() {
 
         $('#modalForm .imgpreview').slideUp('fast','swing',function(){
 
-            $('#mdl-truebody').slideDown('fast','swing');
+            $('.mdl-truebody').slideDown('fast','swing');
         });
     });
 

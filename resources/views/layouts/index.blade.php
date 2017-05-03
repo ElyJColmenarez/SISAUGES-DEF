@@ -34,8 +34,9 @@
                                                 
                                                 <input type="text" name="{{$aux}}" class="form-control form1" value=" @if(isset($request->$aux)) {{ $request->$aux }} @endif">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-default start-search-proyect" type="submit"><i class="fa fa-search" aria-hidden="true"></i>
-</button>
+                                                    <button class="btn btn-default start-search-proyect" type="submit">
+                                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                                    </button>
                                                 </span>
 
                                             </div>
@@ -93,8 +94,12 @@
                 {!! Form::close() !!}
 
                 <!-- Modals -->
-                <div id="modalForm" class="zoom-anim-dialog modal-block-lg modal-block-primary mfp-hide">
+                <div id="modalForm" class="zoom-anim-dialog modal-block-lg modal-block-primary mfp-hide nextstepmodal">
                 </div>
+
+                <div id="modalsteps" data-laststep="0"></div>
+
+
             </section>
         </div>
     </div>

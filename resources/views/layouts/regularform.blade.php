@@ -1,7 +1,7 @@
 	<section class="panel">
 									
 
-		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered', 'method' => 'post', 'id'=>'modalmicroform'])!!}
+		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
 
 	        <header class="panel-heading">
 				<h2 class="panel-title">Formulario de Registro</h2>
@@ -33,7 +33,7 @@
 				</footer>
 		    </div>
 
-		    <div id="result-mdl" style="display: none;" data-tmodalorigin="{{(!$fields)?'modal-block-warning':'modal-block-primary'}}">
+		    <div class="result-mdl" style="display: none;" data-tmodalorigin="{{(!$fields)?'modal-block-warning':'modal-block-primary'}}">
 		    	<div class="panel-body ">
 					<div class="modal-wrapper">
 						<div class="modal-icon">
@@ -48,19 +48,25 @@
 				<footer class="panel-footer">
 					<div class="row">
 						<div class="col-md-12 text-right">
-							<button id="mld-dismiss-fin" class="">OK</button>
+							<button class="mld-dismiss-fin">OK</button>
 						</div>
 					</div>
 				</footer>
 		    </div>
 
 		    @if($fields)
-			    <div id="mdl-truebody">
+			    <div class="mdl-truebody">
 					<div class="panel-body">
 
 					<?php $datos=array_chunk($fields, 2,true); ?>
 
 						<div class="formcontent">
+
+						<!--<button class="btn btn-default" name="nextstep" value="{{ url('muestra/registerform') }}">click</button>-->
+						<input type="hidden" name="typeform" value="">
+                    	<input type="hidden" name="field_id" value="">
+
+
 
 							@foreach( $datos as $key2 => $value2 )
 
@@ -313,7 +319,7 @@
 
 			@else
 
-				<div id="mdl-truebody">
+				<div class="mdl-truebody">
 					<div class="panel-body ">
 						<div class="modal-wrapper">
 							<div class="modal-icon">
