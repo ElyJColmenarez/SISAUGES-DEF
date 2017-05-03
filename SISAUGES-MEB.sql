@@ -247,8 +247,6 @@ CREATE TABLE IF NOT EXISTS MUESTRA_PROYECTO
 
 	id_proyecto integer not null,
 	id_muestra integer not null,
-	ruta_img_muestra varchar(200),
-	fecha_analisis date,
 	constraint fk_proyecto
 		foreign key (id_proyecto) references proyecto(id_proyecto),
 	constraint fk_muestra
@@ -256,6 +254,22 @@ CREATE TABLE IF NOT EXISTS MUESTRA_PROYECTO
 );
 
 --drop table muestra_proyecto;
+
+CREATE TABLE IF NOT EXISTS ARCHIVO
+(
+  id_archivo serial,
+  ruta_img_muestra varchar(200),
+  fecha_analisis date,
+  nombre_original_muestra varchar(200),
+  nombre_temporal_muestra varchar(200),
+  id_muestra integer,
+  constraint pk_archivo
+    primary key (id_archivo),
+  constraint fk_muestra
+    foreign key (id_muestra) references MUESTRA(id_muestra)
+);
+
+
 
 CREATE TABLE IF NOT EXISTS LABORATORIO
 (
