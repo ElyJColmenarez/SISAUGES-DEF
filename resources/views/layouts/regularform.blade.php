@@ -176,7 +176,9 @@
 										        								
 										        									$ruta=base_path() .'/public/'.$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
 
-										        									$rutaweb=$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
+										        									$extension=explode('.', $muestra->nombre_temporal_muestra);
+
+										        									$rutaweb=$muestra->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $muestra->nombre_temporal_muestra);
 
 										        									if (file_exists($ruta)) {
 										        										$finfo = new finfo(FILEINFO_MIME);

@@ -155,7 +155,7 @@ class MuestraController extends Controller
 
         $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->orderBy('codigo_muestra', 'desc')->paginate(20);
 
-        $action="institucion/listar";
+        $action="muestra/listar";
 
         $fields=$this->fieldsSearchCall($request);
 
@@ -181,21 +181,19 @@ class MuestraController extends Controller
      */
 
 
-    public function generarImagenVisible($original_paht,$id,$proyecto){
+    public function generarImagenVisible($original_paht,$name,$extension){
 
 
-        $ruta=base_path() ."/public/storage/".Auth::user()->cedula_persona."/";
+        $ruta=base_path() ."/public/".$original_paht.'visibles/';
 
         if (!file_exists($ruta)) {
            File::makeDirectory($ruta,0777,true);
         }
 
 
-        $image = new Imagick($original_paht);
+        $image = new Imagick(base_path() ."/public/".$original_paht.$name);
 
-        $fecha=date("d_m_Y_H_i_s");
-
-        $name=rand(0,9).$id.rand(0,9).'aux-'.$fecha.".jpg";
+        $name=str_replace($extension, 'jpg', $name);
 
         $ruta=$ruta.$name;
 
@@ -345,6 +343,11 @@ class MuestraController extends Controller
                 $file->nombre_temporal_muestra=$img;
                 $file->id_muestra=$muestra->id_muestra;
                 $file->save();
+
+                if (strpos($value->getClientMimeType(),'image')!==false) {
+                    
+                    $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
+                }
 
             }else{
                 $retorno[]=$value;
