@@ -29,11 +29,80 @@ class ProyectoController extends Controller
 
 
 
-    public function fieldsRegisterCall($proyecto){
+    public function fieldsRegisterCall($proyecto,$instituciones=null,$departamentos=null,$tutores=null,$estudiantes=null){
 
             
         $fields=array(
 
+            'institucion'=>array(
+
+                'type'      => 'select',
+                'value'     => (isset($instituciones))? $instituciones->id_institucion:'',
+                'id'        => 'id_institucion',
+                'label'     => 'Institución',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_institucion','nombre_institucion'),
+                'options'   => $instituciones,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Institución',
+                    'btnfinlavel'=>'Registrar Institución',
+                    'url'=> url('institucion/registerform')
+                )
+
+            ),
+            'separador1'=>array('type'=>'separador'),
+            'departamento'=>array(
+
+                'type'      => 'select',
+                'value'     => (isset($departamentos))? $departamentos->id_departamento:'',
+                'id'        => 'id_departamento',
+                'label'     => 'Departamento',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_departamento','nombre_departamento'),
+                'options'   => $departamentos,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Departamento',
+                    'btnfinlavel'=>'Registrar Departamento',
+                    'url'=> url('departamento/registerform')
+                )
+
+            ),
+            'separador2'=>array('type'=>'separador'),
+
+            'tutor'=>array(
+
+                'type'      => 'select',
+                'value'     => (isset($tutores))? $tutores->id_tutor:'',
+                'id'        => 'id_tutor',
+                'label'     => 'Tutor',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_tutor','cedula_persona'),
+                'options'   => $tutores,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Tutor',
+                    'btnfinlavel'=>'Registrar tutor',
+                    'url'=> url('tutor/registerform')
+                )
+
+            ),
+            'separador3'=>array('type'=>'separador'),
+            'estudiante'=>array(
+
+                'type'      => 'select',
+                'value'     => (isset($estudiantes))? $estudiantes->id_estudiante:'',
+                'id'        => 'id_estudiante',
+                'label'     => 'Estudiante',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_estudiantes','cedula_persona'),
+                'options'   => $estudiantes,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Estudiante',
+                    'btnfinlavel'=>'Registrar Estudiante',
+                    'url'=> url('estudiante/registerform')
+                )
+
+            ),
+            'separador4'=>array('type'=>'separador'),
             'nombre_proyecto' => array(
                 'type'  => 'text',
                 'value' => (isset($proyecto->nombre_proyecto))? $proyecto->nombre_proyecto:'',
@@ -130,19 +199,19 @@ class ProyectoController extends Controller
 
         
         if ($request->typeform=='add') {
-            $action="muestra/crear";
+            $action="proyecto/crear";
         }elseif($request->typeform=='modify'){
-            $action="muestra/editar/".$request->field_id;
+            $action="proyecto/editar/".$request->field_id;
         }elseif($request->typeform=='deleted'){
-            $action="muestra/eliminar/".$request->field_id;
+            $action="proyecto/eliminar/".$request->field_id;
         }
 
 
-        if (isset($request->nextproyectstep)) {
+        /*if (isset($request->nextproyectstep)) {
             $step=$request->nextproyectstep+1;
         }else{
             $step=1;
-        }
+        }*/
 
 
         $proyecto = Proyecto::find($request->field_id);
@@ -166,7 +235,7 @@ class ProyectoController extends Controller
 
             );
 
-            if ($request->typeform=='add') {
+            /*if ($request->typeform=='add') {
 
                 //Pasos de registro de proyecto
 
@@ -200,7 +269,11 @@ class ProyectoController extends Controller
                 $fields=$this->fieldsRegisterCall($proyecto);
                 $modulo='Proyecto';
                 $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
-            }
+            }*/
+
+            $fields=$this->fieldsRegisterCall($proyecto);
+            $modulo='Proyecto';
+            $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
             
         }
