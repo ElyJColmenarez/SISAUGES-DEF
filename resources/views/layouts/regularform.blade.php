@@ -3,8 +3,6 @@
 
 		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
 
-			<input type="hidden" name="trueaction" value="{!! url($action) !!}">
-
 	        <header class="panel-heading">
 				<h2 class="panel-title">Formulario de Registro de {!! $modulo !!}</h2>
 			</header>
@@ -295,14 +293,20 @@
 										                    <div class="col-md-7">
 										                    
 										                        <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+
+										                        	<option value="0">Seleccione...</option>
 										                        
 											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
 
-										                        	@foreach( $value['options'] as $key2 => $value2 )
+											                    	@if(isset($value['options']))
 
-										                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+											                        	@foreach( $value['options'] as $key2 => $value2 )
 
-										                        	@endforeach
+											                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+											                        	@endforeach
+											                        	
+											                        @endif
 
 										                    	</select>
 

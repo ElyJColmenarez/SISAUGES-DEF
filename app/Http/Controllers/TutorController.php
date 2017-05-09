@@ -5,6 +5,8 @@ namespace SISAUGES\Http\Controllers;
 use Illuminate\Http\Request;
 use SISAUGES\Models\Persona;
 use SISAUGES\Models\Tutor;
+use SISAUGES\Models\Departamento;
+use SISAUGES\Models\institucion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
@@ -15,7 +17,7 @@ class TutorController extends Controller
 
 
 
-    public function fieldsRegisterCall($persona,$tutor){
+    public function fieldsRegisterCall($persona,$tutor,$instituciones,$departamentos){
 
         $fields = array(
 
@@ -63,34 +65,6 @@ class TutorController extends Controller
                     'solonumero',
                     'obligatorio' )),
 
-            'institucion' => array(
-                'type'      => 'select',
-                'value'     => '', //decidir como llamar las instituciones
-                'id'        => 'institucion',
-                'label'     => 'Institución',
-                'options'   => array(
-                    ''          =>'Seleccione...',
-                    '1'         =>'IUT',
-                    '2'         =>'UCV',
-                    '3'         =>'UNEFA'
-                )
-            ),
-
-            'departamento' => array(
-                'type'      => 'select',
-                'value'     => '', //decidir como llamar los departamentos
-                'id'        => 'departamento',
-                'label'     => 'Departamento',
-                'options'   => array(
-                    ''          =>'Seleccione...',
-                    '1'         =>'Informática',
-                    '2'         =>'Electricidad',
-                    '3'         =>'Tecnología de los materiales',
-                    '4'         =>'Quimica',
-
-                )
-            ),
-
             'estatus' => array(
                 'type'      => 'select',
                 'value'     => (!empty($tutor->estatus))? $tutor->estatus:'',
@@ -101,7 +75,48 @@ class TutorController extends Controller
                     'true' =>'Activo',
                     'false'=>'Inactivo'
                 )
+            ),
+
+            'separador1'=>array('type'=>'separador'),
+
+            'institucion' => array(
+
+                'type'      => 'select',
+                'value'     => (isset($instituciones->id_institucion))? $institucioness->id_institucion:'',
+                'id'        => 'id_institucion',
+                'label'     => 'Institución',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_institucion','nombre_institucion'),
+                'options'   => $instituciones,
+                'related_select' => 'id_departamento',
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Institución',
+                    'btnfinlavel'=>'Registrar Institución',
+                    'url'=> url('institucion/registerform')
+                )
+
+            ),
+
+            'separador1'=>array('type'=>'separador'),
+
+            'departamento' => array(
+
+                'type'      => 'select',
+                'value'     => (isset($departamentos->id_departamento))? $departamentos->id_departamento:'',
+                'id'        => 'id_departamento',
+                'label'     => 'Departamento',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_departamento','nombre_departamento'),
+                'options'   => $departamentos,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Departamento',
+                    'btnfinlavel'=>'Registrar Departamento',
+                    'url'=> url('departamento/registerform')
+                )
+
             )
+
+
         );
 
         return $fields;
@@ -248,7 +263,19 @@ class TutorController extends Controller
         if (isset($tutor)){
 
             $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
-            $persona = Persona::find($persona[0]->id_persona);
+
+            $departamentos= Departamento::tutor()->find($persona[0]->id_persona);
+
+            $instituciones= Institucion::departamento()->find($departamentos[0]->id_departamento);
+
+            //$persona = Persona::find($persona[0]->id_persona);
+        }else{
+
+            $persona = Persona::find($request->field_id);
+
+            $departamentos= Departamento::find($request->field_id);
+
+            $instituciones= Institucion::find($request->field_id);
         }
 
 
@@ -266,7 +293,7 @@ class TutorController extends Controller
                 )
             );
 
-            $fields = $this->fieldsRegisterCall($persona,$tutor);
+            $fields = $this->fieldsRegisterCall($persona,$tutor,$instituciones,$departamentos);
 
             $modulo='Tutor';
 

@@ -264,7 +264,12 @@ class EstudianteController extends Controller
         if (isset($estudiante)){
 
             $persona = Persona::buscarpersona($estudiante->cedula_persona)->get();
-            $persona = Persona::find($persona[0]->id_persona);
+
+            //$persona = Persona::find($persona[0]->id_persona);
+        }else{
+
+            $persona = Persona::find($request->field_id);
+
         }
 
         if ($request->typeform == 'delete')

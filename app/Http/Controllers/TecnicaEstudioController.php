@@ -43,7 +43,7 @@ class TecnicaEstudioController extends Controller
             )
         );
 
-        return $fields
+        return $fields;
     }
 
     public function fieldsSearchCall($request){
@@ -73,7 +73,7 @@ class TecnicaEstudioController extends Controller
             )
         ); 
 
-        return $fields
+        return $fields;
     }
 
 
