@@ -250,7 +250,7 @@ class DepartamentoController extends Controller
 
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$departamento->id_departamento,'keystone'=>'id_departamento');
 
     }
 
@@ -291,7 +291,7 @@ class DepartamentoController extends Controller
             $val=$departamento->save();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$departamento->id_departamento,'keystone'=>'id_departamento');
 
     }
 
@@ -311,7 +311,7 @@ class DepartamentoController extends Controller
         $departamento=Departamento::find($id);
         $departamento->estatus='false';
         $val=$departamento->save();
-        return $val;
+        return array('result'=>$val,'obj'=>$departamento->id_departamento,'keystone'=>'id_departamento');
     }
 
 
@@ -322,7 +322,7 @@ class DepartamentoController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -330,7 +330,7 @@ class DepartamentoController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -344,7 +344,7 @@ class DepartamentoController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
@@ -352,7 +352,7 @@ class DepartamentoController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -366,7 +366,7 @@ class DepartamentoController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Desactivo fue exitoso...';
@@ -374,7 +374,7 @@ class DepartamentoController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos.';
+            $retorno['mensaje']='Los datos suministrados no son validos.';
 
         }
 

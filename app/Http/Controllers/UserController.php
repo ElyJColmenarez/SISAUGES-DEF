@@ -321,7 +321,7 @@ class UserController extends Controller
                 $val = $usuario->save();
             }
 
-            return $val;
+            return array('result'=>$val,'obj'=>$usuario->id_usuario,'keystone'=>'id_usuario');
         }
     }
 
@@ -357,7 +357,7 @@ class UserController extends Controller
         $val = $usuario->save();
 
 
-        return $val;
+        return array('result'=>$val,'obj'=>$usuario->id_usuario,'keystone'=>'id_usuario');
     }
 
     /**
@@ -377,17 +377,16 @@ class UserController extends Controller
         $persona->save();
         $val = $usuario->save();
 
-        return $val;
+        return array('result'=>$val,'obj'=>$usuario->id_usuario,'keystone'=>'id_usuario');
     }
 
     public function ajaxRegularStore(Request $request){
-
 
         $val=$this->store($request);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -409,10 +408,10 @@ class UserController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
 
         }else{
             //Datos Invalidos
@@ -425,16 +424,16 @@ class UserController extends Controller
 
     }
 
-    public function ajaxRegularDestroy($id){
+    public function ajaxRegularDestroy(Request $request,$id){
 
         $val=$this->destroy($id);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Desactivo fue exitoso...';
 
         }else{
             //Datos Invalidos

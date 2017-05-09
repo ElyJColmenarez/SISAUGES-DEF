@@ -111,6 +111,17 @@ jQuery(document).ready(function() {
 
                         $('#modalForm').empty();
                         $('#modalForm').append('<div class="ocultos">'+data.html+'</div>');
+
+                        var principalsets=$('#principalmodalvalues').serializeArray();
+
+                        $('#principalmodalvalues').empty();
+
+                        jQuery.each(principalsets,function( i, val ){
+
+                            $('#modalForm #'+val.name).val(val.value);
+
+                        });
+
                         $('#lastmodalstep'+num).remove();
                         $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
                             $('#modalForm .mdl-truebody').slideDown('fast','swing',function(){
@@ -144,6 +155,16 @@ jQuery(document).ready(function() {
         event.preventDefault();
 
         var altaction=$(this).val();
+
+        var principalsets=$('#modalForm .modalmicroform').serializeArray();
+
+        $('#principalmodalvalues').empty();
+
+        jQuery.each(principalsets,function( i, val ){
+
+            $('#principalmodalvalues').append('<input type="hidden" name="'+val.name+'" value="'+val.value+'">');
+
+        });
 
         var form=$('#principalform');
 

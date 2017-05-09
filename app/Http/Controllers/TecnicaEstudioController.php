@@ -194,7 +194,7 @@ class TecnicaEstudioController extends Controller
 
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$tecnicasEstudio->id_tecnica_estudio,'keystone'=>'id_tecnica_estudio');
 
     }
 
@@ -234,7 +234,7 @@ class TecnicaEstudioController extends Controller
             $val=$tecnicasEstudio->save();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$tecnicasEstudio->id_tecnica_estudio,'keystone'=>'id_tecnica_estudio');
 
     }
 
@@ -254,7 +254,7 @@ class TecnicaEstudioController extends Controller
         $tecnicasEstudio=TecnicaEstudio::find($id);
         $tecnicasEstudio->estatus='false';
         $val=$tecnicasEstudio->save();
-        return $val;
+        return array('result'=>$val,'obj'=>$tecnicasEstudio->id_tecnica_estudio,'keystone'=>'id_tecnica_estudio');
     }
 
 
@@ -265,7 +265,7 @@ class TecnicaEstudioController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -273,7 +273,7 @@ class TecnicaEstudioController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -287,7 +287,7 @@ class TecnicaEstudioController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
@@ -295,7 +295,7 @@ class TecnicaEstudioController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -309,7 +309,7 @@ class TecnicaEstudioController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Desactivo fue exitoso...';
@@ -317,7 +317,7 @@ class TecnicaEstudioController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos.';
+            $retorno['mensaje']='Los datos suministrados no son validos.';
 
         }
 

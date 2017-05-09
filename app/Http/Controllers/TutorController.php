@@ -362,7 +362,7 @@ class TutorController extends Controller
                 $val = $tutor->save();
             }
 
-            return $val;
+            return array('result'=>$val,'obj'=>$tutor->id_tutor,'keystone'=>'id_tutor');
         }
     }
 
@@ -395,7 +395,7 @@ class TutorController extends Controller
         $tutor->estatus              = $request->estatus;
         $val = $tutor->save();
 
-        return $val;
+        return array('result'=>$val,'obj'=>$tutor->id_tutor,'keystone'=>'id_tutor');
     }
 
     /**
@@ -416,17 +416,16 @@ class TutorController extends Controller
         $persona->save();
         $val = $tutor->save();
 
-        return $val;
+        return array('result'=>$val,'obj'=>$tutor->id_tutor,'keystone'=>'id_tutor');
     }
 
     public function ajaxRegularStore(Request $request){
-
 
         $val=$this->store($request);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -448,10 +447,10 @@ class TutorController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
 
         }else{
             //Datos Invalidos
@@ -464,16 +463,16 @@ class TutorController extends Controller
 
     }
 
-    public function ajaxRegularDestroy($id){
+    public function ajaxRegularDestroy(Request $request,$id){
 
         $val=$this->destroy($id);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Desactivo fue exitoso...';
 
         }else{
             //Datos Invalidos

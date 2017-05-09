@@ -256,7 +256,7 @@ class InstitucionController extends Controller
             $val=$institucion->save();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$institucion->id_institucion,'keystone'=>'id_institucion');
 
     }
 
@@ -299,7 +299,7 @@ class InstitucionController extends Controller
             $val=$institucion->save();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$institucion->id_institucion,'keystone'=>'id_institucion');
 
     }
 
@@ -317,7 +317,7 @@ class InstitucionController extends Controller
         $institucion->estatus = $request->estatus;
         $val = $institucion->save();
 
-        return $val;
+        return array('result'=>$val,'obj'=>$institucion->id_institucion,'keystone'=>'id_institucion');
 
     }
 
@@ -325,12 +325,11 @@ class InstitucionController extends Controller
 
     public function ajaxRegularStore(Request $request){
 
-
         $val=$this->store($request);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -338,7 +337,7 @@ class InstitucionController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -352,15 +351,15 @@ class InstitucionController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
 
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -370,19 +369,19 @@ class InstitucionController extends Controller
 
     public function ajaxRegularDestroy(Request $request,$id){
 
-        $val=$this->destroy($request,$id);
+        $val=$this->destroy($id);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Desactivo fue exitoso...';
 
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos.';
+            $retorno['mensaje']='Los datos suministrados no son validos.';
 
         }
 

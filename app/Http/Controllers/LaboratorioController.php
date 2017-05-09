@@ -240,7 +240,7 @@ class LaboratorioController extends Controller
 
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
 
     }
 
@@ -281,7 +281,7 @@ class LaboratorioController extends Controller
             $val=$Laboratorio->save();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
 
     }
 
@@ -301,7 +301,7 @@ class LaboratorioController extends Controller
         $Laboratorio=Laboratorio::find($id);
         $Laboratorio->estatus='false';
         $val=$Laboratorio->save();
-        return $val;
+        return array('result'=>$val,'obj'=>$laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
     }
 
 
@@ -312,7 +312,7 @@ class LaboratorioController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -320,7 +320,7 @@ class LaboratorioController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -334,7 +334,7 @@ class LaboratorioController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
@@ -342,7 +342,7 @@ class LaboratorioController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -356,7 +356,7 @@ class LaboratorioController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Desactivo fue exitoso...';
@@ -364,7 +364,7 @@ class LaboratorioController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos.';
+            $retorno['mensaje']='Los datos suministrados no son validos.';
 
         }
 

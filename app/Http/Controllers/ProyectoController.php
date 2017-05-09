@@ -338,7 +338,7 @@ class ProyectoController extends Controller
             $val=$validator->passes();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$proyecto->id_proyecto,'keystone'=>'id_proyecto');
 
     }
 
@@ -386,7 +386,7 @@ class ProyectoController extends Controller
             $val=$validator->passes();
         }
 
-        return $val;
+        return array('result'=>$val,'obj'=>$proyecto->id_proyecto,'keystone'=>'id_proyecto');
 
     }
 
@@ -407,18 +407,19 @@ class ProyectoController extends Controller
 
         }
 
+        return array('result'=>$val,'obj'=>$proyecto->id_proyecto,'keystone'=>'id_proyecto');
+
     }
 
 
 
     public function ajaxRegularStore(Request $request){
 
-
         $val=$this->store($request);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
@@ -426,7 +427,7 @@ class ProyectoController extends Controller
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -440,15 +441,15 @@ class ProyectoController extends Controller
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
 
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos';
+            $retorno['mensaje']='Los datos suministrados no son validos';
 
         }
 
@@ -458,19 +459,19 @@ class ProyectoController extends Controller
 
     public function ajaxRegularDestroy(Request $request,$id){
 
-        $val=$this->destroy($request,$id);
+        $val=$this->destroy($id);
 
         $retorno=array();
 
-        if ($val) {
+        if ($val['result']) {
             //Datos Validos
             $retorno['resultado']='success';
-            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['mensaje']='Desactivo fue exitoso...';
 
         }else{
             //Datos Invalidos
             $retorno['resultado']='danger';
-            $retorno['mensaje']='Los datos no suministrados no son validos.';
+            $retorno['mensaje']='Los datos suministrados no son validos.';
 
         }
 
