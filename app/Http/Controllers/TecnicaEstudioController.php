@@ -11,6 +11,72 @@ use SISAUGES\Http\Requests;
 
 class TecnicaEstudioController extends Controller
 {
+
+
+
+    public function fieldsRegisterCall($tecnicasEstudio){
+
+        $fields=array(
+               
+
+            'descripcion_tecnica_estudio' => array(
+                'type'  => 'text',
+                'value' => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->descripcion_tecnica_estudio,
+                'id'    => 'descripcion_tecnica_estudio',
+                'label' => 'Nombre '
+            ),
+
+
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->estatus,
+                'id'        => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields
+    }
+
+    public function fieldsSearchCall($request){
+
+        $fields=array(
+
+            'descripcion_tecnica_estudio' => array(
+                'type'  => 'text',
+                'value' => (isset($request->descripcion_tecnica_estudio))?  $request->descripcion_tecnica_estudio:'',
+                'id'    => 'descripcion_departamento',
+                'label' => 'Nombre'
+            ),
+           
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->estatus))? $request->estatus: '',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),                    
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            )
+        ); 
+
+        return $fields
+    }
+
+
     public function index(Request $request)
     {
 
@@ -25,30 +91,7 @@ class TecnicaEstudioController extends Controller
 
          $action="tecnica-estudio/listar";
 
-            $fields=array(
-
-                'descripcion_tecnica_estudio' => array(
-                    'type'  => 'text',
-                    'value' => (isset($request->descripcion_tecnica_estudio))?  $request->descripcion_tecnica_estudio:'',
-                    'id'    => 'descripcion_departamento',
-                    'label' => 'Nombre'
-                ),
-               
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (isset($request->estatus))? $request->estatus: '',
-                    'id'        => 'estatus',
-                    'label'     => 'estatus',
-                    'validaciones'=>array(
-                        'obligatorio'
-                    ),                    
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Activo',
-                        '0'=>'Inactivo'
-                    )
-                )
-            );     
+        $fields=$this->fieldsSearchCall($request);    
 
         $data=array(
 
@@ -91,37 +134,13 @@ class TecnicaEstudioController extends Controller
             );
 
 
-            $fields=array(
-               
+            $fields=$this->fieldsRegisterCall($tecnicasEstudio);
 
-                'descripcion_tecnica_estudio' => array(
-                    'type'  => 'text',
-                    'value' => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->descripcion_tecnica_estudio,
-                    'id'    => 'descripcion_tecnica_estudio',
-                    'label' => 'Nombre '
-                ),
-
-
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->estatus,
-                    'id'        => 'estatus',
-                    'validaciones'=>array(
-                        'obligatorio'
-                    ),
-                    'label'     => 'estatus',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Activo',
-                        '0'=>'Inactivo'
-                    )
-                )
-            );
-
+            $modulo='Tecnica de Estudio';
 
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
 
         if ($htmlbody) {

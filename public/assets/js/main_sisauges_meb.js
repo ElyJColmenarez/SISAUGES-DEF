@@ -125,6 +125,7 @@ jQuery(document).ready(function() {
         var inform= form.serializeArray();
 
         inform.push({name: 'stepform', value: 'true'})
+        inform.push({name: 'finlabel', value: $(this).attr('data-finlabel')})
 
         var promise=$.ajax({
 
@@ -188,6 +189,8 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
+        $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
         var form=new FormData($('#modalForm .modalmicroform')[0]);
 
         var promise=$.ajax({
@@ -206,10 +209,6 @@ jQuery(document).ready(function() {
             },
             success:    function(data){
 
-
-            	$('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
-
-
             	if (data.resultado=='success') {
 
             		$('#modalForm').addClass('modal-block-success');
@@ -217,7 +216,7 @@ jQuery(document).ready(function() {
             		$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
             		$('#modalForm .msn-alerta-header').text('Solicitud completa!');
             		$('#modalForm .msn-alerta-body').text(data.mensaje);
-            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-success modal-dismiss');
+            		$('#modalForm .truebtndissmis > button').attr('class','btn btn-success modal-dismiss mld-dismiss-fin');
 
 
             	}else{
@@ -256,8 +255,6 @@ jQuery(document).ready(function() {
             },
             error:      function(){
 
-                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
-
             	$('#modalForm').addClass('modal-block-danger');
 
     			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
@@ -285,6 +282,8 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
+        $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
         var form=new FormData($('#modalForm .modalmicroform')[0]);
 
         var promise=$.ajax({
@@ -304,9 +303,6 @@ jQuery(document).ready(function() {
             success:    function(data){
 
 
-                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
-
-
                 if (data.resultado=='success') {
 
                     $('#modalForm').addClass('modal-block-success');
@@ -314,7 +310,7 @@ jQuery(document).ready(function() {
                     $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
                     $('#modalForm .msn-alerta-header').text('Solicitud completa!');
                     $('#modalForm .msn-alerta-body').text(data.mensaje);
-                    $('#modalForm .mld-dismiss-fin').attr('class','btn btn-success dismisslastmodal');
+                    $('#modalForm .truebtndissmis > button').attr('class','btn btn-success dismisslastmodal');
 
                 }else{
 
@@ -352,7 +348,6 @@ jQuery(document).ready(function() {
             },
             error:      function(){
 
-                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
 
                 $('#modalForm').addClass('modal-block-danger');
 
@@ -472,13 +467,13 @@ jQuery(document).ready(function() {
 
         var f = new Date();
 
-        $('#modalForm .muestra-seccion table tbody').empty();
+        $('#modalForm .muestra-seccion table.newrecords tbody').empty();
 
         for (var i = 0; i < $(this)[0].files.length; i++) {
 
             var aux= $(this)[0].files[i];
 
-            var htmlsect="<tr id='tablereg"+i+"' data-regid='"+i+"'>";
+            var htmlsect="<tr id='tablereg"+i+"'>";
             htmlsect=htmlsect+"<td>"+aux.name+"</td>";
             htmlsect=htmlsect+"<td>"+aux.type+"</td>";
             htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
@@ -487,7 +482,7 @@ jQuery(document).ready(function() {
             htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
-            $('#modalForm .muestra-seccion table tbody').append(htmlsect);
+            $('#modalForm .muestra-seccion table.newrecords  tbody').append(htmlsect);
         }
 
 
@@ -500,8 +495,11 @@ jQuery(document).ready(function() {
 
         $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
             $(this).remove();
-            $('#modalForm .ocultos input')[0].files[$(this).attr('data-regid')];
-            $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-regid')+'">');
+
+            if ($(this).attr('data-trueid')) {
+
+                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
+            }
         });
 
     });

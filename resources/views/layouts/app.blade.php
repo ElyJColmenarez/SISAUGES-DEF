@@ -66,13 +66,13 @@
                         <div class="right-wrapper pull-right">
                             <ol class="breadcrumbs">
                                 <li>
-                                    <a href="{{asset('/logout')}}">
+                                    <a class="sidebar-right-toggle" href="{{asset('/logout')}}">
                                         <i class="fa fa-sign-out fa-2x"></i>
                                     </a>
                                 </li>
                             </ol>
 
-                            <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>
+                            <!--<a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>-->
                         </div>
                     </header>
 

@@ -4,64 +4,67 @@ namespace SISAUGES\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use SISAUGES\Http\Requests;
 use SISAUGES\Http\Controllers\Controller;
 use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
+use SISAUGES\Models\Muestra;
+use SISAUGES\Models\Proyecto;
+use SISAUGES\Models\Archivo;
+use Storage;
+use Validator;
+use File;
+use Imagick;
 
 use Illuminate\Support\Facades\View;
 
 class ProyectoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-     public function index(Request $request)
-    {
 
-        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->/*whereHas('departamento', function($query) use ($request){
 
-                $query->descripciondepartamento('');
 
-        })->*/orderBy('nombre_institucion', 'desc')->paginate(20);
+    public function fieldsRegisterCall($proyecto){
 
-        $action="institucion/listar";
-
+            
         $fields=array(
 
-            'nombre_institucion' => array(
+            'nombre_proyecto' => array(
                 'type'  => 'text',
-                'value' => (isset($request->nombre_institucion))? $request->nombre_institucion:'',
-                'id'    => 'nombre_institucion',
-                'label' => 'Nombre de la institucion'
+                'value' => (isset($proyecto->nombre_proyecto))? $proyecto->nombre_proyecto:'',
+                'id'    => 'nombre_proyecto',
+                'label' => 'Nombre del Proyecto'
             ),
-            'correo_institucional' => array(
-                'type'  => 'text',
-                'value' => (isset($request->correo_institucional))? $request->correo_institucional:'',
-                'id'    => 'correo_institucional',
-                'label' => 'Correo de la institucion'
+            'estatus_proyecto' => array(
+                'type'  => 'select',
+                'value' => (isset($proyecto->estatus_proyecto))? $proyecto->estatus_proyecto:'',
+                'id'    => 'estatus_proyecto',
+                'label' => 'Estatus del Proyecto',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Tipo1',
+                    '2'=>'Tipo2'
+                )
             ),
-            'direccion_institucion' => array(
-                'type'  => 'text',
-                'value' => (isset($request->direccion_institucion))? $request->direccion_institucion:'',
-                'id'    => 'direccion_institucion',
-                'label' => 'Direccion de la institucion'
+            'fecha_inicio' => array(
+                'type'  => 'date',
+                'value' => (isset($proyecto->fecha_inicio))? $proyecto->fecha_inicio:'',
+                'id'    => 'fecha_inicio',
+                'label' => 'Fecha de Recepción de la proyecto'
             ),
-            'telefono_institucion' => array(
-                'type'  => 'text',
-                'value' => (isset($request->telefono_institucion))? $request->telefono_institucion:'',
-                'id'    => 'telefono_institucion',
-                'label' => 'Telefono de la institucion'
+            'fecha_final' => array(
+                'type'  => 'date',
+                'value' => (isset($proyecto->fecha_final))? $proyecto->fecha_final:'',
+                'id'    => 'fecha_final',
+                'label' => 'Fecha de Recepción de la proyecto'
             ),
-            'estatus' => array(
+            'permiso_proyecto' => array(
                 'type'      => 'select',
-                'value'     => (isset($request->estatus))? $request->estatus:'',
-                'id'        => 'estatus',
-                'label'     => 'estatus',
+                'value'     => (isset($proyecto->permiso_proyecto))? $proyecto->permiso_proyecto:'',
+                'id'        => 'permiso_proyecto',
+                'label'     => 'Permiso',
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
@@ -70,27 +73,108 @@ class ProyectoController extends Controller
             )
         );
 
+        return $fields;
+
+    }
+
+    public function fieldsSearchCall(){
+        $fields=array(
+        );
+
+        return $fields;
+    }
+
+
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+        $proyectos=Proyecto::orderBy('id_proyecto', 'desc')->paginate(20);
+
+        $action="proyecto/listar";
+
+        $fields=$this->fieldsSearchCall();
+
         $data=array(
 
-            'title'=>'Instituciones',
-            'principal_search'=>'nombre_institucion',
-            'registros'=>$instituciones,
+            'title'=>'Proyecto',
+            'principal_search'=>'nombre_proyecto',
+            'registros'=>$proyectos,
             'carpeta'=>'proyecto'
 
         );
 
-        return view('proyecto.proyecto',compact('data','action','fields','request'));
+        return view('layouts.index',compact('data','action','fields','request'));
         
     }
 
+
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+
+
+    public function renderForm(Request $request){
+
+        
+        if ($request->typeform=='add') {
+            $action="muestra/crear";
+        }elseif($request->typeform=='modify'){
+            $action="muestra/editar/".$request->field_id;
+        }elseif($request->typeform=='deleted'){
+            $action="muestra/eliminar/".$request->field_id;
+        }
+
+        $proyecto = Proyecto::find($request->field_id);
+
+        if ($request->typeform=='deleted') {
+            $fields=false;
+        }else{
+
+            $hiddenfields=array(
+
+                'field_id'=>array(
+                    'type'  => 'hidden',
+                    'value' => $request->field_id,
+                    'id'    => 'field_id',
+                ),
+                'form_step'=>array(
+                    'type'  => 'hidden',
+                    'value' => (isset($request->form_step))? ($request->form_step+1): 1 ,
+                    'id'    => 'field_id',
+                )
+
+            );
+
+            $fields=$this->fieldsRegisterCall($proyecto);
+
+            $modulo='Proyecto';
+        }
+
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
+
+        if ($htmlbody) {
+            $retorno=array(
+                'result'=>true,
+                'html'  =>$htmlbody
+            );
+        }else{
+            $retorno=array(
+                'result'=>false,
+            );
+        }
+
+        echo json_encode($retorno);
+
     }
 
     /**
@@ -99,32 +183,47 @@ class ProyectoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+
+
+    public function store($request){
+
+        $muestra=new Muestra($request->all());
+
+        $aux=$request->all();
+
+        $validator=Validator::make($request->all(),[
+
+            'codigo_muestra'=>'required|min:1|max:255',
+            'tipo_muestra'=>'required|min:1|max:255',
+            'descripcion_muestra'=>'required|min:1|max:255',
+            'fecha_inicio'=>'required|min:1|max:255',
+            'estatus'=>'required|min:1|max:255',
+            'proyecto'=>'required|min:1|max:255'
+
+        ]);
+
+        //var_dump($validator->errors());
+
+        if ($validator->passes()) {
+
+            $val=$muestra->save();
+
+            if ($val) {
+
+                if ($request->file('imagenes')[0]!=null) {
+                    $procesados=$this->imagenVal($request,$muestra);
+                }
+
+            }
+
+        }else{
+            $val=$validator->passes();
+        }
+
+        return $val;
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -133,9 +232,44 @@ class ProyectoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+
+    public function update($request, $id){
+
+        $muestra=Muestra::find($id);
+
+        $validator=Validator::make($request->all(),[
+
+            'codigo_muestra'=>'required|min:1|max:255',
+            'tipo_muestra'=>'required|min:1|max:255',
+            'descripcion_muestra'=>'required|min:1|max:255',
+            'fecha_inicio'=>'required|min:1|max:255',
+            'estatus'=>'required|min:1|max:255',
+            'proyecto'=>'required|min:1|max:255'
+
+        ]);
+
+
+        if ($validator->passes()) {
+
+
+            $muestra->codigo_muestra=$request->codigo_muestra;
+            $muestra->tipo_muestra=$request->tipo_muestra;
+            $muestra->descripcion_muestra=$request->descripcion_muestra;
+            $muestra->fecha_inicio=$request->fecha_inicio;
+            $muestra->estatus=$request->estatus;
+
+            $val=$muestra->save();
+
+            if ($val) {
+                $procesados=$this->imagenVal($request,$muestra);
+            }
+
+        }else{
+            $val=$validator->passes();
+        }
+
+        return $val;
+
     }
 
     /**
@@ -144,8 +278,87 @@ class ProyectoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+
+    public function destroy($request, $id){
+
+        $institucion=Muestra::find($id);
+
+        foreach ($institucion->archivo()->get() as $key => $value) {
+            
+            $this->fileDelete($value->id_archivo);
+
+        }
+
     }
+
+
+
+    public function ajaxRegularStore(Request $request){
+
+
+        $val=$this->store($request);
+
+        $retorno=array();
+
+        if ($val) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos no suministrados no son validos';
+
+        }
+
+        echo json_encode($retorno);
+
+    }
+
+    public function ajaxRegularUpdate(Request $request, $id){
+
+        $val=$this->update($request,$id);
+
+        $retorno=array();
+
+        if ($val) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos no suministrados no son validos';
+
+        }
+
+        echo json_encode($retorno);
+
+    }
+
+    public function ajaxRegularDestroy(Request $request,$id){
+
+        $val=$this->destroy($request,$id);
+
+        $retorno=array();
+
+        if ($val) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos no suministrados no son validos.';
+
+        }
+
+        echo json_encode($retorno);
+
+    }
+
+
 }

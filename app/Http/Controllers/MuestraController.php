@@ -4,6 +4,7 @@ namespace SISAUGES\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use SISAUGES\Http\Requests;
@@ -12,6 +13,7 @@ use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
 use SISAUGES\Models\Proyecto;
+use SISAUGES\Models\Archivo;
 use Storage;
 use Validator;
 use File;
@@ -21,17 +23,80 @@ use Illuminate\Support\Facades\View;
 
 class MuestraController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
 
-        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->orderBy('codigo_muestra', 'desc')->paginate(20);
+     public function fieldsRegisterCall($muestra,$proyectos){
 
-        $action="institucion/listar";
+        $fields=array(
+
+            'codigo_muestra' => array(
+                'type'  => 'text',
+                'value' => (isset($muestra->codigo_muestra))? $muestra->codigo_muestra:'',
+                'id'    => 'codigo_muestra',
+                'label' => 'Codigo de la Muestra'
+            ),
+            'tipo_muestra' => array(
+                'type'  => 'select',
+                'value' => (isset($muestra->tipo_muestra))? $muestra->tipo_muestra:'',
+                'id'    => 'tipo_muestra',
+                'label' => 'Tipo de Muestra',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Tipo1',
+                    '2'=>'Tipo2'
+                )
+            ),
+            'separador1'=>array('type'=>'separador'),
+            'descripcion_muestra' => array(
+                'type'  => 'textarea',
+                'value' => (isset($muestra->descripcion_muestra))? $muestra->descripcion_muestra:'',
+                'id'    => 'descripcion_muestra',
+                'label' => 'Descripcion de la Muestra'
+            ),
+            'fecha_recepcion' => array(
+                'type'  => 'date',
+                'value' => (isset($muestra->fecha_recepcion))? $muestra->fecha_recepcion:'',
+                'id'    => 'fecha_recepcion',
+                'label' => 'Fecha de Recepción de la Muestra'
+            ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (isset($muestra->estatus))? $muestra->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            ),
+            'proyecto'  => array(
+                'type'      => 'select',
+                'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->proyecto->id_proyecto:'',
+                'id'        => 'id_proyecto',
+                'label'     => 'Proyecto',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_proyecto','nombre_proyecto'),
+                'options'   => $proyectos,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Proyecto',
+                    'btnfinlavel'=>'Registrar Proyecto',
+                    'url'=> url('proyecto/registerform')
+                )
+            ),
+            'muestras'=>array(
+
+                'type'      => 'muestra',
+                'id'        => 'muestra',
+                'label'     => 'Archivos',
+                'data'      => $muestra
+
+            )
+        );
+
+        return $fields;
+     }
+
+     public function fieldsSearchCall($request){
 
         $fields=array(
 
@@ -77,6 +142,23 @@ class MuestraController extends Controller
             )
         );
 
+        return $fields;
+     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->orderBy('codigo_muestra', 'desc')->paginate(20);
+
+        $action="institucion/listar";
+
+        $fields=$this->fieldsSearchCall($request);
+
         $data=array(
 
             'title'=>'Muestras',
@@ -102,7 +184,7 @@ class MuestraController extends Controller
     public function generarImagenVisible($original_paht,$id,$proyecto){
 
 
-        $ruta=base_path() ."/public/storage/test/";
+        $ruta=base_path() ."/public/storage/".Auth::user()->cedula_persona."/";
 
         if (!file_exists($ruta)) {
            File::makeDirectory($ruta,0777,true);
@@ -129,7 +211,7 @@ class MuestraController extends Controller
     public function generarArchivo($file,$id,$proyecto){
 
 
-        $ruta=base_path() ."/public/storage/test/";
+        $ruta=base_path() ."/public/storage/".$proyecto."/";
 
         if (!file_exists($ruta)) {
            File::makeDirectory($ruta,0777,true);
@@ -173,77 +255,12 @@ class MuestraController extends Controller
                 ),
             );
 
-            $fields=array(
+            $fields=$this->fieldsRegisterCall($muestra,$proyectos);
 
-                'codigo_muestra' => array(
-                    'type'  => 'text',
-                    'value' => (isset($muestra->codigo_muestra))? $muestra->codigo_muestra:'',
-                    'id'    => 'codigo_muestra',
-                    'label' => 'Codigo de la Muestra'
-                ),
-                'tipo_muestra' => array(
-                    'type'  => 'select',
-                    'value' => (isset($muestra->tipo_muestra))? $muestra->tipo_muestra:'',
-                    'id'    => 'tipo_muestra',
-                    'label' => 'Tipo de Muestra',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Tipo1',
-                        '2'=>'Tipo2'
-                    )
-                ),
-                'separador1'=>array('type'=>'separador'),
-                'descripcion_muestra' => array(
-                    'type'  => 'textarea',
-                    'value' => (isset($muestra->descripcion_muestra))? $muestra->descripcion_muestra:'',
-                    'id'    => 'descripcion_muestra',
-                    'label' => 'Descripcion de la Muestra'
-                ),
-                'fecha_recepcion' => array(
-                    'type'  => 'date',
-                    'value' => (isset($muestra->fecha_recepcion))? $muestra->fecha_recepcion:'',
-                    'id'    => 'fecha_recepcion',
-                    'label' => 'Fecha de Recepción de la Muestra'
-                ),
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (isset($muestra->estatus))? $muestra->estatus:'',
-                    'id'        => 'estatus',
-                    'label'     => 'estatus',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Activo',
-                        '0'=>'Inactivo'
-                    )
-                ),
-                'proyecto'  => array(
-                    'type'      => 'select',
-                    'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->proyecto->id_proyecto:'',
-                    'id'        => 'id_proyecto',
-                    'label'     => 'Proyecto',
-                    'selecttype'=> 'obj',
-                    'objkeys'   => array('id_proyecto','nombre_proyecto'),
-                    'options'   => $proyectos,
-                    'selectadd' => array(
-                        'btnlabel'=>'Agegar Proyecto',
-                        'btnfinlavel'=>'Registrar Proyecto',
-                        'url'=> url('proyecto/registerform')
-                    )
-                ),
-                'muestras'=>array(
-
-                    'type'      => 'muestra',
-                    'id'        => 'muestra',
-                    'label'     => 'Archivos',
-                    'data'      => $muestra
-
-                )
-            );
-
-
+            $modulo='Muestra';
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
         if ($htmlbody) {
             $retorno=array(
@@ -267,33 +284,89 @@ class MuestraController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+    public function fileDelete($borrado){
+
+            
+        $file=Archivos::find($borrado);
+        $varaux=base_path() .'/public/'.$file->ruta_img_muestra.$file->nombre_temporal_muestra;
+        $aux=$file->delete();
+
+        if ($aux) {
+            unlink($varaux);
+        }
+
+
+    }
+
+
+    public function dirDelete($carpeta=''){
+
+        if (file_exists($carpeta)) {
+
+           foreach(glob($carpeta . "/*") as $archivos_carpeta)
+            {
+                echo $archivos_carpeta;
+         
+                if (is_dir($archivos_carpeta))
+                {
+                    $this->tempDelete($archivos_carpeta);
+                }
+                else
+                {
+                    unlink($archivos_carpeta);
+                }
+            }
+         
+            rmdir($carpeta);
+
+        }
+    }
+
+
     public function imagenVal($request,$muestra){
 
         $retorno=array();
 
-        //$borrados=$request->borrados;
+        //Agregar registros nuevos
 
         foreach ($request->file('imagenes') as $key => $value) {
 
 
-            if (strpos($value->getClientMimeType(),'image')!==false) {
+            if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
 
-                $img=$this->generarImagenVisible($request->imagenes[$key]->getRealPath(),$muestra->id_muestra,$request->proyecto);
+                $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
 
-                $muestra->proyecto()->attach($request->proyecto,array('ruta_img_muestra'=>$img,'fecha_analisis'=>date('d-m-Y')));
+                $file=new Archivo();
 
-            }elseif(strpos($value->getClientMimeType(),'pdf')!==false){
-
-                $this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
+                $file->ruta_img_muestra="storage/".$request->proyecto."/";
+                $file->fecha_analisis=date('d-m-Y');
+                $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
+                $file->nombre_temporal_muestra=$img;
+                $file->id_muestra=$muestra->id_muestra;
+                $file->save();
 
             }else{
-                $retorno=$value;
+                $retorno[]=$value;
             }
 
              
         }
 
+        //Eliminar registros existentes
+
+        $borrados=$request->borrados;
+
+        if (isset($borrados)) {
+            foreach ($borrados as $key => $value) {
+            
+                $this->fileDelete($value);
+
+            }
+        }
+
     }
+
 
     public function store($request){
 
@@ -307,7 +380,8 @@ class MuestraController extends Controller
             'tipo_muestra'=>'required|min:1|max:255',
             'descripcion_muestra'=>'required|min:1|max:255',
             'fecha_recepcion'=>'required|min:1|max:255',
-            'estatus'=>'required|min:1|max:255'
+            'estatus'=>'required|min:1|max:255',
+            'proyecto'=>'required|min:1|max:255'
 
         ]);
 
@@ -318,12 +392,18 @@ class MuestraController extends Controller
             $val=$muestra->save();
 
             if ($val) {
-                $procesados=$this->imagenVal($request,$muestra);
+
+                if ($request->file('imagenes')[0]!=null) {
+                    $procesados=$this->imagenVal($request,$muestra);
+                }
+
             }
 
+        }else{
+            $val=$validator->passes();
         }
 
-        return $validator->passes();
+        return $val;
 
     }
 
@@ -346,20 +426,20 @@ class MuestraController extends Controller
             'tipo_muestra'=>'required|min:1|max:255',
             'descripcion_muestra'=>'required|min:1|max:255',
             'fecha_recepcion'=>'required|min:1|max:255',
-            'estatus'=>'required|min:1|max:255'
+            'estatus'=>'required|min:1|max:255',
+            'proyecto'=>'required|min:1|max:255'
 
         ]);
 
-        //var_dump($validator->errors());
 
         if ($validator->passes()) {
 
 
-            $muestra->codigo_muestra($request->codigo_muestra);
-            $muestra->tipo_muestra($request->tipo_muestra);
-            $muestra->descripcion_muestra($request->descripcion_muestra);
-            $muestra->fecha_recepcion($request->fecha_recepcion);
-            $muestra->estatus($request->estatus);
+            $muestra->codigo_muestra=$request->codigo_muestra;
+            $muestra->tipo_muestra=$request->tipo_muestra;
+            $muestra->descripcion_muestra=$request->descripcion_muestra;
+            $muestra->fecha_recepcion=$request->fecha_recepcion;
+            $muestra->estatus=$request->estatus;
 
             $val=$muestra->save();
 
@@ -385,6 +465,12 @@ class MuestraController extends Controller
     public function destroy($request, $id){
 
         $institucion=Muestra::find($id);
+
+        foreach ($institucion->archivo()->get() as $key => $value) {
+            
+            $this->fileDelete($value->id_archivo);
+
+        }
 
     }
 

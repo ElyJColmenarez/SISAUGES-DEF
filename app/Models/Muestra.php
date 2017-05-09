@@ -29,7 +29,7 @@ class Muestra extends Model
 
     public function proyecto()
     {
-        return $this->belongsToMany(Proyecto::class,'muestra_proyecto','id_muestra','id_proyecto')->withPivot('ruta_img_muestra','fecha_analisis');
+        return $this->belongsToMany(Proyecto::class,'muestra_proyecto','id_muestra','id_proyecto');
     }
 
     public function tecnicaEstudio()

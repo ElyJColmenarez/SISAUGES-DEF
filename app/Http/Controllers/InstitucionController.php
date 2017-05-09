@@ -44,21 +44,60 @@ use Illuminate\Support\Facades\View;
  */
 class InstitucionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
 
-        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->/*whereHas('departamento', function($query) use ($request){
 
-                $query->descripciondepartamento('');
 
-        })->*/orderBy('nombre_institucion', 'desc')->paginate(20);
 
-        $action="institucion/listar";
+    public function fieldsRegisterCall($institucion){
+
+        $fields=array(
+
+            'nombre_institucion' => array(
+                'type'  => 'text',
+                'value' => (empty($institucion))? '' : $institucion->nombre_institucion,
+                'id'    => 'nombre_institucion',
+                'label' => 'Nombre de la institucion'
+            ),
+            'correo_institucional' => array(
+                'type'  => 'text',
+                'value' => (empty($institucion))? '' : $institucion->correo_institucional,
+                'id'    => 'correo_institucional',
+                'label' => 'Correo de la institucion'
+            ),
+            'direccion_institucion' => array(
+                'type'  => 'text',
+                'value' => (empty($institucion))? '' : $institucion->direccion_institucion,
+                'id'    => 'direccion_institucion',
+                'label' => 'Direccion de la institucion'
+            ),
+            'telefono_institucion' => array(
+                'type'  => 'text',
+                'value' => (empty($institucion))? '' : $institucion->telefono_institucion,
+                'id'    => 'telefono_institucion',
+                'label' => 'Telefono de la institucion'
+            ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($institucion))? '' : $institucion->estatus,
+                'id'        => 'estatus',
+                'validaciones'=>array(
+
+                    'obligatorio'
+
+                ),
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+    public function fieldsSearchCall($request){
 
         $fields=array(
 
@@ -98,6 +137,30 @@ class InstitucionController extends Controller
                 )
             )
         );
+
+        return $fields;
+    }
+
+
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->/*whereHas('departamento', function($query) use ($request){
+
+                $query->descripciondepartamento('');
+
+        })->*/orderBy('nombre_institucion', 'desc')->paginate(20);
+
+        $action="institucion/listar";
+
+        $fields=$this->fieldsSearchCall($request);
 
         $data=array(
 
@@ -140,54 +203,13 @@ class InstitucionController extends Controller
                 ),
             );
 
-            $fields=array(
+            $fields=$this->fieldsRegisterCall($institucion);
 
-                'nombre_institucion' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->nombre_institucion,
-                    'id'    => 'nombre_institucion',
-                    'label' => 'Nombre de la institucion'
-                ),
-                'correo_institucional' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->correo_institucional,
-                    'id'    => 'correo_institucional',
-                    'label' => 'Correo de la institucion'
-                ),
-                'direccion_institucion' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->direccion_institucion,
-                    'id'    => 'direccion_institucion',
-                    'label' => 'Direccion de la institucion'
-                ),
-                'telefono_institucion' => array(
-                    'type'  => 'text',
-                    'value' => (empty($institucion))? '' : $institucion->telefono_institucion,
-                    'id'    => 'telefono_institucion',
-                    'label' => 'Telefono de la institucion'
-                ),
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (empty($institucion))? '' : $institucion->estatus,
-                    'id'        => 'estatus',
-                    'validaciones'=>array(
-
-                        'obligatorio'
-
-                    ),
-                    'label'     => 'estatus',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Activo',
-                        '0'=>'Inactivo'
-                    )
-                )
-            );
-
+            $modulo='Institución';
 
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
         if ($htmlbody) {
             $retorno=array(

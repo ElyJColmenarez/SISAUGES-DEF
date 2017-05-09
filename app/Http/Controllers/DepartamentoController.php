@@ -45,6 +45,85 @@ use Illuminate\Support\Facades\View;
  */
 class DepartamentoController extends Controller
 {
+
+
+
+    public function fieldsRegisterCall($departamento){
+
+        $fields=array(
+
+            'descripcion_departamento' => array(
+                'type'  => 'text',
+                'value' => (empty($departamento))? '' : $departamento->descripcion_departamento,
+                'id'    => 'descripcion_departamento',
+                'label' => 'Nombre '
+            ),
+            'id_institucion' => array(
+                'type'  => 'select',
+                'value' => (empty($departamento))? '' : $departamento->id_institucion,
+                'id'    => 'id_institucion',
+                'label' => 'Institucion',
+                'options'   => $res
+            ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($departamento))? '' : $departamento->estatus,
+                'id'        => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true'=>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+    public function fieldsSearchCall($request){
+
+        $fields=array(
+
+            'descripcion_departamento' => array(
+                'type'  => 'text',
+                'value' => (isset($request->descripcion_departamento))?  $request->descripcion_departamento:'',
+                'id'    => 'descripcion_departamento',
+                'label' => 'Nombre'
+            ),
+           
+
+             'nombre_institucion' => array(
+                'type'  => 'text',
+                'value' => (isset($request->nombre_institucion))?  $request->nombre_institucion:'',
+                'id'    => 'nombre_institucion',
+                'label' => 'institucion '
+            ),
+
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->estatus))? $request->estatus: '',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),                    
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+
+
     public function index(Request $request)
     {
 
@@ -71,38 +150,7 @@ class DepartamentoController extends Controller
 
          $action="departamento/listar";
 
-            $fields=array(
-
-                'descripcion_departamento' => array(
-                    'type'  => 'text',
-                    'value' => (isset($request->descripcion_departamento))?  $request->descripcion_departamento:'',
-                    'id'    => 'descripcion_departamento',
-                    'label' => 'Nombre'
-                ),
-               
-
-                 'nombre_institucion' => array(
-                    'type'  => 'text',
-                    'value' => (isset($request->nombre_institucion))?  $request->nombre_institucion:'',
-                    'id'    => 'nombre_institucion',
-                    'label' => 'institucion '
-                ),
-
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (isset($request->estatus))? $request->estatus: '',
-                    'id'        => 'estatus',
-                    'label'     => 'estatus',
-                    'validaciones'=>array(
-                        'obligatorio'
-                    ),                    
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        '1'=>'Activo',
-                        '0'=>'Inactivo'
-                    )
-                )
-            );
+        $fields=$this->fieldsSearchCall($request);
 
 
      
@@ -164,41 +212,12 @@ class DepartamentoController extends Controller
                 )
             );
 
-            $fields=array(
+            $fields=$this->fieldsRegisterCall($departamento);
 
-                'descripcion_departamento' => array(
-                    'type'  => 'text',
-                    'value' => (empty($departamento))? '' : $departamento->descripcion_departamento,
-                    'id'    => 'descripcion_departamento',
-                    'label' => 'Nombre '
-                ),
-                'id_institucion' => array(
-                    'type'  => 'select',
-                    'value' => (empty($departamento))? '' : $departamento->id_institucion,
-                    'id'    => 'id_institucion',
-                    'label' => 'Institucion',
-                    'options'   => $res
-                ),
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (empty($departamento))? '' : $departamento->estatus,
-                    'id'        => 'estatus',
-                    'validaciones'=>array(
-                        'obligatorio'
-                    ),
-                    'label'     => 'estatus',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        'true'=>'Activo',
-                        'false'=>'Inactivo'
-                    )
-                )
-            );
-
-
+            $modulo='Departamento';
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
 
         if ($htmlbody) {

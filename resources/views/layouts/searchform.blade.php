@@ -10,7 +10,7 @@
 
 		    	<div class="panel panel-accordion panel-accordion-default">
 
-		    		<div class="panel-body ocultos">
+		    		<div class="panel-body">
 
 						<?php $datos=array_chunk($fields, 4,true); ?>
 

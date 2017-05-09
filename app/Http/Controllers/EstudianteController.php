@@ -12,16 +12,104 @@ use SISAUGES\Http\Requests;
 
 class EstudianteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $estudiante = Estudiante::with('persona')->cedulaEstudiante($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
 
-        $action = "estudiante/listar";
+    public function fieldsRegisterCall($persona,$estudiante){
+
+        $fields = array(
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($persona))? '' : $persona->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'carrera_estudiante' => array(
+                'type'      => 'text',
+                'value'     => (empty($estudiante))? '' : $estudiante->carrera_estudiante,
+                'id'        => 'carrera_estudiante',
+                'label'     => 'Carrera',
+                'validaciones'  => array(
+                    'sololetras',
+                    'obligatorio' )
+            ),
+
+            'semestre_estudiante' => array(
+                'type'      => 'text',
+                'value'     => (empty($estudiante))? '' : $estudiante->semestre_estudiante,
+                'id'        => 'semestre_estudiante',
+                'label'     => 'Semestre/Trimestre',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )
+            ),
+
+            'id_proyecto' => array(
+                'type'      => 'select',
+                'value'     => (empty($estudiante))? '' : $estudiante->id_proyecto,
+                'id'        => 'id_proyecto',
+                'label'     => 'Proyecto',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'Informática',
+                    '2'         =>'Electricidad',
+                    '3'         =>'Tecnología de los materiales',
+                    '4'         =>'Quimica')
+            ),
+
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (!empty($estudiante->estatus))? $estudiante->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+    public function fieldsSearchCall($request){
 
         $fields = array(
 
@@ -122,6 +210,23 @@ class EstudianteController extends Controller
             )
         );
 
+        return $fields;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $estudiante = Estudiante::with('persona')->cedulaEstudiante($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+
+        $action = "estudiante/listar";
+
+        $fields = $this->fieldsSearchCall($request);
+
         $data=array(
 
             'title'             => 'Estudiantes',
@@ -176,100 +281,11 @@ class EstudianteController extends Controller
                 )
             );
 
-            $fields = array(
-
-
-                'cedula'         => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->cedula,
-                    'id'            => 'cedula',
-                    'label'         => 'Cédula',
-                    'validaciones'  => array('solonumeros','obligatorio')),
-
-                'nombre'         => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->nombre,
-                    'id'            => 'nombre',
-                    'label'         => 'Nombre',
-                    'validaciones'  => array(
-                        'solocaracteres',
-                        'obligatorio')),
-
-                'apellido'       => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->apellido,
-                    'id'            => 'apellido',
-                    'label'         => 'Apellido',
-                    'validaciones'  => array(
-                        'solocaracteres',
-                        'obligatorio' )),
-
-                'email'          => array(
-                    'type'          => 'email',
-                    'value'         => (empty($persona))? '' : $persona->email,
-                    'id'            => 'email',
-                    'label'         => 'Correo Electronico',
-                    'validaciones'  => array(
-                        'solocorreo',
-                        'obligatorio' )), //no lo muestra
-
-                'telefono'       => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->telefono,
-                    'id'            => 'telefono',
-                    'label'         => 'Teléfono',
-                    'validaciones'  => array(
-                        'solonumero',
-                        'obligatorio' )),
-
-                'carrera_estudiante' => array(
-                    'type'      => 'text',
-                    'value'     => (empty($estudiante))? '' : $estudiante->carrera_estudiante,
-                    'id'        => 'carrera_estudiante',
-                    'label'     => 'Carrera',
-                    'validaciones'  => array(
-                        'sololetras',
-                        'obligatorio' )
-                ),
-
-                'semestre_estudiante' => array(
-                    'type'      => 'text',
-                    'value'     => (empty($estudiante))? '' : $estudiante->semestre_estudiante,
-                    'id'        => 'semestre_estudiante',
-                    'label'     => 'Semestre/Trimestre',
-                    'validaciones'  => array(
-                        'solonumero',
-                        'obligatorio' )
-                ),
-
-                'id_proyecto' => array(
-                    'type'      => 'select',
-                    'value'     => (empty($estudiante))? '' : $estudiante->id_proyecto,
-                    'id'        => 'id_proyecto',
-                    'label'     => 'Proyecto',
-                    'options'   => array(
-                        ''          =>'Seleccione...',
-                        '1'         =>'Informática',
-                        '2'         =>'Electricidad',
-                        '3'         =>'Tecnología de los materiales',
-                        '4'         =>'Quimica')
-                ),
-
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (!empty($estudiante->estatus))? $estudiante->estatus:'',
-                    'id'        => 'estatus',
-                    'label'     => 'estatus',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        'true' =>'Activo',
-                        'false'=>'Inactivo'
-                    )
-                )
-            );
+            $fields = $this->fieldsRegisterCall($persona,$estudiante);
+            $modulo='Estudiante';
         }
 
-        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
         if ($htmlBody)
         {
@@ -295,52 +311,45 @@ class EstudianteController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->isMethod('get'))
+
+        $persona = Persona::buscarpersona($request->cedula)->get();
+
+        if (!isset($persona[0]))
         {
-            return view('estudiante.crear');
+            $persona = new Persona();
+
+            $persona->cedula    = $request->cedula;
+            $persona->nombre    = $request->nombre;
+            $persona->apellido  = $request->apellido;
+            $persona->email     = $request->email;
+            $persona->telefono  = $request->telefono;
+            $persona->estatus    = $request->estatus;
+            $persona->save();
+
+            $estudiante = new Estudiante();
+
+            $estudiante->carrera_estudiante     = $request->carrera_estudiante;
+            $estudiante->semestre_estudiante    = $request->semestre_estudiante;
+            $estudiante->id_proyecto            = $request->id_proyecto;
+            $estudiante->cedula_persona         = $request->cedula;
+            $estudiante->estatus                 = $request->estatus;
+            $val = $estudiante->save();
+
+
+        }
+        else
+        {
+            $estudiante = new Estudiante();
+
+            $estudiante->carrera_estudiante     = $request->carrera_estudiante;
+            $estudiante->semestre_estudiante    = $request->semestre_estudiante;
+            $estudiante->id_proyecto            = $request->id_proyecto;
+            $estudiante->cedula_persona         = $request->cedula;
+            $estudiante->estatus                 = $request->estatus;
+            $val = $estudiante->save();
         }
 
-        if ($request->isMethod('post'))
-        {
-            $persona = Persona::buscarpersona($request->cedula)->get();
-
-            if (!isset($persona[0]))
-            {
-                $persona = new Persona();
-
-                $persona->cedula    = $request->cedula;
-                $persona->nombre    = $request->nombre;
-                $persona->apellido  = $request->apellido;
-                $persona->email     = $request->email;
-                $persona->telefono  = $request->telefono;
-                $persona->estatus    = $request->estatus;
-                $persona->save();
-
-                $estudiante = new Estudiante();
-
-                $estudiante->carrera_estudiante     = $request->carrera_estudiante;
-                $estudiante->semestre_estudiante    = $request->semestre_estudiante;
-                $estudiante->id_proyecto            = $request->id_proyecto;
-                $estudiante->cedula_persona         = $request->cedula;
-                $estudiante->estatus                 = $request->estatus;
-                $val = $estudiante->save();
-
-
-            }
-            else
-            {
-                $estudiante = new Estudiante();
-
-                $estudiante->carrera_estudiante     = $request->carrera_estudiante;
-                $estudiante->semestre_estudiante    = $request->semestre_estudiante;
-                $estudiante->id_proyecto            = $request->id_proyecto;
-                $estudiante->cedula_persona         = $request->cedula;
-                $estudiante->estatus                 = $request->estatus;
-                $val = $estudiante->save();
-            }
-
-            return $val;
-        }
+        return $val;
     }
 
     /**

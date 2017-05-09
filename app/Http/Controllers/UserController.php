@@ -16,142 +16,9 @@ use Illuminate\Support\Facades\View;
 class UserController extends Controller
 {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $usuario = User::with('persona')->cedulaUser($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
-
-        $action = "usuario/listar";
+    public function fieldsRegisterCall($persona,$usuario){
 
         $fields = array(
-
-
-            'cedula'         => array(
-                'type'          => 'text',
-                'value'         => (empty($request))? '' : $request->cedula,
-                'id'            => 'cedula',
-                'label'         => 'Cédula',
-                'validaciones'  => array('solonumeros','obligatorio')),
-
-            'nombre'         => array(
-                'type'          => 'text',
-                'value'         => (empty($request))? '' : $request->nombre,
-                'id'            => 'nombre',
-                'label'         => 'Nombre',
-                'validaciones'  => array(
-                    'solocaracteres',
-                    'obligatorio')),
-
-            'apellido'       => array(
-                'type'          => 'text',
-                'value'         => (empty($request))? '' : $request->apellido,
-                'id'            => 'apellido',
-                'label'         => 'Apellido',
-                'validaciones'  => array(
-                    'solocaracteres',
-                    'obligatorio' )),
-
-            'email'          => array(
-                'type'          => 'email',
-                'value'         => (empty($request))? '' : $request->email,
-                'id'            => 'email',
-                'label'         => 'Correo Electronico',
-                'validaciones'  => array(
-                    'solocorreo',
-                    'obligatorio' )), //no lo muestra
-
-            'telefono'       => array(
-                'type'          => 'text',
-                'value'         => (empty($request))? '' : $request->telefono,
-                'id'            => 'telefono',
-                'label'         => 'Teléfono',
-                'validaciones'  => array(
-                    'solonumero',
-                    'obligatorio' )),
-
-            'username'      => array(
-                'type'          => 'text',
-                'value'         =>  (empty($request))? '' : $request->username,
-                'id'            => 'username',
-                'label'         => 'Nombre de Usuario',
-                'validaciones'  => array('solotexto','obligatorio')
-            ),
-
-            'id_rol'           => array(
-                'type'          => 'select',
-                'value'         => (empty($request))? '' : $request->id_rol,
-                'id'            => 'rol',
-                'validaciones'  => array('obligatorio'),
-                'label'         => 'Rol usuario',
-                'options'       => array('2' => 'Administrador', '3' => 'Operador')
-            ),
-
-            'estatus' => array(
-                'type'      => 'select',
-                'value'     => (isset($request->estatus))? $request->estatus:'',
-                'id'        => 'estatus',
-                'label'     => 'estatus',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
-                )
-            )
-        );
-
-        $data=array(
-
-            'title'             => 'Usuarios',
-            'principal_search'  => 'username',
-            'registros'         => $usuario,
-            'carpeta'           => 'users'
-
-        );
-
-
-
-
-
-        return view('layouts.index',compact('data','action','fields','request'));
-    }
-
-
-    public function renderForm(Request $request)
-    {
-        if ($request->typeform == 'add') {
-            $action = "usuario/crear/";
-        } elseif ($request->typeform == 'modify') {
-            $action = "usuario/editar/" . $request->field_id;
-        } elseif ($request->typeform == 'delete') {
-            $action = "usuario/eliminar/" . $request->field_id;
-        }
-
-        $usuario = User::find($request->field_id);
-        if (isset($usuario)){
-
-            $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
-            $persona = Persona::find($persona[0]->id_persona);
-        }
-
-        if ($request->typeform == 'delete')
-        {
-            $fields = false;
-        }
-        else
-        {
-            $hiddenfields = array(
-                'field_id'=>array(
-                    'type'  => 'hidden',
-                    'value' => $request->field_id,
-                    'id'    => 'field_id',
-                )
-            );
-
-            $fields = array(
 
 
                 'cedula'         => array(
@@ -234,9 +101,158 @@ class UserController extends Controller
                     )
                 )
             );
+
+        return $fields;
+    }
+
+    public function fieldsSearchCall($request){
+
+        $fields = array(
+
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($request))? '' : $request->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($request))? '' : $request->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'username'      => array(
+                'type'          => 'text',
+                'value'         =>  (empty($request))? '' : $request->username,
+                'id'            => 'username',
+                'label'         => 'Nombre de Usuario',
+                'validaciones'  => array('solotexto','obligatorio')
+            ),
+
+            'id_rol'           => array(
+                'type'          => 'select',
+                'value'         => (empty($request))? '' : $request->id_rol,
+                'id'            => 'rol',
+                'validaciones'  => array('obligatorio'),
+                'label'         => 'Rol usuario',
+                'options'       => array('2' => 'Administrador', '3' => 'Operador')
+            ),
+
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->estatus))? $request->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $usuario = User::with('persona')->cedulaUser($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+
+        $action = "usuario/listar";
+
+        $fields = $this->fieldsSearchCall($request);
+
+        $data=array(
+
+            'title'             => 'Usuarios',
+            'principal_search'  => 'username',
+            'registros'         => $usuario,
+            'carpeta'           => 'users'
+
+        );
+
+
+
+
+
+        return view('layouts.index',compact('data','action','fields','request'));
+    }
+
+
+    public function renderForm(Request $request)
+    {
+        if ($request->typeform == 'add') {
+            $action = "usuario/crear/";
+        } elseif ($request->typeform == 'modify') {
+            $action = "usuario/editar/" . $request->field_id;
+        } elseif ($request->typeform == 'delete') {
+            $action = "usuario/eliminar/" . $request->field_id;
         }
 
-        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $usuario = User::find($request->field_id);
+        if (isset($usuario)){
+
+            $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
+            $persona = Persona::find($persona[0]->id_persona);
+        }
+
+        if ($request->typeform == 'delete')
+        {
+            $fields = false;
+        }
+        else
+        {
+            $hiddenfields = array(
+                'field_id'=>array(
+                    'type'  => 'hidden',
+                    'value' => $request->field_id,
+                    'id'    => 'field_id',
+                )
+            );
+
+            $fields = $this->fieldsRegisterCall($persona,$usuario);
+
+            $modulo='Usuario';
+        }
+
+        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
         if ($htmlBody)
         {

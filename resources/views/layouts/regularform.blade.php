@@ -4,7 +4,7 @@
 		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
 
 	        <header class="panel-heading">
-				<h2 class="panel-title">Formulario de Registro</h2>
+				<h2 class="panel-title">Formulario de Registro de {!! $modulo !!}</h2>
 			</header>
 
 			<div class="waitingimg" style="display: none;">
@@ -47,7 +47,7 @@
 				</div>
 				<footer class="panel-footer">
 					<div class="row">
-						<div class="col-md-12 text-right">
+						<div class="col-md-12 text-right truebtndissmis">
 							<button class="mld-dismiss-fin">OK</button>
 						</div>
 					</div>
@@ -105,7 +105,7 @@
 								        	<div class="col-md-12">
 								                <label class="col-md-2 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 								                <div class="col-md-10">
-								                	<textarea class="form-control" rows="3"  id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif></textarea>
+								                	<textarea class="form-control" rows="3"  id="{!! $value['id'] !!}" name="{!! $key !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>{!! $value['value'] !!}</textarea>
 								                </div>
 								            </div>
 
@@ -118,67 +118,106 @@
 
 								        	<div class="col-md-12 muestra-seccion">
 
-								        		<div class="row">
-								        			<div class="col-md-4">
-									        			<button class="btn btn-default click" name="cargaimg">Agregar Archivos</button>
-									        			<div class="ocultos"><input type="file" name="imagenes[]"  multiple="true"></div>
-									        			<div class="borrados"></div>
-									        		</div>
+							        			
+							        			<div class="ocultos"><input type="file" name="imagenes[]"  multiple="true"></div>
+							        			<div class="borrados"></div>
 
-								        		</div>
 
-								        		<div class="row">
+								        		<div class="">
 								        			<div class="col-md-12">
-								        				<table class="table table-bordered table-striped mb-none">
 
-								        					<thead>
-								        						<tr>
-								        							<th>Archivo</th>
-								        							<th>Tipo de Archivo</th>
-								        							<th>Tamaño</th>
-								        							<th>Fecha de Registro</th>
-								        							<th></th>
-								        						</tr>
-								        					</thead>
-								        					<tbody>
-								        						<?php
+								        				<h3>Registros Nuevos <button class="btn btn-default click" name="cargaimg">Agregar Archivos</button></h3>
 
-								        							if (count($value['data'])>0) {
-								        								foreach ($value['data']->proyecto as $mkey => $muestra) {
-								        								
-								        									$ruta=base_path() ."/public/storage/test/".$muestra->pivot->ruta_img_muestra;
+								        				<div class="tablecontainer">
+								        					<table class="table table-bordered table-striped mb-none newrecords">
 
-								        									$rutaweb="/storage/test/".$muestra->pivot->ruta_img_muestra;
+									        					<thead>
+									        						<tr>
+									        							<th>Archivo</th>
+									        							<th>Tipo de Archivo</th>
+									        							<th>Tamaño</th>
+									        							<th>Fecha de Registro</th>
+									        							<th></th>
+									        						</tr>
+									        					</thead>
+									        					<tbody>
+									        					</tbody>
 
-								        									if (file_exists($ruta)) {
-								        										$finfo = new finfo(FILEINFO_MIME);
-
-										        								$type = explode(';', $finfo->file($ruta));
-
-										        								echo "<tr id='tableregd".$key."' data-regid='d".$mkey."'>";
-											        								echo "<td>".$muestra->pivot->ruta_img_muestra."</td>";
-											        								echo "<td>".$type[0]."</td>";
-											        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
-											        								echo "<td>".$muestra->pivot->fecha_analisis."</td>";
-											        								echo '<td>
-											        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
-											        									<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
-											        								</td>';
-											        							echo "</tr>";
-								        									}
-
-									        								
-
-									        							}
-								        							}
-
-
-								        						?>
-								        					</tbody>
-
-								        				</table>
+									        				</table>
+								        				</div>
 								        			</div>
 								        		</div>
+
+
+								        		@if(count($value['data'])>0)
+
+									        		<div class="">
+									        			<div class="col-md-12">
+
+									        				<h3>Registros Existentes</h3>
+
+									        				<div class="tablecontainer">
+										        				<table class="table table-bordered table-striped mb-none">
+
+										        					<thead>
+										        						<tr>
+										        							<th>Archivo</th>
+										        							<th>Tipo de Archivo</th>
+										        							<th>Tamaño</th>
+										        							<th>Fecha de Registro</th>
+										        							<th></th>
+										        						</tr>
+										        					</thead>
+										        					<tbody>
+										        						<?php
+
+										        							$archi=$value['data']->archivo()->get();
+
+										        							if (count($archi)>0) {
+										        								
+										        							
+										        								foreach ($archi as $mkey => $muestra) {
+										        								
+										        									$ruta=base_path() .'/public/'.$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
+
+										        									$rutaweb=$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
+
+										        									if (file_exists($ruta)) {
+										        										$finfo = new finfo(FILEINFO_MIME);
+
+												        								$type = explode(';', $finfo->file($ruta));
+
+												        								echo "<tr id='tableregd".$key."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
+													        								echo "<td>".$muestra->nombre_temporal_muestra."</td>";
+													        								echo "<td>".$type[0]."</td>";
+													        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
+													        								echo "<td>".$muestra->fecha_analisis."</td>";
+													        								echo '<td>
+													        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
+													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
+													        								</td>';
+													        							echo "</tr>";
+										        									}
+
+											        								
+
+											        							}
+
+
+											        						}
+										        							
+
+
+										        						?>
+										        					</tbody>
+
+										        				</table>
+										        			</div>
+									        			</div>
+									        		</div>
+
+
+								        		@endif
 								        		
 								        	</div>
 
@@ -251,11 +290,6 @@
 
 									        	@if(isset($value['selectadd']))
 
-									        		<?php
-
-									        			$lasmodalcall[]=$value;
-
-									        		?>
 
 								        			<div class="col-md-8">
 										                <label class="col-md-3 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
@@ -278,7 +312,7 @@
 										                    </div>
 
 										                    <div class="col-md-5">
-										                        <button class="btn btn-primary" name="nextstep" value="{!! $value['selectadd']['url'] !!}" data-idpointer="{!! $value['id'] !!}">{!! $value['selectadd']['btnlabel'] !!}</button>
+										                        <button class="btn btn-primary" name="nextstep" value="{!! $value['selectadd']['url'] !!}" data-idpointer="{!! $value['id'] !!}" data-finlabel="{!! $value['selectadd']['btnfinlavel'] !!}">{!! $value['selectadd']['btnlabel'] !!}</button>
 										                    </div>
 
 
@@ -353,7 +387,7 @@
 
 								@if(isset($request->stepform))
 
-									<button class="btn btn-primary" name="lastcallmodal">{!! $lasmodalcall[0]['selectadd']['btnfinlavel'] !!}</button>
+									<button class="btn btn-primary" name="lastcallmodal">{!! $request->finlabel !!}</button>
 									<button class="btn btn-default dismisslastmodal">Regresar</button>
 
 								@else

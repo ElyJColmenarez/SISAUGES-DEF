@@ -12,16 +12,102 @@ use SISAUGES\Http\Requests;
 
 class TutorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $tutor = Tutor::with('persona')->cedulaTutor($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
 
-        $action = "tutor/listar";
+
+
+    public function fieldsRegisterCall($persona,$tutor){
+
+        $fields = array(
+
+
+            'cedula'         => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->cedula,
+                'id'            => 'cedula',
+                'label'         => 'Cédula',
+                'validaciones'  => array('solonumeros','obligatorio')),
+
+            'nombre'         => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->nombre,
+                'id'            => 'nombre',
+                'label'         => 'Nombre',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio')),
+
+            'apellido'       => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->apellido,
+                'id'            => 'apellido',
+                'label'         => 'Apellido',
+                'validaciones'  => array(
+                    'solocaracteres',
+                    'obligatorio' )),
+
+            'email'          => array(
+                'type'          => 'email',
+                'value'         => (empty($persona))? '' : $persona->email,
+                'id'            => 'email',
+                'label'         => 'Correo Electronico',
+                'validaciones'  => array(
+                    'solocorreo',
+                    'obligatorio' )), //no lo muestra
+
+            'telefono'       => array(
+                'type'          => 'text',
+                'value'         => (empty($persona))? '' : $persona->telefono,
+                'id'            => 'telefono',
+                'label'         => 'Teléfono',
+                'validaciones'  => array(
+                    'solonumero',
+                    'obligatorio' )),
+
+            'institucion' => array(
+                'type'      => 'select',
+                'value'     => '', //decidir como llamar las instituciones
+                'id'        => 'institucion',
+                'label'     => 'Institución',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'IUT',
+                    '2'         =>'UCV',
+                    '3'         =>'UNEFA'
+                )
+            ),
+
+            'departamento' => array(
+                'type'      => 'select',
+                'value'     => '', //decidir como llamar los departamentos
+                'id'        => 'departamento',
+                'label'     => 'Departamento',
+                'options'   => array(
+                    ''          =>'Seleccione...',
+                    '1'         =>'Informática',
+                    '2'         =>'Electricidad',
+                    '3'         =>'Tecnología de los materiales',
+                    '4'         =>'Quimica',
+
+                )
+            ),
+
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (!empty($tutor->estatus))? $tutor->estatus:'',
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+    public function fieldsSearchCall($request){
 
         $fields = array(
 
@@ -109,6 +195,23 @@ class TutorController extends Controller
             )
         );
 
+        return $fields;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $tutor = Tutor::with('persona')->cedulaTutor($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+
+        $action = "tutor/listar";
+
+        $fields = $this->fieldsSearchCall($request);
+
         $data=array(
 
             'title'             => 'Tutores',
@@ -163,95 +266,13 @@ class TutorController extends Controller
                 )
             );
 
-            $fields = array(
+            $fields = $this->fieldsRegisterCall($persona,$tutor);
 
+            $modulo='Tutor';
 
-                'cedula'         => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->cedula,
-                    'id'            => 'cedula',
-                    'label'         => 'Cédula',
-                    'validaciones'  => array('solonumeros','obligatorio')),
-
-                'nombre'         => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->nombre,
-                    'id'            => 'nombre',
-                    'label'         => 'Nombre',
-                    'validaciones'  => array(
-                        'solocaracteres',
-                        'obligatorio')),
-
-                'apellido'       => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->apellido,
-                    'id'            => 'apellido',
-                    'label'         => 'Apellido',
-                    'validaciones'  => array(
-                        'solocaracteres',
-                        'obligatorio' )),
-
-                'email'          => array(
-                    'type'          => 'email',
-                    'value'         => (empty($persona))? '' : $persona->email,
-                    'id'            => 'email',
-                    'label'         => 'Correo Electronico',
-                    'validaciones'  => array(
-                        'solocorreo',
-                        'obligatorio' )), //no lo muestra
-
-                'telefono'       => array(
-                    'type'          => 'text',
-                    'value'         => (empty($persona))? '' : $persona->telefono,
-                    'id'            => 'telefono',
-                    'label'         => 'Teléfono',
-                    'validaciones'  => array(
-                        'solonumero',
-                        'obligatorio' )),
-
-                'institucion' => array(
-                    'type'      => 'select',
-                    'value'     => '', //decidir como llamar las instituciones
-                    'id'        => 'institucion',
-                    'label'     => 'Institución',
-                    'options'   => array(
-                        ''          =>'Seleccione...',
-                        '1'         =>'IUT',
-                        '2'         =>'UCV',
-                        '3'         =>'UNEFA'
-                    )
-                ),
-
-                'departamento' => array(
-                    'type'      => 'select',
-                    'value'     => '', //decidir como llamar los departamentos
-                    'id'        => 'departamento',
-                    'label'     => 'Departamento',
-                    'options'   => array(
-                        ''          =>'Seleccione...',
-                        '1'         =>'Informática',
-                        '2'         =>'Electricidad',
-                        '3'         =>'Tecnología de los materiales',
-                        '4'         =>'Quimica',
-
-                    )
-                ),
-
-                'estatus' => array(
-                    'type'      => 'select',
-                    'value'     => (!empty($tutor->estatus))? $tutor->estatus:'',
-                    'id'        => 'estatus',
-                    'label'     => 'estatus',
-                    'options'   => array(
-                        ''=>'Seleccione...',
-                        'true' =>'Activo',
-                        'false'=>'Inactivo'
-                    )
-                )
-            );
         }
 
-        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlBody = View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
         if ($htmlBody)
         {

@@ -11,34 +11,59 @@ use SISAUGES\Http\Requests;
 
 class LaboratorioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
 
 
-        
-//$Laboratorio=Laboratorio::find(1);
-   // if (!is_null($request->estatus)){
-         $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
-         ubicacionlaboratorio($request->ubicacion_laboratorio)->
-         telefonolaboratorio($request->telefono_laboratorio)->
-      //   statuslaboratorio($request->estatus)->
-            orderBy('nombre_laboratorio', 'desc')->paginate(20);
-   /* }else{
-        $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
-         ubicacionlaboratorio($request->ubicacion_laboratorio)->
-         telefonolaboratorio($request->telefono_laboratorio)->    
-         statuslaboratorio($request->estatus)->
-         orderBy('nombre_laboratorio', 'desc')->paginate(20);
-    }*/
-     
-    //    dd($Laboratorio);
+    public function fieldsRegisterCall($laboratorio){
 
-        $action="laboratorio/listar";
+        $fields=array(
+
+            'nombre_laboratorio' => array(
+                'type'  => 'text',               
+                'value'     => (empty($laboratorio))? '' : $laboratorio->nombre_laboratorio,
+                'id'    => 'nombre_laboratorio',
+                'label' => 'Nombre del laboratorio',
+                'validaciones'=>array(
+                        'obligatorio'
+                    ),
+            ),
+            'ubicacion_laboratorio' => array(
+                'type'  => 'text',               
+                'value'     => (empty($laboratorio))? '' : $laboratorio->ubicacion_laboratorio,
+                'id'    => 'ubicacion_laboratorio',
+                'label' => 'Ubicacion de laboratorio',
+                'validaciones'=>array(
+                        'obligatorio'
+                    ),
+            ),           
+            'telefono_laboratorio' => array(
+                'type'  => 'text',                
+                'value'     => (empty($laboratorio))? '' : $laboratorio->telefono_laboratorio,
+                'id'    => 'telefono_laboratorio',
+                'label' => 'Telefono de la laboratorio',
+                'validaciones'=>array(
+                        'obligatorio'
+                    )
+            ),
+            'estatus' => array(
+                'type'      => 'select',               
+                'value'     => (empty($laboratorio))? '' : $laboratorio->estatus,
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'validaciones'=>array(
+                        'obligatorio'
+                    ),
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            )
+        );
+
+        return $fields;
+    }
+
+    public function fieldsSearchCall($request){
 
         $fields=array(
 
@@ -73,6 +98,41 @@ class LaboratorioController extends Controller
                 )
             )
         );
+
+        return $fields;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+
+
+        
+    //$Laboratorio=Laboratorio::find(1);
+    // if (!is_null($request->estatus)){
+         $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
+         ubicacionlaboratorio($request->ubicacion_laboratorio)->
+         telefonolaboratorio($request->telefono_laboratorio)->
+      //   statuslaboratorio($request->estatus)->
+            orderBy('nombre_laboratorio', 'desc')->paginate(20);
+   /* }else{
+        $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
+         ubicacionlaboratorio($request->ubicacion_laboratorio)->
+         telefonolaboratorio($request->telefono_laboratorio)->    
+         statuslaboratorio($request->estatus)->
+         orderBy('nombre_laboratorio', 'desc')->paginate(20);
+    }*/
+     
+    //    dd($Laboratorio);
+
+        $action="laboratorio/listar";
+
+        $fields=$this->fieldsSearchCall($request);
 
         $data=array(
 
@@ -120,55 +180,13 @@ class LaboratorioController extends Controller
         );
 
 
-        $fields=array(
+        $fields=$this->fieldsRegisterCall($laboratorio);
 
-            'nombre_laboratorio' => array(
-                'type'  => 'text',               
-                'value'     => (empty($laboratorio))? '' : $laboratorio->nombre_laboratorio,
-                'id'    => 'nombre_laboratorio',
-                'label' => 'Nombre del laboratorio',
-                'validaciones'=>array(
-                        'obligatorio'
-                    ),
-            ),
-            'ubicacion_laboratorio' => array(
-                'type'  => 'text',               
-                'value'     => (empty($laboratorio))? '' : $laboratorio->ubicacion_laboratorio,
-                'id'    => 'ubicacion_laboratorio',
-                'label' => 'Ubicacion de laboratorio',
-                'validaciones'=>array(
-                        'obligatorio'
-                    ),
-            ),           
-            'telefono_laboratorio' => array(
-                'type'  => 'text',                
-                'value'     => (empty($laboratorio))? '' : $laboratorio->telefono_laboratorio,
-                'id'    => 'telefono_laboratorio',
-                'label' => 'Telefono de la laboratorio',
-                'validaciones'=>array(
-                        'obligatorio'
-                    )
-            ),
-            'estatus' => array(
-                'type'      => 'select',               
-                'value'     => (empty($laboratorio))? '' : $laboratorio->estatus,
-                'id'        => 'estatus',
-                'label'     => 'estatus',
-                'validaciones'=>array(
-                        'obligatorio'
-                    ),
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1'=>'Activo',
-                    '0'=>'Inactivo'
-                )
-            )
-        );
-
+        $modulo='Laboratorio';
 
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields'))->render();
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
 
         if ($htmlbody) {
