@@ -361,6 +361,8 @@ jQuery(document).ready(function() {
                     $('#modalForm .msn-alerta-body').text(data.mensaje);
                     $('#modalForm .truebtndissmis > button').attr('class','btn btn-success dismisslastmodal');
 
+                    $('#principalmodalvalues input[name='+data.keystone+']').val(data.obj);
+
                 }else{
 
                     if (data.resultado=='warning'){

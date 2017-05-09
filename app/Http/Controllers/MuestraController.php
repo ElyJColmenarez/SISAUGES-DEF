@@ -488,6 +488,8 @@ class MuestraController extends Controller
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['obj']=$val['obj'];
+            $retorno['keystone']=$val['keystone'];
 
         }else{
             //Datos Invalidos
@@ -510,6 +512,8 @@ class MuestraController extends Controller
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Actualizacion de registro de los datos fue exitoso...';
+            $retorno['obj']=$val['obj'];
+            $retorno['keystone']=$val['keystone'];
 
         }else{
             //Datos Invalidos
@@ -532,6 +536,8 @@ class MuestraController extends Controller
             //Datos Validos
             $retorno['resultado']='success';
             $retorno['mensaje']='Desactivo fue exitoso...';
+            $retorno['obj']=$val['obj'];
+            $retorno['keystone']=$val['keystone'];
 
         }else{
             //Datos Invalidos
