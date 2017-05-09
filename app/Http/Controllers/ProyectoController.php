@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use SISAUGES\Http\Requests;
 use SISAUGES\Http\Controllers\Controller;
+
+use SISAUGES\Http\Controllers\InstitucionController;
+
 use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
@@ -134,6 +137,14 @@ class ProyectoController extends Controller
             $action="muestra/eliminar/".$request->field_id;
         }
 
+
+        if (isset($request->nextproyectstep)) {
+            $step=$request->nextproyectstep+1;
+        }else{
+            $step=1;
+        }
+
+
         $proyecto = Proyecto::find($request->field_id);
 
         if ($request->typeform=='deleted') {
@@ -155,12 +166,46 @@ class ProyectoController extends Controller
 
             );
 
-            $fields=$this->fieldsRegisterCall($proyecto);
+            if ($request->typeform=='add') {
 
-            $modulo='Proyecto';
+                //Pasos de registro de proyecto
+
+                if ($step==1) {
+                    $steptitle='Institución';
+
+                    $inscontroller= new InstitucionController();
+
+                    $fields=$inscontroller->fieldsRegisterCall(Institucion::find(0));
+                }
+                elseif ($step==2) {
+                    $steptitle='';
+                }
+                elseif ($step==3) {
+                    $steptitle='';
+                }
+                elseif ($step==4) {
+                    $steptitle='';
+                }
+                elseif ($step==5) {
+                    $steptitle='';
+                }
+
+
+                $modulo='Proyecto';
+                $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo','steptitle','step'))->render();
+
+
+            }else{
+
+                $fields=$this->fieldsRegisterCall($proyecto);
+                $modulo='Proyecto';
+                $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
+            }
+
+            
         }
 
-        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
+        
 
         if ($htmlbody) {
             $retorno=array(

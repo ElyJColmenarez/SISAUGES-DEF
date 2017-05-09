@@ -58,6 +58,12 @@
 			    <div class="mdl-truebody">
 					<div class="panel-body">
 
+					@if(isset($step))
+
+						<h3>Registro de Proyecto paso {!! $step !!} de 5 <span>Registro de {!! $steptitle !!}</span> </h3>
+
+					@endif
+
 					<?php $datos=array_chunk($fields, 2,true); ?>
 
 						<div class="formcontent">
@@ -305,7 +311,7 @@
 											                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
 
 											                        	@endforeach
-											                        	
+
 											                        @endif
 
 										                    	</select>
