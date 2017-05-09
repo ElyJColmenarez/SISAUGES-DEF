@@ -3,6 +3,8 @@
 
 		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
 
+			<input type="hidden" name="trueaction" value="{!! url($action) !!}">
+
 	        <header class="panel-heading">
 				<h2 class="panel-title">Formulario de Registro de {!! $modulo !!}</h2>
 			</header>
@@ -61,11 +63,6 @@
 					<?php $datos=array_chunk($fields, 2,true); ?>
 
 						<div class="formcontent">
-
-						<!--<button class="btn btn-default" name="nextstep" value="{{ url('muestra/registerform') }}">click</button>-->
-						<input type="hidden" name="typeform" value="">
-                    	<input type="hidden" name="field_id" value="">
-
 
 
 							@foreach( $datos as $key2 => $value2 )

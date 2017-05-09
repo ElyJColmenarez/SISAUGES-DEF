@@ -48,7 +48,7 @@ class DepartamentoController extends Controller
 
 
 
-    public function fieldsRegisterCall($departamento){
+    public function fieldsRegisterCall($departamento,$instituciones){
 
         $fields=array(
 
@@ -58,13 +58,6 @@ class DepartamentoController extends Controller
                 'id'    => 'descripcion_departamento',
                 'label' => 'Nombre '
             ),
-            'id_institucion' => array(
-                'type'  => 'select',
-                'value' => (empty($departamento))? '' : $departamento->id_institucion,
-                'id'    => 'id_institucion',
-                'label' => 'Institucion',
-                'options'   => $res
-            ),
             'estatus' => array(
                 'type'      => 'select',
                 'value'     => (empty($departamento))? '' : $departamento->estatus,
@@ -72,13 +65,28 @@ class DepartamentoController extends Controller
                 'validaciones'=>array(
                     'obligatorio'
                 ),
-                'label'     => 'estatus',
+                'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true'=>'Activo',
                     'false'=>'Inactivo'
                 )
+            ),
+            'id_institucion' => array(
+                'type'      => 'select',
+                'value'     => (isset($institucion->departamento->id_institucion))? $institucion->departamento->id_institucion:'',
+                'id'        => 'id_institucion',
+                'label'     => 'Institución',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_institucion','nombre_institucion'),
+                'options'   => $instituciones,
+                'selectadd' => array(
+                    'btnlabel'=>'Agegar Institución',
+                    'btnfinlavel'=>'Registrar Institución',
+                    'url'=> url('institucion/registerform')
+                )
             )
+            
         );
 
         return $fields;
@@ -127,28 +135,13 @@ class DepartamentoController extends Controller
     public function index(Request $request)
     {
 
- /*    var_dump($request->descripcion_departamento);
-     var_dump($request->estatus);*/
       
-
-         if (is_null($request->estatus)){
-      
-             $departamento =Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)->
-                    StatusDepartamento($request->estatus)
+        $departamento = Departamento::descripciondepartamento($request->descripcion_departamento)->institucionrelaciones($request)->
+                    statusdepartamento($request->estatus)
                     ->orderBy('descripcion_departamento', 'desc')->paginate(20);
-
-        }else{
-             $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)->
-            //        StatusDepartamento($request->estatus)
-                    orderBy('descripcion_departamento', 'desc')->paginate(20);
-        }
-
-         /* $departamento = Departamento::DescripcionDepartamento($request->descripcion_departamento)->InstitucionRelaciones($request)->
-                    StatusDepartamento($request->estatus)
-                    ->orderBy('descripcion_departamento', 'desc')->paginate(20);*/
  
 
-         $action="departamento/listar";
+        $action="departamento/listar";
 
         $fields=$this->fieldsSearchCall($request);
 
@@ -178,8 +171,6 @@ class DepartamentoController extends Controller
             $action="departamento/editar/".$request->field_id;;
         }elseif ($request->typeform=='deleted') {
             $action="departamento/eliminar/".$request->field_id;
-        }elseif($request->typeform=='search'){
-            $action="departamento/buscar";
         }
 
         $departamento = Departamento::find($request->field_id);
@@ -192,18 +183,6 @@ class DepartamentoController extends Controller
 
             $instituciones=DB::table('institucion')->select(array('id_institucion','nombre_institucion'))->get();
 
-            $instituciones = json_decode(json_encode($instituciones), true);
-
-
-            $arrayI = array();
-            $arrayD = array();
-            for ($i=0; $i < sizeof($instituciones) ; $i++) {
-                array_push($arrayI,$instituciones[$i]["id_institucion"]);
-                array_push($arrayD,$instituciones[$i]["nombre_institucion"]);
-            }
-
-            $res = array_combine($arrayI, $arrayD);
-
             $hiddenfields = array(
                 'field_id'=>array(
                     'type'  => 'hidden',
@@ -212,7 +191,7 @@ class DepartamentoController extends Controller
                 )
             );
 
-            $fields=$this->fieldsRegisterCall($departamento);
+            $fields=$this->fieldsRegisterCall($departamento,$instituciones);
 
             $modulo='Departamento';
         }

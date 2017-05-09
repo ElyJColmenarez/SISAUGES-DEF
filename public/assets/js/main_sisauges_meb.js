@@ -87,19 +87,47 @@ jQuery(document).ready(function() {
 
         var num= (parseInt($('#modalsteps').attr('data-laststep'))-1);
 
-        $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+        var form=$('#principalform');
 
-            $('#modalForm').empty();
-            $('#modalForm').append('<div class="ocultos">'+$('#lastmodalstep'+num).html()+'</div>');
-            $('#lastmodalstep'+num).remove();
-            $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-                $('#modalForm .mdl-truebody').slideDown('fast','swing',function(){
-                    $('#modalForm > .ocultos').slideDown('fast','swing');
-                });
-                
-            });
+        $('#principalform> input[name=typeform]').attr('value','add');
+        $('#principalform> input[name=field_id]').attr('value','0');
+
+        var inform= form.serializeArray();
+
+        var taction=$('#lastmodalstep'+num+' form').attr('action').replace(/crear/g, "registerform");
+
+        var promise=$.ajax({
+
+            url:taction,
+            cache: false,
+            data:inform,
+            type:"POST",
+            dataType: "json",
+            beforeSend: function(){},
+            success:    function(data){
+
+                if (data.result) {
+                    $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+
+                        $('#modalForm').empty();
+                        $('#modalForm').append('<div class="ocultos">'+data.html+'</div>');
+                        $('#lastmodalstep'+num).remove();
+                        $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                            $('#modalForm .mdl-truebody').slideDown('fast','swing',function(){
+                                $('#modalForm > .ocultos').slideDown('fast','swing');
+                            });
+                            
+                        });
+
+                    });
+                }
+
+            },
+            error:      function(){}
 
         });
+
+        
 
     });
 
