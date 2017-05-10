@@ -245,7 +245,7 @@
 									                <div class="col-md-8" style="padding: 0px">
 									                    
 									                    <div class="col-md-4">
-									                        <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+									                        <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 									                            
 									                        	@foreach( $value['options'] as $key2 => $value2 )
 
@@ -295,7 +295,7 @@
 										                    
 										                    <div class="col-md-7">
 										                    
-										                        <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+										                        <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 
 										                        	<option value="0">Seleccione...</option>
 										                        
@@ -328,7 +328,7 @@
 										        	<div class="col-md-6">
 										                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 										                <div class="col-md-8">
-										                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+										                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 										                        
 										                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
 
@@ -350,7 +350,7 @@
 							        			<div class="col-md-6">
 									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 									                <div class="col-md-8">
-									                    <select data-plugin-select name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+									                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 									                            
 								                        	@foreach( $value['options'] as $key2 => $value2 )
 
@@ -434,6 +434,33 @@
 			@endif
 
 	    {!! Form::close() !!}
+
+	    <script type="text/javascript">
+	    	
+	    	jQuery(document).ready(function() {
+
+	    		$('[data-plugin-selectTwo]').each(function() {
+							
+					$(this).select2({
+						allowClear: true,
+						container:'#modalForm .mdl-truebody'
+					});
+				});
+
+
+				$('.select2-drop').each(function(){
+
+					$(this).addClass('select2-drop-superindex');
+
+				});
+
+				$('#modalForm .mdl-truebody').on('click' , function() { 
+					$('[data-plugin-selectTwo]').each(function() {});
+				} );
+
+	    	})
+
+	    </script>
 
     </section>
 

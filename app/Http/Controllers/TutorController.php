@@ -323,47 +323,41 @@ class TutorController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->isMethod('get'))
+
+        $persona = Persona::buscarpersona($request->cedula)->get();
+        if (!isset($persona[0]))
         {
-            return view('tutor.crear');
+            $persona = new Persona();
+
+            $persona->cedula    = $request->cedula;
+            $persona->nombre    = $request->nombre;
+            $persona->apellido  = $request->apellido;
+            $persona->email     = $request->email;
+            $persona->telefono  = $request->telefono;
+            $persona->estatus    = $request->estatus;
+            $persona->save();
+
+            $tutor = new Tutor();
+
+            $tutor->id_departamento     = $request->departamento;
+            $tutor->cedula_persona      = $request->cedula;
+            $tutor->estatus              = $request->estatus;
+            $val = $tutor->save();
+
+
+        }
+        else
+        {
+            $tutor = new Tutor();
+
+            $tutor->id_departamento     = $request->departamento;
+            $tutor->cedula_persona      = $request->cedula;
+            $tutor->estatus              = $request->estatus;
+            $val = $tutor->save();
         }
 
-        if ($request->isMethod('post'))
-        {
-            $persona = Persona::buscarpersona($request->cedula)->get();
-            if (!isset($persona[0]))
-            {
-                $persona = new Persona();
-
-                $persona->cedula    = $request->cedula;
-                $persona->nombre    = $request->nombre;
-                $persona->apellido  = $request->apellido;
-                $persona->email     = $request->email;
-                $persona->telefono  = $request->telefono;
-                $persona->estatus    = $request->estatus;
-                $persona->save();
-
-                $tutor = new Tutor();
-
-                $tutor->id_departamento     = $request->departamento;
-                $tutor->cedula_persona      = $request->cedula;
-                $tutor->estatus              = $request->estatus;
-                $val = $tutor->save();
-
-
-            }
-            else
-            {
-                $tutor = new Tutor();
-
-                $tutor->id_departamento     = $request->departamento;
-                $tutor->cedula_persona      = $request->cedula;
-                $tutor->estatus              = $request->estatus;
-                $val = $tutor->save();
-            }
-
-            return array('result'=>$val,'obj'=>$tutor->id_tutor,'keystone'=>'id_tutor');
-        }
+        return array('result'=>$val,'obj'=>$tutor->id_tutor,'keystone'=>'id_tutor');
+        
     }
 
 
