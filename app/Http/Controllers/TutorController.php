@@ -82,12 +82,12 @@ class TutorController extends Controller
             'institucion' => array(
 
                 'type'      => 'select',
-                'value'     => (isset($instituciones->id_institucion))? $institucioness->id_institucion:'',
+                'value'     => (isset($instituciones[0]->id_institucion))? $institucioness[0]->id_institucion:'',
                 'id'        => 'id_institucion',
                 'label'     => 'Institución',
                 'selecttype'=> 'obj',
                 'objkeys'   => array('id_institucion','nombre_institucion'),
-                'options'   => $instituciones,
+                'options'   => $instituciones[1],
                 'related_select' => 'id_departamento',
                 'selectadd' => array(
                     'btnlabel'=>'Agegar Institución',
@@ -102,12 +102,12 @@ class TutorController extends Controller
             'departamento' => array(
 
                 'type'      => 'select',
-                'value'     => (isset($departamentos->id_departamento))? $departamentos->id_departamento:'',
+                'value'     => (isset($departamentos[0]->id_departamento))? $departamentos[0]->id_departamento:'',
                 'id'        => 'id_departamento',
                 'label'     => 'Departamento',
                 'selecttype'=> 'obj',
-                'objkeys'   => array('id_departamento','nombre_departamento'),
-                'options'   => $departamentos,
+                'objkeys'   => array('id_departamento','descripcion_departamento'),
+                'options'   => $departamentos[1],
                 'selectadd' => array(
                     'btnlabel'=>'Agegar Departamento',
                     'btnfinlavel'=>'Registrar Departamento',
@@ -293,7 +293,10 @@ class TutorController extends Controller
                 )
             );
 
-            $fields = $this->fieldsRegisterCall($persona,$tutor,$instituciones,$departamentos);
+            $dp=Departamento::get();
+            $ins=institucion::get();
+
+            $fields = $this->fieldsRegisterCall($persona,$tutor,array($instituciones,$ins),array($departamentos,$dp));
 
             $modulo='Tutor';
 
