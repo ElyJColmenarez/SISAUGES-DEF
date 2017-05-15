@@ -32,7 +32,7 @@
 
                                                 <?php $aux=$data['principal_search']; ?>
                                                 
-                                                <input type="text" name="{{$aux}}" class="form-control form1" value=" @if(isset($request->$aux)) {{ $request->$aux }} @endif">
+                                                <input type="text" name="{{$aux}}" class="form-control form1" value="@if(isset($request->$aux)){{ $request->$aux }}@endif">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-default start-search-proyect" type="submit">
                                                         <i class="fa fa-search" aria-hidden="true"></i>

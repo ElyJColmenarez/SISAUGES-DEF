@@ -68,13 +68,13 @@ class DepartamentoController extends Controller
                 'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true'=>'Activo',
-                    'false'=>'Inactivo'
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
                 )
             ),
             'id_institucion' => array(
                 'type'      => 'select',
-                'value'     => (isset($institucion->departamento->id_institucion))? $institucion->departamento->id_institucion:'',
+                'value'     => (isset($departamento->id_institucion))? $departamento->id_institucion:'',
                 'id'        => 'id_institucion',
                 'label'     => 'Institución',
                 'selecttype'=> 'obj',
@@ -181,7 +181,7 @@ class DepartamentoController extends Controller
 
             // $instituciones=Institucion::all()->toArray();
 
-            $instituciones=DB::table('institucion')->select(array('id_institucion','nombre_institucion'))->get();
+            $instituciones=Institucion::get();
 
             $hiddenfields = array(
                 'field_id'=>array(
@@ -228,6 +228,9 @@ class DepartamentoController extends Controller
     public function store(Request $request){
 
         $departamento=new Departamento($request->all());
+
+        $departamento->
+
 
         $aux=$request->all();
 

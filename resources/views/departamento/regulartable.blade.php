@@ -14,7 +14,7 @@
 
     <tr class="gradeX">
         <td>{{$data->descripcion_departamento}}</td>
-        <td>{{$data->nombre_institucion}}</td>
+        <td>{{$data->institucion->nombre_institucion}}</td>
         
         <td> @if ($data->estatus == 1)  
         		{{ 'activo'  }}

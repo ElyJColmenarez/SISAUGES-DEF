@@ -24,14 +24,14 @@ class TutorController extends Controller
 
             'cedula'         => array(
                 'type'          => 'text',
-                'value'         => (empty($persona))? '' : $persona->cedula,
+                'value'         => (empty($persona))? '' : $persona[0]->cedula,
                 'id'            => 'cedula',
                 'label'         => 'Cédula',
                 'validaciones'  => array('solonumeros','obligatorio')),
 
             'nombre'         => array(
                 'type'          => 'text',
-                'value'         => (empty($persona))? '' : $persona->nombre,
+                'value'         => (empty($persona))? '' : $persona[0]->nombre,
                 'id'            => 'nombre',
                 'label'         => 'Nombre',
                 'validaciones'  => array(
@@ -40,7 +40,7 @@ class TutorController extends Controller
 
             'apellido'       => array(
                 'type'          => 'text',
-                'value'         => (empty($persona))? '' : $persona->apellido,
+                'value'         => (empty($persona))? '' : $persona[0]->apellido,
                 'id'            => 'apellido',
                 'label'         => 'Apellido',
                 'validaciones'  => array(
@@ -49,7 +49,7 @@ class TutorController extends Controller
 
             'email'          => array(
                 'type'          => 'email',
-                'value'         => (empty($persona))? '' : $persona->email,
+                'value'         => (empty($persona))? '' : $persona[0]->email,
                 'id'            => 'email',
                 'label'         => 'Correo Electronico',
                 'validaciones'  => array(
@@ -58,7 +58,7 @@ class TutorController extends Controller
 
             'telefono'       => array(
                 'type'          => 'text',
-                'value'         => (empty($persona))? '' : $persona->telefono,
+                'value'         => (empty($persona))? '' : $persona[0]->telefono,
                 'id'            => 'telefono',
                 'label'         => 'Teléfono',
                 'validaciones'  => array(
@@ -72,8 +72,8 @@ class TutorController extends Controller
                 'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
+                    '1' =>'Activo',
+                    '0'=>'Inactivo'
                 )
             ),
 
@@ -82,7 +82,7 @@ class TutorController extends Controller
             'institucion' => array(
 
                 'type'      => 'select',
-                'value'     => (isset($instituciones[0]->id_institucion))? $institucioness[0]->id_institucion:'',
+                'value'     => (isset($instituciones[0]->id_institucion))? $instituciones[0]->id_institucion:'',
                 'id'        => 'id_institucion',
                 'label'     => 'Institución',
                 'selecttype'=> 'obj',
@@ -260,13 +260,14 @@ class TutorController extends Controller
 
 
         $tutor = Tutor::find($request->field_id);
+
         if (isset($tutor)){
 
             $persona = Persona::buscarpersona($tutor->cedula_persona)->get();
 
-            $departamentos= Departamento::tutor()->find($persona[0]->id_persona);
+            $departamentos= Departamento::find($tutor->id_departamento);
 
-            $instituciones= Institucion::departamento()->find($departamentos[0]->id_departamento);
+            $instituciones= Institucion::find($departamentos->id_institucion);
 
             //$persona = Persona::find($persona[0]->id_persona);
         }else{
