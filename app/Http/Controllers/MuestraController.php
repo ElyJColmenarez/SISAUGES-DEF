@@ -28,6 +28,42 @@ class MuestraController extends Controller
 
         $fields=array(
 
+            'titulo1'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Proyecto'
+            ),
+
+            'proyecto'  => array(
+                'type'      => 'relacion',
+                'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->proyecto->id_proyecto:'',
+                'id'        => 'id_proyecto',
+                'label'     => 'Proyecto',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_proyecto','nombre_proyecto'),
+                'options'   => $proyectos,
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Proyecto',
+                    'btnlabel'=>'Registrar Proyecto',
+                    'btnfinlavel'=>'Registrar Proyecto',
+                    'url'=> url('proyecto/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Proyectos Asociados a la Muestra',
+                    'table_fields'=>array(
+                        'Nombre del Proyecto'
+                    ),
+                    'table_key'=>'nombre_proyecto'
+                ),
+                'relacion_campo'=>'id_proyecto'
+            ),
+
+            'separador4'=>array('type'=>'separador'),
+
+            'titulo2'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos de la Muestra'
+            ),
+
             'codigo_muestra' => array(
                 'type'  => 'text',
                 'value' => (isset($muestra->codigo_muestra))? $muestra->codigo_muestra:'',
@@ -67,20 +103,6 @@ class MuestraController extends Controller
                     ''=>'Seleccione...',
                     '1'=>'Activo',
                     '0'=>'Inactivo'
-                )
-            ),
-            'proyecto'  => array(
-                'type'      => 'select',
-                'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->proyecto->id_proyecto:'',
-                'id'        => 'id_proyecto',
-                'label'     => 'Proyecto',
-                'selecttype'=> 'obj',
-                'objkeys'   => array('id_proyecto','nombre_proyecto'),
-                'options'   => $proyectos,
-                'selectadd' => array(
-                    'btnlabel'=>'Agegar Proyecto',
-                    'btnfinlavel'=>'Registrar Proyecto',
-                    'url'=> url('proyecto/registerform')
                 )
             ),
             'muestras'=>array(
@@ -251,6 +273,11 @@ class MuestraController extends Controller
                     'value' => $request->field_id,
                     'id'    => 'field_id',
                 ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('muestra/registerform'),
+                    'id'    => 'field_id',
+                )
             );
 
             $fields=$this->fieldsRegisterCall($muestra,$proyectos);
@@ -286,12 +313,14 @@ class MuestraController extends Controller
     public function fileDelete($borrado){
 
             
-        $file=Archivos::find($borrado);
+        $file=Archivo::find($borrado);
         $varaux=base_path() .'/public/'.$file->ruta_img_muestra.$file->nombre_temporal_muestra;
+        $visibles=base_path() ."/public/".$file->ruta_img_muestra.'visibles/'.$file->nombre_temporal_muestra;
         $aux=$file->delete();
 
         if ($aux) {
             unlink($varaux);
+            unlink($visibles);
         }
 
 
@@ -328,37 +357,41 @@ class MuestraController extends Controller
 
         //Agregar registros nuevos
 
-        foreach ($request->file('imagenes') as $key => $value) {
+        if (count($request->file('imagenes'))>1) {
+            
+            foreach ($request->file('imagenes') as $key => $value) {
 
 
-            if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
+                if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
 
-                $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
+                    $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
 
-                $file=new Archivo();
+                    $file=new Archivo();
 
-                $file->ruta_img_muestra="storage/".$request->proyecto."/";
-                $file->fecha_analisis=date('d-m-Y');
-                $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
-                $file->nombre_temporal_muestra=$img;
-                $file->id_muestra=$muestra->id_muestra;
-                $file->save();
+                    $file->ruta_img_muestra="storage/".$request->proyecto."/";
+                    $file->fecha_analisis=date('d-m-Y');
+                    $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
+                    $file->nombre_temporal_muestra=$img;
+                    $file->id_muestra=$muestra->id_muestra;
+                    $file->save();
 
-                if (strpos($value->getClientMimeType(),'image')!==false) {
-                    
-                    $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
+                    if (strpos($value->getClientMimeType(),'image')!==false) {
+                        
+                        $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
+                    }
+
+                }else{
+                    $retorno[]=$value;
                 }
 
-            }else{
-                $retorno[]=$value;
+                 
             }
 
-             
         }
 
         //Eliminar registros existentes
 
-        $borrados=$request->borrados;
+        $borrados=$request->borrados_existentes;
 
         if (isset($borrados)) {
             foreach ($borrados as $key => $value) {

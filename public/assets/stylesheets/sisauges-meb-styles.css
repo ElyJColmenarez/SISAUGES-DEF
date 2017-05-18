@@ -177,6 +177,20 @@
 	text-decoration: none;
 }
 
+.tableregularbtns{
+	text-align: center;
+	width: 20%;
+}
+
+.tableregularbtns a{
+	margin: 0px 5px;
+}
+
+.tableregularbtns a i.fa{
+	color: #fff;
+	text-decoration: none;
+}
+
 .waitingprev{
 	text-align: center;
 	min-height: 300px;
@@ -211,6 +225,21 @@
 .select2-drop-superindex{
 	z-index: 999999999;
 }
+
+
+.formsptitels{
+	background: #f6f6f6;    
+	border-bottom: 1px solid #DADADA;
+	border-top: 1px solid #DADADA;
+	margin-bottom: 10px;
+}
+
+.formsptitels h2{
+	margin-top: 0px;
+	margin: 15px 0px;
+
+}
+
 
 @media only screen and (min-width: 992px){
 

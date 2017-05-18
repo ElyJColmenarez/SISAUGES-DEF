@@ -87,14 +87,41 @@ jQuery(document).ready(function() {
 
         var num= (parseInt($('#modalsteps').attr('data-laststep'))-1);
 
+        $('#modalsteps').attr('data-laststep', parseInt($('#modalsteps').attr('data-laststep'))-1 );
+
         var form=$('#principalform');
 
-        $('#principalform> input[name=typeform]').attr('value','add');
-        $('#principalform> input[name=field_id]').attr('value','0');
+
+
+        var strcadena=''+$('#lastmodalstep'+num+' form').attr('action')+'';
+
+
+        if (strcadena.indexOf('crear')> -1) {
+
+            var taction=$('#lastmodalstep'+num+' form input[name=extra_url]').val();
+            $('#principalform> input[name=typeform]').attr('value','add');
+            $('#principalform> input[name=field_id]').attr('value','0');
+
+        }else{
+
+            var taction=$('#lastmodalstep'+num+' form input[name=extra_url]').val();
+            $('#principalform> input[name=typeform]').attr('value','modify');
+            $('#principalform> input[name=field_id]').attr('value',$('#lastmodalstep'+num+' form input[name=field_id]').val());
+
+        }
+
+
 
         var inform= form.serializeArray();
 
-        var taction=$('#lastmodalstep'+num+' form').attr('action').replace(/crear/g, "registerform");
+        if (num>0) {
+
+            inform.push({name: 'stepform', value: 'true'});
+            inform.push({name: 'finlabel', value: $('#lastmodalstep'+num+' button[name=nextstep]').attr('data-finlabel')});
+
+        }
+
+        
 
         var promise=$.ajax({
 
@@ -501,6 +528,47 @@ jQuery(document).ready(function() {
 
     });
 
+    /*Relation Modals*/
+
+
+
+     $('#modalForm').on('click','button[name=relationadd]',function(event){
+
+        event.preventDefault();
+
+        var relationid=$(this).attr('data-relation');
+
+        var valoreal=$('#relacion-'+relationid+' select').val();
+
+        var cont=0;
+
+        $('#relacion-'+relationid+' table tbody tr').each(function(){
+
+
+            if ($(this).attr('data-trueid')==valoreal) {cont++;}
+
+        });
+
+        if (cont==0 && valoreal.length>0) {
+
+
+            var htmlsect="<tr id='tablereg"+valoreal+"'  data-trueid='"+valoreal+"'>";
+            htmlsect=htmlsect+"<td>"+$('#relacion-'+relationid+' select option[value='+valoreal+']').text()+"</td>";
+            htmlsect=htmlsect+'<td class="tableregularbtns"><a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-trueid="'+valoreal+'"><i class="fa fa-eye"></i></a>';
+            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+valoreal+'"  data-trueid="'+valoreal+'"><i class="fa fa-trash-o"></i></a></td>';
+            htmlsect=htmlsect+"</tr>";
+
+            $('#relacion-'+relationid+' table tbody').append(htmlsect);
+
+            $('#relacion-'+relationid+' div.added').append('<input type="hidden" name="addenin'+$('#relacion-'+relationid+' select').attr('name')+'" value="'+valoreal+'" >');
+
+        }
+
+
+        
+     });
+
+
 
     /*Muestras Functions*/
 
@@ -530,7 +598,7 @@ jQuery(document).ready(function() {
             htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
             htmlsect=htmlsect+"<td>"+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+"</td>";
             htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
-            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
+            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"  data-trueid="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
             $('#modalForm .muestra-seccion table.newrecords  tbody').append(htmlsect);
@@ -544,13 +612,25 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
+        var obj=$(this);
+
         $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
             $(this).remove();
 
-            if ($(this).attr('data-trueid')) {
+            console.log($(this).attr('data-trueid'));
+
+            if (obj.attr('data-trueid')) {
 
                 $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
             }
+
+
+            if (obj.attr('data-existfile')) {
+
+                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados_existentes[]" value="'+$(this).attr('data-trueid')+'">');
+            }
+
+
         });
 
     });

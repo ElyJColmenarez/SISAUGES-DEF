@@ -94,10 +94,11 @@
                 {!! Form::close() !!}
 
 
-                 {!!Form::open(['url'=>'#', 'class'=>'hiddenform' , 'method' => 'post' , 'id'=>'principalmodalvalues'])!!}
+                {!!Form::open(['url'=>'#', 'class'=>'hiddenform' , 'method' => 'post' , 'id'=>'principalmodalvalues'])!!}
                     
 
                 {!! Form::close() !!}
+
 
                 <!-- Modals -->
                 <div id="modalForm" class="zoom-anim-dialog modal-block-lg modal-block-primary mfp-hide nextstepmodal">

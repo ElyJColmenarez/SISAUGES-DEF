@@ -14,6 +14,8 @@ use SISAUGES\Http\Controllers\InstitucionController;
 
 use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
+use SISAUGES\Models\Tutor;
+use SISAUGES\Models\Estudiante;
 use SISAUGES\Models\Muestra;
 use SISAUGES\Models\Proyecto;
 use SISAUGES\Models\Archivo;
@@ -34,34 +36,49 @@ class ProyectoController extends Controller
             
         $fields=array(
 
+            'titulo1'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos de la Institución'
+            ),
+
             'institucion'=>array(
 
-                'type'      => 'select',
-                'value'     => (isset($instituciones))? $instituciones->id_institucion:'',
+                'type'      => 'relacion',
+                'value'     => (isset($instituciones[1]))? $instituciones[1]->id_institucion:'',
                 'id'        => 'id_institucion',
                 'label'     => 'Institución',
                 'selecttype'=> 'obj',
+                'values_seting'=> $instituciones[2],
                 'objkeys'   => array('id_institucion','nombre_institucion'),
-                'options'   => $instituciones,
+                'options'   => $instituciones[0],
                 'selectadd' => array(
-                    'btnlabel'=>'Agegar Institución',
+                    'btnadd'=>'Agregar Institución',
+                    'btnlabel'=>'Registrar Institución',
                     'btnfinlavel'=>'Registrar Institución',
                     'url'=> url('institucion/registerform')
-                )
+                ),
+                'relation_table'=>array(
+                    'title'=>'Instituciones Asociadas al Proyecto',
+                    'table_fields'=>array(
+                        'Nombre de la Institucion'
+                    ),
+                    'table_key'=>'nombre_institucion'
+                ),
+                'relacion_campo'=>'id_institucion'
 
             ),
             'separador1'=>array('type'=>'separador'),
-            'departamento'=>array(
+            /*'departamento'=>array(
 
                 'type'      => 'select',
-                'value'     => (isset($departamentos))? $departamentos->id_departamento:'',
+                'value'     => (isset($departamentos[1]))? $departamentos[1]->id_departamento:'',
                 'id'        => 'id_departamento',
                 'label'     => 'Departamento',
                 'selecttype'=> 'obj',
-                'objkeys'   => array('id_departamento','nombre_departamento'),
-                'options'   => $departamentos,
+                'objkeys'   => array('id_departamento','descripcion_departamento'),
+                'options'   => $departamentos[0],
                 'selectadd' => array(
-                    'btnlabel'=>'Agegar Departamento',
+                    'btnlabel'=>'Agregar Departamento',
                     'btnfinlavel'=>'Registrar Departamento',
                     'url'=> url('departamento/registerform')
                 )
@@ -72,37 +89,59 @@ class ProyectoController extends Controller
             'tutor'=>array(
 
                 'type'      => 'select',
-                'value'     => (isset($tutores))? $tutores->id_tutor:'',
+                'value'     => (isset($tutores[1]))? $tutores[1]->id_tutor:'',
                 'id'        => 'id_tutor',
                 'label'     => 'Tutor',
                 'selecttype'=> 'obj',
                 'objkeys'   => array('id_tutor','cedula_persona'),
-                'options'   => $tutores,
+                'options'   => $tutores[0],
                 'selectadd' => array(
-                    'btnlabel'=>'Agegar Tutor',
+                    'btnlabel'=>'Agregar Tutor',
                     'btnfinlavel'=>'Registrar tutor',
                     'url'=> url('tutor/registerform')
                 )
 
             ),
-            'separador3'=>array('type'=>'separador'),
+            'separador3'=>array('type'=>'separador'),*/
+
+            'titulo2'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Estudiante'
+            ),
+
             'estudiante'=>array(
 
-                'type'      => 'select',
-                'value'     => (isset($estudiantes))? $estudiantes->id_estudiante:'',
+                'type'      => 'relacion',
+                'value'     => (isset($estudiantes[1]))? $estudiantes[1]->id_estudiante:'',
                 'id'        => 'id_estudiante',
                 'label'     => 'Estudiante',
                 'selecttype'=> 'obj',
                 'objkeys'   => array('id_estudiantes','cedula_persona'),
-                'options'   => $estudiantes,
+                'options'   => $estudiantes[0],
+                'values_seting'=> $estudiantes[2],
                 'selectadd' => array(
-                    'btnlabel'=>'Agegar Estudiante',
+                    'btnadd'=>'Agregar Estudiante',
+                    'btnlabel'=>'Registrar Estudiante',
                     'btnfinlavel'=>'Registrar Estudiante',
                     'url'=> url('estudiante/registerform')
-                )
+                ),
+                'relation_table'=>array(
+                    'title'=>'Estudiantes involucrados en el Proyecto',
+                    'table_fields'=>array(
+                        'Cedula del Estudiante'
+                    ),
+                    'table_key'=>'cedula_persona'
+                ),
+                'relacion_campo'=>'id_estudiante'
 
             ),
             'separador4'=>array('type'=>'separador'),
+
+            'titulo3'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Proyecto'
+            ),
+
             'nombre_proyecto' => array(
                 'type'  => 'text',
                 'value' => (isset($proyecto->nombre_proyecto))? $proyecto->nombre_proyecto:'',
@@ -116,8 +155,9 @@ class ProyectoController extends Controller
                 'label' => 'Estatus del Proyecto',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    '1'=>'Tipo1',
-                    '2'=>'Tipo2'
+                    'No iniciado'=>'No iniciado',
+                    'En progreso'=>'En progreso',
+                    'Culminado'=>'Culminado'
                 )
             ),
             'fecha_inicio' => array(
@@ -139,8 +179,8 @@ class ProyectoController extends Controller
                 'label'     => 'Permiso',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    '1'=>'Activo',
-                    '0'=>'Inactivo'
+                    'Publico'=>'Publico',
+                    'Privado'=>'Privado'
                 )
             )
         );
@@ -231,7 +271,12 @@ class ProyectoController extends Controller
                     'type'  => 'hidden',
                     'value' => (isset($request->form_step))? ($request->form_step+1): 1 ,
                     'id'    => 'field_id',
-                )
+                ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('proyecto/registerform'),
+                    'id'    => 'field_id',
+                ),
 
             );
 
@@ -271,7 +316,20 @@ class ProyectoController extends Controller
                 $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
             }*/
 
-            $fields=$this->fieldsRegisterCall($proyecto);
+
+            $ins=Institucion::find($request->institucion);
+            $dep=Departamento::find($request->departamento);
+            $tut=Tutor::find($request->tutor);
+            $est=Estudiante::find($request->estudiante);
+
+
+            $inses=Institucion::get();
+            $depes=Departamento::get();
+            $tutes=Tutor::get();
+            $estes=Estudiante::get();
+
+
+            $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request));
             $modulo='Proyecto';
             $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
 
@@ -305,34 +363,37 @@ class ProyectoController extends Controller
 
     public function store($request){
 
-        $muestra=new Muestra($request->all());
+        $proyecto=new Proyecto($request->all());
 
         $aux=$request->all();
 
         $validator=Validator::make($request->all(),[
 
-            'codigo_muestra'=>'required|min:1|max:255',
-            'tipo_muestra'=>'required|min:1|max:255',
-            'descripcion_muestra'=>'required|min:1|max:255',
+            'nombre_proyecto'=>'required|min:1|max:255',
+            'estatus_proyecto'=>'required|min:1|max:255',
             'fecha_inicio'=>'required|min:1|max:255',
-            'estatus'=>'required|min:1|max:255',
-            'proyecto'=>'required|min:1|max:255'
+            'fecha_final'=>'required|min:1|max:255',
+            'permiso_proyecto'=>'required|min:1|max:255',
+            'institucion'=>'required|min:1|max:255',
+            'estudiante'=>'required|min:1|max:255'
 
         ]);
 
-        //var_dump($validator->errors());
 
         if ($validator->passes()) {
 
-            $val=$muestra->save();
+            $val=$proyecto->save();
 
-            if ($val) {
+            $ins=Institucion::find($request->institucion);
+            $ins->proyecto->attach($val->id_proyecto);
+            $ins->save();
 
-                if ($request->file('imagenes')[0]!=null) {
-                    $procesados=$this->imagenVal($request,$muestra);
-                }
 
-            }
+            $est=Estudiante::find($request->estudiante);
+
+            $est->id_proyecto=$val->id_proyecto;
+            $est->save();
+
 
         }else{
             $val=$validator->passes();
@@ -353,34 +414,38 @@ class ProyectoController extends Controller
 
     public function update($request, $id){
 
-        $muestra=Muestra::find($id);
+        $proyecto=Proyecto::find($id);
+
+        $aux=$request->all();
 
         $validator=Validator::make($request->all(),[
 
-            'codigo_muestra'=>'required|min:1|max:255',
-            'tipo_muestra'=>'required|min:1|max:255',
-            'descripcion_muestra'=>'required|min:1|max:255',
+            'nombre_proyecto'=>'required|min:1|max:255',
+            'estatus_proyecto'=>'required|min:1|max:255',
             'fecha_inicio'=>'required|min:1|max:255',
-            'estatus'=>'required|min:1|max:255',
-            'proyecto'=>'required|min:1|max:255'
+            'fecha_final'=>'required|min:1|max:255',
+            'permiso_proyecto'=>'required|min:1|max:255',
+            'institucion'=>'required|min:1|max:255',
+            'estudiante'=>'required|min:1|max:255'
 
         ]);
 
 
         if ($validator->passes()) {
 
+            $val=$proyecto->save();
 
-            $muestra->codigo_muestra=$request->codigo_muestra;
-            $muestra->tipo_muestra=$request->tipo_muestra;
-            $muestra->descripcion_muestra=$request->descripcion_muestra;
-            $muestra->fecha_inicio=$request->fecha_inicio;
-            $muestra->estatus=$request->estatus;
+            $ins=Institucion::find($request->institucion);
+            $ins->proyecto->detach($val->id_proyecto);
+            $ins->proyecto->attach($val->id_proyecto);
+            $ins->save();
 
-            $val=$muestra->save();
 
-            if ($val) {
-                $procesados=$this->imagenVal($request,$muestra);
-            }
+            $est=Estudiante::find($request->estudiante);
+
+            $est->id_proyecto=$val->id_proyecto;
+            $est->save();
+
 
         }else{
             $val=$validator->passes();
@@ -399,13 +464,11 @@ class ProyectoController extends Controller
 
     public function destroy($request, $id){
 
-        $institucion=Muestra::find($id);
+        $proyecto=Proyecto::find($id);
 
-        foreach ($institucion->archivo()->get() as $key => $value) {
-            
-            $this->fileDelete($value->id_archivo);
+        $proyecto->estatus='Culminado';
 
-        }
+        $val=$proyecto->save();
 
         return array('result'=>$val,'obj'=>$proyecto->id_proyecto,'keystone'=>'id_proyecto');
 

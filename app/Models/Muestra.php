@@ -42,14 +42,15 @@ class Muestra extends Model
 
     public function scopeCodigoMuestra($query,$search){
 
-        if (count(trim($search))>1) {
+        if (strlen(trim($search))>=1) {
+
             return $query->where('codigo_muestra', 'LIKE', '%'.$search.'%');
         }
     }
 
     public function scopeTipoMuestra($query,$search){
 
-        if (count(trim($search))>1) {
+        if (strlen(trim($search))>=1) {
             return $query->where('tipo_muestra', '=', $search);
         }
 
@@ -57,21 +58,21 @@ class Muestra extends Model
 
     public function scopeDescripcionMuestra($query,$search){
 
-        if (count(trim($search))>1) {
+        if (strlen(trim($search))>=1) {
             return $query->where('descripcion_muestra', 'LIKE', '%'.$search.'%');
         }
     }
     
     public function scopeFechaRecepcionMuestra($query,$search){
 
-        if (count(trim($search))>1) {
+        if (strlen(trim($search))>=1) {
             return $query->where('fecha_recepcion', '=', $search);
         }
     } 
 
     public function scopeStatusMuestra($query,$search){
 
-        if (count(trim($search))>1) {
+        if (strlen(trim($search))>=1) {
             return $query->where('estatus', '=', $search);
         }
     }

@@ -110,6 +110,133 @@
 
 
 
+								        @elseif( $value['type']=='titulo' )
+
+								        	<div class="col-md-12 formsptitels"><h2>{{ $value['value'] }}</h2></div>
+
+
+								        @elseif( $value['type']=='relacion' )
+
+								        	<div  id="relacion-{!! $value['relacion_campo'] !!}">
+
+									        	<div class="col-md-12">
+									                <label class="col-md-2 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <div class="col-md-10" style="padding: 0px">
+									                    
+									                    <div class="col-md-4">
+									                    
+									                        <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+
+									                        	<option value="">Seleccione...</option>
+									                        	<option value="prueba">Proyecto de Prueba</option>
+									                        
+										                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux='' ?>
+
+										                    	@if(isset($value['options']))
+
+										                        	@foreach( $value['options'] as $key2 => $value2 )
+
+										                        		<?php
+
+										                        			if ($key2==0) {
+										        								
+										        								$objaux=$value2;
+										        							}
+
+										                        		?>
+
+
+										                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+										                        	@endforeach
+
+										                        @endif
+
+									                    	</select>
+
+									                    </div>
+
+									                    <div class="col-md-8">
+
+									                    	<button class="btn btn-success" name="relationadd" value="{!! $value['selectadd']['url'] !!}" data-relation="{!! $value['relacion_campo'] !!}">{!! $value['selectadd']['btnadd'] !!}</button>
+
+									                        <button class="btn btn-primary" name="nextstep" value="{!! $value['selectadd']['url'] !!}" data-idpointer="{!! $value['id'] !!}" data-finlabel="{!! $value['selectadd']['btnfinlavel'] !!}">{!! $value['selectadd']['btnlabel'] !!}</button>
+									                    </div>
+
+
+									                </div>
+									            </div>
+
+
+
+									        	<div class="col-md-12" id="relation-{{ $value['relacion_campo'] }}">
+
+									        		<div class="deleted"></div>
+									        		<div class="added"></div>
+									        		
+									        		<div class="">
+									        			<div class="col-md-12">
+
+									        				<h3>{{ $value['relation_table']['title'] }}</h3>
+
+									        				<div class="tablecontainer">
+									        					<table class="table table-bordered table-striped mb-none newrecords">
+
+										        					<thead>
+										        						<tr>
+										        							@foreach($value['relation_table']['table_fields'] as $tablef)
+
+										        								<th>{{$tablef}}</th>
+
+										        							@endforeach
+
+										        							<th></th>
+										        						</tr>
+										        					</thead>
+										        					<tbody>
+
+										        						<?php 
+
+										        							$auxstr='relacion'.$value['relacion_campo'];
+										        							$auxstr2=$value['relation_table']['table_key'];
+
+
+										        						?>
+
+										        						@if(isset($value['values_seting']->$auxstr))
+
+											        						@foreach($value['values_seting']->$auxstr as $relacionesp)
+
+											        							<tr>
+											        								
+											        								<th>{{ $objaux->find($relacionesp)->$auxstr2 }}</th>
+											        								<th>
+											        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-trueid="{{ $relacionesp }}"><i class="fa fa-eye"></i></a>
+
+											        									<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="{{ $relacionesp }}"  data-trueid="{{ $relacionesp }}"><i class="fa fa-trash-o"></i></a>
+											        								</th>
+
+											        							</tr>
+
+
+											        						@endforeach
+
+											        					@endif
+
+										        					</tbody>
+
+										        				</table>
+									        				</div>
+									        			</div>
+									        		</div>
+
+
+									        	</div>
+
+
+									        </div>
+
+
 								        @elseif( $value['type']=='muestra' )
 
 								        	<div class="col-md-12 muestra-seccion">
@@ -185,14 +312,14 @@
 
 												        								$type = explode(';', $finfo->file($ruta));
 
-												        								echo "<tr id='tableregd".$key."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
+												        								echo "<tr id='tableregd".$mkey."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
 													        								echo "<td>".$muestra->nombre_temporal_muestra."</td>";
 													        								echo "<td>".$type[0]."</td>";
 													        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
 													        								echo "<td>".$muestra->fecha_analisis."</td>";
 													        								echo '<td>
 													        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
-													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
+													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-existfile="'.$mkey.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
 													        								</td>';
 													        							echo "</tr>";
 										        									}
@@ -297,7 +424,7 @@
 										                    
 										                        <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 
-										                        	<option value="0">Seleccione...</option>
+										                        	<option value="">Seleccione...</option>
 										                        
 											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
 
