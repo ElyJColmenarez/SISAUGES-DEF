@@ -554,13 +554,13 @@ jQuery(document).ready(function() {
 
             var htmlsect="<tr id='tablereg"+valoreal+"'  data-trueid='"+valoreal+"'>";
             htmlsect=htmlsect+"<td>"+$('#relacion-'+relationid+' select option[value='+valoreal+']').text()+"</td>";
-            htmlsect=htmlsect+'<td class="tableregularbtns"><a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-trueid="'+valoreal+'"><i class="fa fa-eye"></i></a>';
-            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+valoreal+'"  data-trueid="'+valoreal+'"><i class="fa fa-trash-o"></i></a></td>';
+            htmlsect=htmlsect+'<td class="tableregularbtns"><a href="#" class="btn btn-primary remove-row deleted-row ocultos" data-visible="false" data-trueid="'+valoreal+'"><i class="fa fa-eye"></i></a>';
+            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row btnborrar" data-field-id="'+valoreal+'"  data-trueid="'+valoreal+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
             $('#relacion-'+relationid+' table tbody').append(htmlsect);
 
-            $('#relacion-'+relationid+' div.added').append('<input type="hidden" name="addenin'+$('#relacion-'+relationid+' select').attr('name')+'" value="'+valoreal+'" >');
+            $('#relacion-'+relationid+' div.added').append('<input type="hidden" name="addenin'+relationid+'[]" value="'+valoreal+'" id="addin'+valoreal+'-'+relationid+'">');
 
         }
 
@@ -597,13 +597,32 @@ jQuery(document).ready(function() {
             htmlsect=htmlsect+"<td>"+aux.type+"</td>";
             htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
             htmlsect=htmlsect+"<td>"+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+"</td>";
-            htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
+            htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row ocultos" data-visible="false" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
             htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"  data-trueid="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
             $('#modalForm .muestra-seccion table.newrecords  tbody').append(htmlsect);
         }
 
+
+    });
+
+    $('#modalForm').on('click','.btnborrar',function(event){
+
+        event.preventDefault();
+
+        var obj=$(this);
+
+        var relationid=$(this).attr('data-relation');
+
+        $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
+            $(this).remove();
+
+            $('#modalForm .added #addin'+$(this).attr('data-trueid')+'-'+relationid).remove();
+
+            $('#modalForm .deleted').append('<input type="hidden" name="deletein'+relationid+'[]" value="'+$(this).attr('data-trueid')+'">');
+
+        });
 
     });
 
@@ -634,6 +653,7 @@ jQuery(document).ready(function() {
         });
 
     });
+
 
     $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(5) a:nth-child(1)',function(event){
 

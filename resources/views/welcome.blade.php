@@ -1,8 +1,13 @@
+@inject('muestra', 'SISAUGES\Http\Controllers\MuestraController')
+@inject('institucion', 'SISAUGES\Http\Controllers\InstitucionController')
+@inject('proyecto', 'SISAUGES\Http\Controllers\ProyectoController')
+@inject('usuario', 'SISAUGES\Http\Controllers\UserController')
+
 @extends('layouts.app')
 
 @section('content')
         <div class="row">
-            <div class="col-md-6 col-lg-12 col-xl-6">
+            <!--<div class="col-md-6 col-lg-12 col-xl-6">
                 <section class="panel">
                     <div class="panel-body">
                         <div class="row">
@@ -20,7 +25,7 @@
                                     </h2>
 
                                     <div id="salesSelectorItems" class="chart-data-selector-items mt-sm">
-                                        <!-- Flot: Sales Porto Admin -->
+
                                         <div class="chart chart-sm" data-sales-rel="Porto Admin" id="flotDashSales1" class="chart-active"></div>
                                         <script>
 
@@ -46,7 +51,7 @@
 
                                         </script>
 
-                                        <!-- Flot: Sales Porto Drupal -->
+
                                         <div class="chart chart-sm" data-sales-rel="Porto Drupal" id="flotDashSales2" class="chart-hidden"></div>
                                         <script>
 
@@ -72,7 +77,7 @@
 
                                         </script>
 
-                                        <!-- Flot: Sales Porto Wordpress -->
+
                                         <div class="chart chart-sm" data-sales-rel="Porto Wordpress" id="flotDashSales3" class="chart-hidden"></div>
                                         <script>
 
@@ -104,8 +109,10 @@
                         </div>
                     </div>
                 </section>
-            </div>
-            <div class="col-md-6 col-lg-12 col-xl-6">
+            </div>-->
+
+
+            <div class="col-md-12 col-lg-12 col-xl-12">
                 <div class="row">
                     <div class="col-md-12 col-lg-6 col-xl-6">
                         <section class="panel panel-featured-left panel-featured-primary">
@@ -120,11 +127,8 @@
                                         <div class="summary">
                                             <h4 class="title">Muestras Totales</h4>
                                             <div class="info">
-                                                <strong class="amount">1281</strong>
+                                                <strong class="amount">{{$muestra->obtenerConteoMuestras()}}</strong>
                                             </div>
-                                        </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase">(ver todas)</a>
                                         </div>
                                     </div>
                                 </div>
@@ -144,11 +148,8 @@
                                         <div class="summary">
                                             <h4 class="title">Instituciones Afiliadas</h4>
                                             <div class="info">
-                                                <strong class="amount">200</strong>
+                                                <strong class="amount">{{$institucion->obtenerConteoInstituciones()}}</strong>
                                             </div>
-                                        </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase">(ver)</a>
                                         </div>
                                     </div>
                                 </div>
@@ -168,12 +169,8 @@
                                         <div class="summary">
                                             <h4 class="title">Proyectos Solicitados este Mes:</h4>
                                             <div class="info">
-                                                <strong class="amount">18</strong>
-                                                <span class="text-primary">(10 pendientes)</span>
+                                                <strong class="amount">{{$proyecto->obtenerConteoProyectosxMes()}}</strong>
                                             </div>
-                                        </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase">(ver todos)</a>
                                         </div>
                                     </div>
                                 </div>
@@ -193,11 +190,8 @@
                                         <div class="summary">
                                             <h4 class="title">Usuarios Registrados</h4>
                                             <div class="info">
-                                                <strong class="amount">20</strong>
+                                                <strong class="amount">{{$usuario->obtenerConteoUsuarios()}}</strong>
                                             </div>
-                                        </div>
-                                        <div class="summary-footer">
-                                            <a class="text-muted text-uppercase">(ver)</a>
                                         </div>
                                     </div>
                                 </div>

@@ -4,7 +4,7 @@
 		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
 
 	        <header class="panel-heading">
-				<h2 class="panel-title">Formulario de Registro de {!! $modulo !!}</h2>
+				<h2 class="panel-title">Formulario de {!! $modulo !!}</h2>
 			</header>
 
 			<div class="waitingimg" style="display: none;">
@@ -128,7 +128,6 @@
 									                        <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 
 									                        	<option value="">Seleccione...</option>
-									                        	<option value="prueba">Proyecto de Prueba</option>
 									                        
 										                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux='' ?>
 
@@ -160,7 +159,7 @@
 
 									                    	<button class="btn btn-success" name="relationadd" value="{!! $value['selectadd']['url'] !!}" data-relation="{!! $value['relacion_campo'] !!}">{!! $value['selectadd']['btnadd'] !!}</button>
 
-									                        <button class="btn btn-primary" name="nextstep" value="{!! $value['selectadd']['url'] !!}" data-idpointer="{!! $value['id'] !!}" data-finlabel="{!! $value['selectadd']['btnfinlavel'] !!}">{!! $value['selectadd']['btnlabel'] !!}</button>
+									                        <button class="btn btn-primary" name="nextstep" value="{!! $value['selectadd']['url'] !!}"  data-idpointer="{!! $value['id'] !!}" data-finlabel="{!! $value['selectadd']['btnfinlavel'] !!}">{!! $value['selectadd']['btnlabel'] !!}</button>
 									                    </div>
 
 
@@ -172,7 +171,20 @@
 									        	<div class="col-md-12" id="relation-{{ $value['relacion_campo'] }}">
 
 									        		<div class="deleted"></div>
-									        		<div class="added"></div>
+									        		<div class="added">
+									        			
+									        			@if($value['relation_table']['table_obj']!=null)
+
+							        						@foreach($value['relation_table']['table_obj'] as $relacionesp)
+
+							        							<input type="hidden" name="addenin{{ $value['relacion_campo'] }}[]" value="{{ $relacionesp->$aux1 }}" id="addin{{ $relacionesp->$aux1 }}-{{ $value['relacion_campo'] }}">
+
+
+							        						@endforeach
+
+							        					@endif
+
+									        		</div>
 									        		
 									        		<div class="">
 									        			<div class="col-md-12">
@@ -195,26 +207,20 @@
 										        					</thead>
 										        					<tbody>
 
-										        						<?php 
+										        						<?php $auxstr=$value['relacion_campo']; ?>
 
-										        							$auxstr='relacion'.$value['relacion_campo'];
-										        							$auxstr2=$value['relation_table']['table_key'];
+										        						@if($value['relation_table']['table_obj']!=null)
 
+											        						@foreach($value['relation_table']['table_obj'] as $relacionesp)
 
-										        						?>
-
-										        						@if(isset($value['values_seting']->$auxstr))
-
-											        						@foreach($value['values_seting']->$auxstr as $relacionesp)
-
-											        							<tr>
+											        							<tr  id="tablereg{{ $relacionesp->$aux1 }}"  data-trueid="{{ $relacionesp->$aux1 }}">
 											        								
-											        								<th>{{ $objaux->find($relacionesp)->$auxstr2 }}</th>
-											        								<th>
-											        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="false" data-trueid="{{ $relacionesp }}"><i class="fa fa-eye"></i></a>
+											        								<td>{{ $relacionesp->$aux2 }}</td>
+											        								<td class="tableregularbtns">
+											        									<a href="#" class="btn btn-primary remove-row deleted-row btnver ocultos" data-visible="false" data-trueid="{{ $relacionesp->$aux1 }}" data-relation="{!! $value['relacion_campo'] !!}"><i class="fa fa-eye"></i></a>
 
-											        									<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="{{ $relacionesp }}"  data-trueid="{{ $relacionesp }}"><i class="fa fa-trash-o"></i></a>
-											        								</th>
+											        									<a href="#" class="btn btn-danger remove-row deleted-row btnborrar" data-field-id="{{ $relacionesp->$aux1 }}"  data-trueid="{{ $relacionesp->$aux1 }}" data-relation="{!! $value['relacion_campo'] !!}"><i class="fa fa-trash-o"></i></a>
+											        								</td>
 
 											        							</tr>
 

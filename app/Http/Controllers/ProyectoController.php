@@ -62,7 +62,8 @@ class ProyectoController extends Controller
                     'table_fields'=>array(
                         'Nombre de la Institucion'
                     ),
-                    'table_key'=>'nombre_institucion'
+                    'table_key'=>'nombre_institucion',
+                    'table_obj'=>(isset($proyecto->institucion))? $proyecto->institucion()->get() :null,
                 ),
                 'relacion_campo'=>'id_institucion'
 
@@ -104,7 +105,7 @@ class ProyectoController extends Controller
             ),
             'separador3'=>array('type'=>'separador'),*/
 
-            'titulo2'=>array(
+            /*'titulo2'=>array(
                 'type'      => 'titulo',
                 'value'     => 'Datos del Estudiante'
             ),
@@ -130,12 +131,13 @@ class ProyectoController extends Controller
                     'table_fields'=>array(
                         'Cedula del Estudiante'
                     ),
-                    'table_key'=>'cedula_persona'
+                    'table_key'=>'cedula_persona',
+                    'table_obj'=>(isset($proyecto->estudiante))? $proyecto->estudiante()->get() :null,
                 ),
                 'relacion_campo'=>'id_estudiante'
 
             ),
-            'separador4'=>array('type'=>'separador'),
+            'separador4'=>array('type'=>'separador'),*/
 
             'titulo3'=>array(
                 'type'      => 'titulo',
@@ -267,54 +269,13 @@ class ProyectoController extends Controller
                     'value' => $request->field_id,
                     'id'    => 'field_id',
                 ),
-                'form_step'=>array(
-                    'type'  => 'hidden',
-                    'value' => (isset($request->form_step))? ($request->form_step+1): 1 ,
-                    'id'    => 'field_id',
-                ),
                 'extra_url'=>array(
                     'type'  => 'hidden',
                     'value' =>  url('proyecto/registerform'),
-                    'id'    => 'field_id',
+                    'id'    => 'extra_url',
                 ),
 
             );
-
-            /*if ($request->typeform=='add') {
-
-                //Pasos de registro de proyecto
-
-                if ($step==1) {
-                    $steptitle='Institución';
-
-                    $inscontroller= new InstitucionController();
-
-                    $fields=$inscontroller->fieldsRegisterCall(Institucion::find(0));
-                }
-                elseif ($step==2) {
-                    $steptitle='';
-                }
-                elseif ($step==3) {
-                    $steptitle='';
-                }
-                elseif ($step==4) {
-                    $steptitle='';
-                }
-                elseif ($step==5) {
-                    $steptitle='';
-                }
-
-
-                $modulo='Proyecto';
-                $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo','steptitle','step'))->render();
-
-
-            }else{
-
-                $fields=$this->fieldsRegisterCall($proyecto);
-                $modulo='Proyecto';
-                $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
-            }*/
 
 
             $ins=Institucion::find($request->institucion);
@@ -374,8 +335,7 @@ class ProyectoController extends Controller
             'fecha_inicio'=>'required|min:1|max:255',
             'fecha_final'=>'required|min:1|max:255',
             'permiso_proyecto'=>'required|min:1|max:255',
-            'institucion'=>'required|min:1|max:255',
-            'estudiante'=>'required|min:1|max:255'
+            'institucion'=>'required|min:1|max:255'
 
         ]);
 
@@ -384,15 +344,34 @@ class ProyectoController extends Controller
 
             $val=$proyecto->save();
 
-            $ins=Institucion::find($request->institucion);
-            $ins->proyecto->attach($val->id_proyecto);
-            $ins->save();
 
+            foreach ($request->addeninid_institucion as $prokey => $provalue) {
 
-            $est=Estudiante::find($request->estudiante);
+                if (!$proyecto->institucion()->find($provalue)) {
 
-            $est->id_proyecto=$val->id_proyecto;
-            $est->save();
+                    $proyecto->institucion()->attach($provalue);
+
+                    $proyecto->save();
+                }
+
+            }
+
+            if (isset($request->addeninid_estudiante)) {
+
+                foreach ($request->addeninid_estudiante as $prokey => $provalue) {
+
+                    if (!$proyecto->estudiante()->find($provalue)) {
+
+                        $proyecto->estudiante()->attach($provalue);
+
+                        $proyecto->save();
+                    }
+
+                }
+
+            }
+
+            
 
 
         }else{
@@ -474,6 +453,14 @@ class ProyectoController extends Controller
 
     }
 
+
+    //Funciones Extra
+
+    public function obtenerConteoProyectosxMes(){
+
+        return Proyecto::whereMonth('fecha_inicio','=',date('n'))->whereYear('fecha_inicio','=',date('Y'))->count();
+
+    }
 
 
     public function ajaxRegularStore(Request $request){

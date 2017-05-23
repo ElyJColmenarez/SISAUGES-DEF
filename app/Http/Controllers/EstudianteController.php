@@ -9,14 +9,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
 use SISAUGES\Http\Requests;
+use SISAUGES\Models\Proyecto;
 
 class EstudianteController extends Controller
 {
 
-    public function fieldsRegisterCall($persona,$estudiante){
+    public function fieldsRegisterCall($persona,$estudiante,$proyectos){
 
         $fields = array(
 
+            'titulo1'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Estudiante'
+            ),
+            'separador1'=>array('type'=>'separador'),
             'cedula'         => array(
                 'type'          => 'text',
                 'value'         => (empty($persona))? '' : $persona->cedula,
@@ -80,30 +86,53 @@ class EstudianteController extends Controller
                     'obligatorio' )
             ),
 
-            'id_proyecto' => array(
-                'type'      => 'select',
-                'value'     => (empty($estudiante))? '' : $estudiante->id_proyecto,
-                'id'        => 'id_proyecto',
-                'label'     => 'Proyecto',
-                'options'   => array(
-                    ''          =>'Seleccione...',
-                    '1'         =>'Informática',
-                    '2'         =>'Electricidad',
-                    '3'         =>'Tecnología de los materiales',
-                    '4'         =>'Quimica')
-            ),
-
             'estatus' => array(
                 'type'      => 'select',
                 'value'     => (!empty($estudiante->estatus))? $estudiante->estatus:'',
                 'id'        => 'estatus',
-                'label'     => 'estatus',
+                'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     'true' =>'Activo',
                     'false'=>'Inactivo'
                 )
-            )
+            ),
+
+            'titulo2'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Proyecto'
+            ),
+
+            'id_proyecto'=>array(
+
+                'type'      => 'select',
+                'value'     => (!empty($estudiante->id_proyecto))? $estudiante->id_proyecto:'',
+                'id'        => 'id_proyecto',
+                'label'     => 'Proyecto',
+                'selecttype'=> 'selectadd',
+                'values_seting'=> $proyectos[2],
+                'objkeys'   => array('id_proyecto','nombre_proyecto'),
+                'options'   => $proyectos[0],
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Proyecto',
+                    'btnlabel'=>'Registrar Proyecto',
+                    'btnfinlavel'=>'Registrar Proyecto',
+                    'url'=> url('proyecto/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Proyectos involucrados',
+                    'table_fields'=>array(
+                        'Nombre del Proyecto'
+                    ),
+                    'table_key'=>'nombre_proyecto',
+                    'table_obj'=>(isset($institucion->proyecto))? $institucion->proyecto()->get() :null,
+                ),
+                'relacion_campo'=>'id_proyecto'
+
+            ),
+            'separador2'=>array('type'=>'separador')
+
+            
         );
 
         return $fields;
@@ -184,19 +213,6 @@ class EstudianteController extends Controller
                     '4'         =>'4')
             ),
 
-            'id_proyecto' => array(
-                'type'      => 'select',
-                'value'     => (isset($request->id_proyecto))? $request->id_proyecto:'',
-                'id'        => 'id_proyecto',
-                'label'     => 'Proyecto',
-                'options'   => array(
-                    ''          =>'Seleccione...',
-                    '1'         =>'1',
-                    '2'         =>'2',
-                    '3'         =>'3',
-                    '4'         =>'4')
-            ),
-
             'estatus' => array(
                 'type'      => 'select',
                 'value'     => (isset($request->estatus))? $request->estatus:'',
@@ -263,7 +279,7 @@ class EstudianteController extends Controller
 
         if (isset($estudiante)){
 
-            $persona = Persona::buscarpersona($estudiante->cedula_persona)->get();
+            $persona = Persona::buscarpersona($estudiante->cedula_persona)->first();
 
             //$persona = Persona::find($persona[0]->id_persona);
         }else{
@@ -275,18 +291,33 @@ class EstudianteController extends Controller
         if ($request->typeform == 'delete')
         {
             $fields = false;
+
+            $modulo='Estudiante';
         }
         else
         {
+
+
+            $pro=Proyecto::find($request->proyecto);
+            $proyectos=Proyecto::get();
+
+
+
             $hiddenfields = array(
                 'field_id'=>array(
                     'type'  => 'hidden',
                     'value' => $request->field_id,
                     'id'    => 'field_id',
+                ),
+
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('estudiante/registerform'),
+                    'id'    => 'extra_url',
                 )
             );
 
-            $fields = $this->fieldsRegisterCall($persona,$estudiante);
+            $fields = $this->fieldsRegisterCall($persona,$estudiante,array($proyectos,$pro,$request));
             $modulo='Estudiante';
         }
 
@@ -353,6 +384,7 @@ class EstudianteController extends Controller
             $estudiante->estatus                 = $request->estatus;
             $val = $estudiante->save();
         }
+
 
         return array('result'=>$val,'obj'=>$estudiante->id_estudiante,'keystone'=>'id_estudiante');
     }

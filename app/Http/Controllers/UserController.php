@@ -380,6 +380,15 @@ class UserController extends Controller
         return array('result'=>$val,'obj'=>$usuario->id_usuario,'keystone'=>'id_usuario');
     }
 
+
+    //Funciones Extra
+
+    public function obtenerConteoUsuarios(){
+
+        return User::count();
+
+    }
+
     public function ajaxRegularStore(Request $request){
 
         $val=$this->store($request);

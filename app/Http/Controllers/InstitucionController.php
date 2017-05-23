@@ -322,6 +322,15 @@ class InstitucionController extends Controller
     }
 
 
+    //Funciones Extra
+
+    public function obtenerConteoInstituciones(){
+
+        return Institucion::count();
+
+    }
+
+
 
     public function ajaxRegularStore(Request $request){
 

@@ -52,7 +52,9 @@ class MuestraController extends Controller
                     'table_fields'=>array(
                         'Nombre del Proyecto'
                     ),
-                    'table_key'=>'nombre_proyecto'
+                    'table_key'=>'nombre_proyecto',
+                    'table_obj'=>(isset($muestra->proyecto))? $muestra->proyecto()->get() :null,
+
                 ),
                 'relacion_campo'=>'id_proyecto'
             ),
@@ -159,7 +161,7 @@ class MuestraController extends Controller
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
-                    '2'=>'Inactivo'
+                    '0'=>'Inactivo'
                 )
             )
         );
@@ -175,7 +177,7 @@ class MuestraController extends Controller
     public function index(Request $request)
     {
 
-        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->orderBy('codigo_muestra', 'desc')->paginate(20);
+        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->statusmuestra($request->estatus)->orderBy('codigo_muestra', 'desc')->paginate(20);
 
         $action="muestra/listar";
 
@@ -260,10 +262,28 @@ class MuestraController extends Controller
         }
 
         $muestra = Muestra::find($request->field_id);
-        $proyectos = Proyecto::where('status_proyecto','<>','Culminado')->get();
+        $proyectos = Proyecto::where('estatus_proyecto','<>','Culminado')->get();
 
         if ($request->typeform=='deleted') {
             $fields=false;
+
+            $modulo='Muestra';
+
+            $hiddenfields=array(
+
+                'field_id'=>array(
+                    'type'  => 'hidden',
+                    'value' => $request->field_id,
+                    'id'    => 'field_id',
+                ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('muestra/registerform'),
+                    'id'    => 'field_id',
+                )
+            );
+
+
         }else{
 
             $hiddenfields=array(
@@ -319,8 +339,15 @@ class MuestraController extends Controller
         $aux=$file->delete();
 
         if ($aux) {
-            unlink($varaux);
-            unlink($visibles);
+
+            if (file_exists($varaux)) {
+                unlink($varaux);
+            }
+
+            if (file_exists($visibles)) {
+                unlink($visibles);
+            }
+
         }
 
 
@@ -417,7 +444,7 @@ class MuestraController extends Controller
             'descripcion_muestra'=>'required|min:1|max:255',
             'fecha_recepcion'=>'required|min:1|max:255',
             'estatus'=>'required|min:1|max:255',
-            'proyecto'=>'required|min:1|max:255'
+            'addeninid_proyecto.*'=>'required'
 
         ]);
 
@@ -426,6 +453,21 @@ class MuestraController extends Controller
         if ($validator->passes()) {
 
             $val=$muestra->save();
+
+            //Guardar proyectos.
+
+
+            foreach ($request->addeninid_proyecto as $prokey => $provalue) {
+
+                if (!$muestra->proyecto()->find($provalue)) {
+
+                    $muestra->proyecto()->attach($provalue);
+
+                    $muestra->save();
+                }
+
+            }
+
 
             if ($val) {
 
@@ -463,12 +505,11 @@ class MuestraController extends Controller
             'descripcion_muestra'=>'required|min:1|max:255',
             'fecha_recepcion'=>'required|min:1|max:255',
             'estatus'=>'required|min:1|max:255',
-            'proyecto'=>'required|min:1|max:255'
+            'addeninid_proyecto.*'=>'required'
 
         ]);
 
-
-        if ($validator->passes()) {
+        if ($validator->passes() && isset($request->addeninid_proyecto)) {
 
 
             $muestra->codigo_muestra=$request->codigo_muestra;
@@ -480,11 +521,38 @@ class MuestraController extends Controller
             $val=$muestra->save();
 
             if ($val) {
+
+
+                //Guardar proyectos.
+
+                if (isset($request->deleteinid_proyecto)) {
+                    
+                    foreach ($request->deleteinid_proyecto as $prokey => $provalue) {
+
+                        if ($muestra->proyecto()->find($provalue)) {
+
+                            $muestra->proyecto()->detach($provalue);
+                        }
+
+                    }
+                }
+
+
+                foreach ($request->addeninid_proyecto as $prokey => $provalue) {
+
+                    if (!$muestra->proyecto()->find($provalue)) {
+
+                        $muestra->proyecto()->attach($provalue);
+                    }
+
+                }
+   
+
                 $procesados=$this->imagenVal($request,$muestra);
             }
 
         }else{
-            $val=$validator->passes();
+            $val=false;
         }
 
         return array('result'=>$val,'obj'=>$muestra->id_muestra,'keystone'=>'id_muestra');
@@ -500,15 +568,30 @@ class MuestraController extends Controller
 
     public function destroy($request, $id){
 
-        $institucion=Muestra::find($id);
+        $muestra=Muestra::find($id);
 
-        foreach ($institucion->archivo()->get() as $key => $value) {
+        foreach ($muestra->archivo()->get() as $key => $value) {
             
             $this->fileDelete($value->id_archivo);
 
         }
 
+        $aux=$muestra->proyecto()->detach();
+
+
+        $val=$muestra->delete();
+
+
         return array('result'=>$val,'obj'=>$muestra->id_muestra,'keystone'=>'id_muestra');
+
+    }
+
+
+    //Funciones Extra
+
+    public function obtenerConteoMuestras(){
+
+        return Muestra::count();
 
     }
 
@@ -564,7 +647,7 @@ class MuestraController extends Controller
 
     public function ajaxRegularDestroy(Request $request,$id){
 
-        $val=$this->destroy($id);
+        $val=$this->destroy($request,$id);
 
         $retorno=array();
 
