@@ -172,7 +172,7 @@ class ProyectoController extends Controller
                 'type'  => 'date',
                 'value' => (isset($proyecto->fecha_final))? $proyecto->fecha_final:'',
                 'id'    => 'fecha_final',
-                'label' => 'Fecha de Recepción de la proyecto'
+                'label' => 'Fecha de Culminacion de la proyecto'
             ),
             'permiso_proyecto' => array(
                 'type'      => 'select',
@@ -404,26 +404,41 @@ class ProyectoController extends Controller
             'fecha_inicio'=>'required|min:1|max:255',
             'fecha_final'=>'required|min:1|max:255',
             'permiso_proyecto'=>'required|min:1|max:255',
-            'institucion'=>'required|min:1|max:255',
-            'estudiante'=>'required|min:1|max:255'
+            'institucion'=>'required|min:1|max:255'
+       
 
         ]);
 
 
         if ($validator->passes()) {
 
+
+
             $val=$proyecto->save();
 
-            $ins=Institucion::find($request->institucion);
-            $ins->proyecto->detach($val->id_proyecto);
-            $ins->proyecto->attach($val->id_proyecto);
-            $ins->save();
+            if (isset($request->deleteinid_institucion)) {
+                    
+                foreach ($request->deleteinid_institucion as $prokey => $provalue) {
+
+                    if ($proyecto->institucion()->find($provalue)) {
+
+                        $proyecto->institucion()->detach($provalue);
+                    }
+
+                }
+            }
 
 
-            $est=Estudiante::find($request->estudiante);
+            foreach ($request->addeninid_institucion as $prokey => $provalue) {
 
-            $est->id_proyecto=$val->id_proyecto;
-            $est->save();
+                if (!$proyecto->institucion()->find($provalue)) {
+
+                    $proyecto->institucion()->attach($provalue);
+
+                    $proyecto->save();
+                }
+
+            }
 
 
         }else{
