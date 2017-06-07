@@ -24,7 +24,7 @@ class EstudianteController extends Controller
             ),
             'separador1'=>array('type'=>'separador'),
             'cedula'         => array(
-                'type'          => 'text',
+                'type'          => (empty($persona))? 'text' : 'label',
                 'value'         => (empty($persona))? '' : $persona->cedula,
                 'id'            => 'cedula',
                 'label'         => 'Cédula',
@@ -93,8 +93,8 @@ class EstudianteController extends Controller
                 'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
+                    '1' =>'Activo',
+                    '0'=>'Inactivo'
                 )
             ),
 
@@ -220,8 +220,8 @@ class EstudianteController extends Controller
                 'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
+                    '1' =>'Activo',
+                    '0'=>'Inactivo'
                 )
             )
         );
@@ -276,6 +276,7 @@ class EstudianteController extends Controller
 
 
         $estudiante = Estudiante::find($request->field_id);
+
 
         if (isset($estudiante)){
 

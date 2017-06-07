@@ -90,7 +90,7 @@
 							        	@if( $value['type']=='text' || $value['type']=='password' || $value['type']=='email')
 
 							        		<div class="col-md-6">
-								                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+								                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
 								                <div class="col-md-8">
 								                    <input type="{!! $value['type'] !!}" class="form-control" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 								                </div>
@@ -113,6 +113,17 @@
 								        @elseif( $value['type']=='titulo' )
 
 								        	<div class="col-md-12 formsptitels"><h2>{{ $value['value'] }}</h2></div>
+
+
+								        @elseif( $value['type']=='label' )
+
+								        	<div class="col-md-6">
+								                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
+								                	
+							                	<label class="col-md-8 control-label" style="text-align: left; font-weight: bold;">{!! $value['value'] !!}</label>
+
+							                    <input type="hidden" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
+								            </div>
 
 
 								        @elseif( $value['type']=='relacion' )
@@ -358,7 +369,7 @@
 
 
 								        	<div class="col-md-6">
-												<label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+												<label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
 												<div class="col-md-8">
 													<div class="input-group">
 														<span class="input-group-addon">
@@ -374,7 +385,7 @@
 							        		@if(isset($value['extrafields']))
 
 							        			<div class="col-md-6">
-									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
 									                <div class="col-md-8" style="padding: 0px">
 									                    
 									                    <div class="col-md-4">
@@ -459,7 +470,7 @@
 										        @else
 
 										        	<div class="col-md-6">
-										                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+										                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
 										                <div class="col-md-8">
 										                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 										                        
@@ -481,7 +492,7 @@
 
 
 							        			<div class="col-md-6">
-									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
 									                <div class="col-md-8">
 									                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 									                            
