@@ -240,7 +240,7 @@ class LaboratorioController extends Controller
 
         }
 
-        return array('result'=>$val,'obj'=>$laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
+        return array('result'=>$val,'obj'=>$Laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
 
     }
 
@@ -281,7 +281,7 @@ class LaboratorioController extends Controller
             $val=$Laboratorio->save();
         }
 
-        return array('result'=>$val,'obj'=>$laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
+        return array('result'=>$val,'obj'=>$Laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
 
     }
 

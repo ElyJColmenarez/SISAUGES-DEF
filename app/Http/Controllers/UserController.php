@@ -231,6 +231,8 @@ class UserController extends Controller
 
             $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
             $persona = Persona::find($persona[0]->id_persona);
+        }else{
+             $persona = null;
         }
 
         if ($request->typeform == 'delete')

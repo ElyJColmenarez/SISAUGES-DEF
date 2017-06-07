@@ -229,8 +229,7 @@ class DepartamentoController extends Controller
 
         $departamento=new Departamento($request->all());
 
-        $departamento->
-
+       
 
         $aux=$request->all();
 
