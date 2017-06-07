@@ -222,6 +222,12 @@
       z-index: 99999999;
 }
 
+.obligatorio{
+	position: absolute;
+    top: 7px;
+    right: -7px;
+}
+
 .select2-drop-superindex{
 	z-index: 999999999;
 }

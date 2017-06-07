@@ -507,7 +507,7 @@ jQuery(document).ready(function() {
 
             $('#modalForm > section > form > div.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
             $('.msn-alerta-header').text('Ocurrio un error!');
-            $('.msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
+            $('.msn-alerta-body').text('La solicitud no se pudo completar, complete todos los campos obligatorios...');
 
             $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
@@ -621,7 +621,7 @@ jQuery(document).ready(function() {
 
             $('#modalForm > section > form > div.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
             $('.msn-alerta-header').text('Ocurrio un error!');
-            $('.msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
+            $('.msn-alerta-body').text('La solicitud no se pudo completar, complete todos los campos obligatorios...');
 
             $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
