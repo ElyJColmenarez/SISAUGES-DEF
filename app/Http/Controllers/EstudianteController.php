@@ -118,16 +118,7 @@ class EstudianteController extends Controller
                     'btnlabel'=>'Registrar Proyecto',
                     'btnfinlavel'=>'Registrar Proyecto',
                     'url'=> url('proyecto/registerform')
-                ),
-                'relation_table'=>array(
-                    'title'=>'Proyectos involucrados',
-                    'table_fields'=>array(
-                        'Nombre del Proyecto'
-                    ),
-                    'table_key'=>'nombre_proyecto',
-                    'table_obj'=>(isset($institucion->proyecto))? $institucion->proyecto()->get() :null,
-                ),
-                'relacion_campo'=>'id_proyecto'
+                )
 
             ),
             'separador2'=>array('type'=>'separador')

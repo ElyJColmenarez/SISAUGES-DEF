@@ -10,8 +10,7 @@ jQuery(document).ready(function() {
             expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             
             if ( !expr.test(inp) ){
-                
-                inp.val('');
+                console.log(inp);
                 return inp;
             }else{
                 return inp;
