@@ -385,30 +385,53 @@ class MuestraController extends Controller
         //Agregar registros nuevos
 
         if (count($request->file('imagenes'))>1) {
+
+            $borra=$request->borrados;
             
             foreach ($request->file('imagenes') as $key => $value) {
 
+                $contador=0;
 
-                if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
-
-                    $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
-
-                    $file=new Archivo();
-
-                    $file->ruta_img_muestra="storage/".$request->proyecto."/";
-                    $file->fecha_analisis=date('d-m-Y');
-                    $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
-                    $file->nombre_temporal_muestra=$img;
-                    $file->id_muestra=$muestra->id_muestra;
-                    $file->save();
-
-                    if (strpos($value->getClientMimeType(),'image')!==false) {
+                if (count($borra)>0) {
+                    
+                    foreach ($borra as $borrakey => $borravalue) {
                         
-                        $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
+                        if ($key==$borravalue) {
+
+                            unset($borra[$borrakey]);
+                            array_values($borra);
+                            $contador++;
+
+                            break 1;
+                        }
+
                     }
 
-                }else{
-                    $retorno[]=$value;
+                }
+
+
+                if ($contador==0) {
+                    if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
+
+                        $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
+
+                        $file=new Archivo();
+
+                        $file->ruta_img_muestra="storage/".$request->proyecto."/";
+                        $file->fecha_analisis=date('d-m-Y');
+                        $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
+                        $file->nombre_temporal_muestra=$img;
+                        $file->id_muestra=$muestra->id_muestra;
+                        $file->save();
+
+                        if (strpos($value->getClientMimeType(),'image')!==false) {
+                            
+                            $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
+                        }
+
+                    }else{
+                        $retorno[]=$value;
+                    }
                 }
 
                  

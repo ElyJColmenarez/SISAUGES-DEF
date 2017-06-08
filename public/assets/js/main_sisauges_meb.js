@@ -774,6 +774,7 @@ jQuery(document).ready(function() {
         var f = new Date();
 
         $('#modalForm .muestra-seccion table.newrecords tbody').empty();
+        $('#modalForm .muestra-seccion .borrados .agregadosmstrs').remove();
 
         for (var i = 0; i < $(this)[0].files.length; i++) {
 
@@ -820,23 +821,19 @@ jQuery(document).ready(function() {
 
         var obj=$(this);
 
+        if (obj.attr('data-trueid')) {
+
+            $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" class="agregadosmstrs" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
+        }
+
+
+        if (obj.attr('data-existfile')) {
+
+            $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados_existentes[]" value="'+$(this).attr('data-existfile')+'">');
+        }
+
         $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
             $(this).remove();
-
-            console.log($(this).attr('data-trueid'));
-
-            if (obj.attr('data-trueid')) {
-
-                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
-            }
-
-
-            if (obj.attr('data-existfile')) {
-
-                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados_existentes[]" value="'+$(this).attr('data-trueid')+'">');
-            }
-
-
         });
 
     });

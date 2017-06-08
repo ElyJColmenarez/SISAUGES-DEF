@@ -336,7 +336,7 @@
 													        								echo "<td>".$muestra->fecha_analisis."</td>";
 													        								echo '<td>
 													        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
-													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-existfile="'.$mkey.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
+													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-existfile="'.$muestra->id_archivo.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
 													        								</td>';
 													        							echo "</tr>";
 										        									}
