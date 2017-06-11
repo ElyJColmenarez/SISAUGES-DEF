@@ -201,6 +201,20 @@ CREATE TABLE IF NOT EXISTS USUARIO
 
 --drop table usuario;
 
+CREATE TABLE IF NOT EXISTS PREGUNTAS_SEGURIDAD
+(
+  id_preguntas_seguridad serial,
+  pregunta_de_seguridad varchar(500),
+  respuesta_de_seguridad varchar(500),
+  id_usuario int,
+  constraint pk_pregunta_seguridad
+  primary key (id_preguntas_seguridad),
+  constraint fk_usuario
+  foreign key (id_usuario) references USUARIO (id_usuario),
+);
+
+--drop table preguntas_seguridad;
+
 
 CREATE TABLE IF NOT EXISTS MUESTRA
 (
@@ -217,30 +231,6 @@ CREATE TABLE IF NOT EXISTS MUESTRA
 
 --drop table muestra
 
-CREATE TABLE IF NOT EXISTS TECNICA_ESTUDIO
-(
-	id_tecnica_estudio serial,
-	descripcion_tecnica_estudio varchar(30),
-    estatus boolean,
-	constraint pk_tecnica_estudio 
-		primary key (id_tecnica_estudio)
-);
-
---drop table tecnica_estudio
-
-CREATE TABLE IF NOT EXISTS MUESTRA_TECNICA_ESTUDIO
-(
-	id_tecnica_estudio integer,
-	id_muestra integer,
-	constraint pk_tecnica_estudio_muestra 
-		primary key (id_tecnica_estudio,id_muestra),
-	constraint fk_tecnica_estudio_MTE
-		foreign key (id_tecnica_estudio) references tecnica_estudio(id_tecnica_estudio),
-	constraint fk_muestra_MTE
-		foreign key (id_muestra) references muestra (id_muestra)
-);
-
---drop table muestra_tecnica_estudio
 
 CREATE TABLE IF NOT EXISTS MUESTRA_PROYECTO
 (
@@ -263,11 +253,27 @@ CREATE TABLE IF NOT EXISTS ARCHIVO
   nombre_original_muestra varchar(200),
   nombre_temporal_muestra varchar(200),
   id_muestra integer,
+  id_tecnica_estudio INTEGER,
   constraint pk_archivo
     primary key (id_archivo),
   constraint fk_muestra
-    foreign key (id_muestra) references MUESTRA(id_muestra)
+    foreign key (id_muestra) references MUESTRA(id_muestra),
+  CONSTRAINT fk_tecnica_estucio
+    FOREIGN KEY (id_tecnica_estudio) REFERENCES TECNICA_ESTUDIO(id_tecnica_estudio)
 );
+
+--drop table archivo;
+
+CREATE TABLE IF NOT EXISTS TECNICA_ESTUDIO
+(
+	id_tecnica_estudio serial,
+	descripcion_tecnica_estudio varchar(30),
+	estatus boolean,
+	constraint pk_tecnica_estudio
+	primary key (id_tecnica_estudio)
+);
+
+--drop table tecnica_estudio
 
 
 
