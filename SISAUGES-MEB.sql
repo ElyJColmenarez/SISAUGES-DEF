@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS PREGUNTAS_SEGURIDAD
   constraint pk_pregunta_seguridad
   primary key (id_preguntas_seguridad),
   constraint fk_usuario
-  foreign key (id_usuario) references USUARIO (id_usuario),
+  foreign key (id_usuario) references USUARIO (id_usuario)
 );
 
 --drop table preguntas_seguridad;
