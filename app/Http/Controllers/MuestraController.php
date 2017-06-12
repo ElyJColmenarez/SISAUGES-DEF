@@ -13,6 +13,7 @@ use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
 use SISAUGES\Models\TecnicaEstudio;
+use SISAUGES\Models\TipoMuestra;
 use SISAUGES\Models\Proyecto;
 use SISAUGES\Models\Archivo;
 use Storage;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\View;
 class MuestraController extends Controller
 {
 
-     public function fieldsRegisterCall($muestra,$proyectos,$tecnicas){
+     public function fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos){
 
         $fields=array(
 
@@ -64,10 +65,10 @@ class MuestraController extends Controller
 
             'titulo3'=>array(
                 'type'      => 'titulo',
-                'value'     => 'Técnica de estudio'
+                'value'     => 'Tipo de Muestra'
             ),
 
-            'tecnica'  => array(
+            /*'tecnica'  => array(
                 'type'      => 'relacion',
                 'value'     => (isset($muestra->tecnicaEstudio->id_tecnica_estudio))? $muestra->tecnicaEstudio->id_tecnica_estudio:'',
                 'id'        => 'id_tecnica_estudio',
@@ -91,6 +92,35 @@ class MuestraController extends Controller
 
                 ),
                 'relacion_campo'=>'id_tecnica_estudio'
+            ),*/
+
+
+            'tipo_muestra'=>array(
+
+                'type'      => 'select',
+                'value'     => (!empty($muestra->id_tipo_muestra))? $estudiante->id_tipo_muestra:'',
+                'id'        => 'id_tipo_muestra',
+                'label'     => 'Tipo de Muestra',
+                'selecttype'=> 'selectadd',
+                'values_seting'=> $tipos,
+                'objkeys'   => array('id_tipo_muestra','descripcion_tipo_muestra'),
+                'options'   => $tipos,
+                'selectadd' => array(
+                    'btnadd'=>'Registrar Tipo de Muestra',
+                    'btnlabel'=>'Registrar Tipo de Muestra',
+                    'btnfinlavel'=>'Registrar Tipo de Muestra',
+                    'url'=> url('tipo-muestra/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Tipos de Muestra',
+                    'table_fields'=>array(
+                        'Descripción del Tipo de Muestra'
+                    ),
+                    'table_key'=>'descripcion_tipo_muestra',
+                    'table_obj'=>(isset($muestra->tipoMuestra))? $muestra->tipoMuestra->get() :null,
+                ),
+                'relacion_campo'=>'id_proyecto'
+
             ),
 
             'separador5'=>array('type'=>'separador'),
@@ -108,17 +138,6 @@ class MuestraController extends Controller
                 'id'    => 'codigo_muestra',
                 'label' => 'Codigo de la Muestra'
             ),
-            'tipo_muestra' => array(
-                'type'  => 'select',
-                'value' => (isset($muestra->tipo_muestra))? $muestra->tipo_muestra:'',
-                'id'    => 'tipo_muestra',
-                'label' => 'Tipo de Muestra',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1'=>'Tipo1',
-                    '2'=>'Tipo2'
-                )
-            ),
             'separador1'=>array('type'=>'separador'),
             'descripcion_muestra' => array(
                 'type'  => 'textarea',
@@ -127,6 +146,7 @@ class MuestraController extends Controller
                 'label' => 'Descripcion de la Muestra'
             ),
 
+            'separador01'=>array('type'=>'separador'),
 
             'fecha_recepcion' => array(
                 'type'  => 'date',
@@ -303,6 +323,7 @@ class MuestraController extends Controller
         $muestra = Muestra::find($request->field_id);
         $proyectos = Proyecto::where('estatus_proyecto','<>','Culminado')->get();
         $tecnicas = TecnicaEstudio::where('estatus','=',1)->get();
+        $tipos=TipoMuestra::where('estatus','=',1)->get();
 
 
         if ($request->typeform=='deleted') {
@@ -341,7 +362,7 @@ class MuestraController extends Controller
                 )
             );
 
-            $fields=$this->fieldsRegisterCall($muestra,$proyectos,$tecnicas);
+            $fields=$this->fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos);
 
             $modulo='Muestra';
         }

@@ -422,8 +422,8 @@
 									        	@if(isset($value['selectadd']))
 
 
-								        			<div class="col-md-8">
-										                <label class="col-md-3 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+								        			<div class="col-md-12">
+										                <label class="col-md-2 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 										                <div class="col-md-8" style="padding: 0px">
 										                    
 										                    <div class="col-md-7">

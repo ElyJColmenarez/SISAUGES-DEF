@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS PROYECTO
 (
 	id_proyecto serial,
 	nombre_proyecto varchar(30) not null,
-	status_proyecto estatus not null,
+	estatus_proyecto estatus not null,
 	permiso_proyecto PERMISOS not null,
 	id_sector_pr integer,
 	fecha_inicio date,
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS MUESTRA
   fecha_analisis date,
 	id_tipo_muestra int,
   estatus boolean,
-  CONSTRAINT pk_muestra PRIMARY KEY (id_muestra),
+  CONSTRAINT pk_tipo_muestra PRIMARY KEY (id_muestra),
 	CONSTRAINT fk_tipo_muestra
 		FOREIGN KEY (id_tipo_muestra) references tipo_muestra(id_tipo_muestra)
 );
@@ -259,6 +259,17 @@ CREATE TABLE IF NOT EXISTS MUESTRA_PROYECTO
 
 --drop table muestra_proyecto;
 
+CREATE TABLE IF NOT EXISTS TECNICA_ESTUDIO
+(
+	id_tecnica_estudio serial,
+	descripcion_tecnica_estudio varchar(30),
+	estatus boolean,
+	constraint pk_tecnica_estudio
+	primary key (id_tecnica_estudio)
+);
+
+--drop table tecnica_estudio
+
 CREATE TABLE IF NOT EXISTS ARCHIVO
 (
   id_archivo serial,
@@ -272,22 +283,12 @@ CREATE TABLE IF NOT EXISTS ARCHIVO
     primary key (id_archivo),
   constraint fk_muestra
     foreign key (id_muestra) references MUESTRA(id_muestra),
-  CONSTRAINT fk_tecnica_estucio
+  CONSTRAINT fk_tecnica_estudio
     FOREIGN KEY (id_tecnica_estudio) REFERENCES TECNICA_ESTUDIO(id_tecnica_estudio)
 );
 
 --drop table archivo;
 
-CREATE TABLE IF NOT EXISTS TECNICA_ESTUDIO
-(
-	id_tecnica_estudio serial,
-	descripcion_tecnica_estudio varchar(30),
-	estatus boolean,
-	constraint pk_tecnica_estudio
-	primary key (id_tecnica_estudio)
-);
-
---drop table tecnica_estudio
 
 
 

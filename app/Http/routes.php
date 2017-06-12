@@ -78,6 +78,18 @@ Route::group(['middleware'=>'admin'], function(){
     });
 
 
+    Route::group(['prefix'=>'tipo-muestra'], function(){
+
+        Route::match(array('get','post'),'listar',['uses'=>'TipoMuestraController@index', 'as'=>'listar']);
+        Route::post('registerform',['uses'=>'TipoMuestraController@renderForm', 'as'=>'registerform']);
+        Route::match(array('get','post'),'buscar',['uses'=>'TipoMuestraController@renderForm', 'as'=>'buscar']);
+        Route::match(array('get','post'),'crear',['uses'=>'TipoMuestraController@ajaxRegularStore', 'as'=>'crear']);
+        Route::match(array('get','post'),'editar/{id}',['uses'=>'TipoMuestraController@ajaxRegularUpdate', 'as'=>'editar']);
+        Route::post('eliminar/{id}',['uses'=>'TipoMuestraController@ajaxRegularDestroy', 'as'=>'eliminar']);
+    });
+
+
+
 });
 
 Route::group(['middleware'=>'op'],function(){
@@ -153,6 +165,18 @@ Route::group(['middleware'=>'op'],function(){
         Route::match(array('get','post'),'editar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularUpdate', 'as'=>'editar']);
         Route::post('eliminar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularDestroy', 'as'=>'eliminar']);
     });
+
+
+    Route::group(['prefix'=>'tipo-muestra'], function(){
+
+        Route::match(array('get','post'),'listar',['uses'=>'TipoMuestraController@index', 'as'=>'listar']);
+        Route::post('registerform',['uses'=>'TipoMuestraController@renderForm', 'as'=>'registerform']);
+        Route::match(array('get','post'),'buscar',['uses'=>'TipoMuestraController@renderForm', 'as'=>'buscar']);
+        Route::match(array('get','post'),'crear',['uses'=>'TipoMuestraController@ajaxRegularStore', 'as'=>'crear']);
+        Route::match(array('get','post'),'editar/{id}',['uses'=>'TipoMuestraController@ajaxRegularUpdate', 'as'=>'editar']);
+        Route::post('eliminar/{id}',['uses'=>'TipoMuestraController@ajaxRegularDestroy', 'as'=>'eliminar']);
+    });
+
 
 
     Route::group(['prefix'=>'proyecto'], function(){

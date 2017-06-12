@@ -73,6 +73,13 @@
                             </a>
                         </li>
 
+                        <li class="">
+                            <a href="{{url('tipo-muestra/listar')}}">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <span>Tipo de Muestra</span>
+                            </a>
+                        </li>
+
                         <li class="nav-parent">
                             <a href="#">
                                 <i class="fa fa-group " aria-hidden="true"></i>
