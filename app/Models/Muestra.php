@@ -11,11 +11,10 @@ class Muestra extends Model
     protected $primaryKey="id_muestra";
     protected $fillable = [ 'codigo_muestra',
                             'nombre_original_muestra',
-                            'tipo_muestra',
                             'descripcion_muestra',
                             'fecha_recepcion',
                             'estatus'];
-    protected $guarded = ['id_muestra','id_usuario'];
+    protected $guarded = ['id_muestra','id_usuario','id_tipo_muestra'];
 
     public function usuario()
     {
@@ -32,12 +31,9 @@ class Muestra extends Model
         return $this->belongsToMany(Proyecto::class,'muestra_proyecto','id_muestra','id_proyecto');
     }
 
-    public function tecnicaEstudio()
+    public function tipoMuestra()
     {
-        return $this->belongsToMany(TecnicaEstudio::class,
-            'muestra_tecnica_estudio',
-            'id_muestra',
-            'id_tecnica_estudio');
+        return $this->belongsTo(TipoMuestra::class,'id_tipo_muestra');
     }
 
     public function scopeCodigoMuestra($query,$search){

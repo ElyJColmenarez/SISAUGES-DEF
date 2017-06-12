@@ -215,21 +215,35 @@ CREATE TABLE IF NOT EXISTS PREGUNTAS_SEGURIDAD
 
 --drop table preguntas_seguridad;
 
+CREATE TABLE IF NOT EXISTS TIPO_MUESTRA
+(
+	id_tipo_muestra serial NOT NULL,
+	descripcion_tipo_muestra varchar(200),
+	estatus boolean,
+	CONSTRAINT pk_muestra PRIMARY KEY (id_tipo_muestra)
+);
+
+--drop table tipo_muestra;
+
 
 CREATE TABLE IF NOT EXISTS MUESTRA
 (
   id_muestra serial NOT NULL,
   codigo_muestra varchar(200),
   nombre_original_muestra character varying(200),
-  tipo_muestra character varying(200),
   descripcion_muestra character varying(200),
   fecha_recepcion date,
   fecha_analisis date,
+	id_tipo_muestra int,
   estatus boolean,
-  CONSTRAINT pk_muestra PRIMARY KEY (id_muestra)
+  CONSTRAINT pk_muestra PRIMARY KEY (id_muestra),
+	CONSTRAINT fk_tipo_muestra
+		FOREIGN KEY (id_tipo_muestra) references tipo_muestra(id_tipo_muestra)
 );
 
 --drop table muestra
+
+
 
 
 CREATE TABLE IF NOT EXISTS MUESTRA_PROYECTO

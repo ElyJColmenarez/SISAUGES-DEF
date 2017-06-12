@@ -12,12 +12,9 @@ class TecnicaEstudio extends Model
     protected $fillable = ['descripcion_tecnica_estudio','estatus'];
     protected $guarded = ['id_tecnica_estudio'];
 
-    public function muestra()
+    public function archivo()
     {
-        return $this->belongsToMany(Muestra::class,
-            'muestra_tecnica_estudio',
-            'id_tecnica_estudio',
-            'id_muestra');
+        return $this->hasMany(Archivo::class,'id_tecnica_estudio');
     }
 
     public function scopeDescripcionTecnicaE($query,$search)
