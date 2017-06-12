@@ -90,7 +90,7 @@
 							        	@if( $value['type']=='text' || $value['type']=='password' || $value['type']=='email')
 
 							        		<div class="col-md-6">
-								                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
+								                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 								                <div class="col-md-8">
 								                    <input type="{!! $value['type'] !!}" class="form-control" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 								                </div>
@@ -113,17 +113,6 @@
 								        @elseif( $value['type']=='titulo' )
 
 								        	<div class="col-md-12 formsptitels"><h2>{{ $value['value'] }}</h2></div>
-
-
-								        @elseif( $value['type']=='label' )
-
-								        	<div class="col-md-6">
-								                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
-								                	
-							                	<label class="col-md-8 control-label" style="text-align: left; font-weight: bold;">{!! $value['value'] !!}</label>
-
-							                    <input type="hidden" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
-								            </div>
 
 
 								        @elseif( $value['type']=='relacion' )
@@ -336,7 +325,7 @@
 													        								echo "<td>".$muestra->fecha_analisis."</td>";
 													        								echo '<td>
 													        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
-													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-existfile="'.$muestra->id_archivo.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
+													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-existfile="'.$mkey.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
 													        								</td>';
 													        							echo "</tr>";
 										        									}
@@ -369,7 +358,7 @@
 
 
 								        	<div class="col-md-6">
-												<label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
+												<label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 												<div class="col-md-8">
 													<div class="input-group">
 														<span class="input-group-addon">
@@ -385,7 +374,7 @@
 							        		@if(isset($value['extrafields']))
 
 							        			<div class="col-md-6">
-									                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
+									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 									                <div class="col-md-8" style="padding: 0px">
 									                    
 									                    <div class="col-md-4">
@@ -441,7 +430,7 @@
 										                    
 										                        <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 
-										                        	<option value="">Seleccione...</option>
+										                        	<option value=" ">Seleccione...</option>
 										                        
 											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
 
@@ -470,7 +459,7 @@
 										        @else
 
 										        	<div class="col-md-6">
-										                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
+										                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 										                <div class="col-md-8">
 										                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 										                        
@@ -492,13 +481,13 @@
 
 
 							        			<div class="col-md-6">
-									                <label class="col-md-4 control-label"  @if (isset($value['validaciones'])) id="validate{!! $value['id'] !!}"  @endif for="{!! $key !!}">{!! $value['label'] !!}  @if (isset($value['validaciones'])) <span class="obligatorio">(*)</span>  @endif </label>
+									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
 									                <div class="col-md-8">
 									                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
 									                            
 								                        	@foreach( $value['options'] as $key2 => $value2 )
 
-								                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
+								                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2  && strlen($value['value'])==strlen($key2) )? 'selected' : '' }}> {!! $value2 !!} </option>
 
 								                        	@endforeach
 

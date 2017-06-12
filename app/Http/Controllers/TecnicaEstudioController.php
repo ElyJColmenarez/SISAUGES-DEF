@@ -24,22 +24,6 @@ class TecnicaEstudioController extends Controller
                 'value' => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->descripcion_tecnica_estudio,
                 'id'    => 'descripcion_tecnica_estudio',
                 'label' => 'Nombre '
-            ),
-
-
-            'estatus' => array(
-                'type'      => 'select',
-                'value'     => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->estatus,
-                'id'        => 'estatus',
-                'validaciones'=>array(
-                    'obligatorio'
-                ),
-                'label'     => 'estatus',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1'=>'Activo',
-                    '0'=>'Inactivo'
-                )
             )
         );
 
@@ -121,6 +105,7 @@ class TecnicaEstudioController extends Controller
 
         if ($request->typeform=='deleted') {
             $fields=false;
+            $modulo='Tecnica de Estudio';
         }else{
 
 
@@ -173,6 +158,8 @@ class TecnicaEstudioController extends Controller
 
         $tecnicasEstudio=new TecnicaEstudio($request->all());
 
+        $tecnicasEstudio->estatus=1;
+
         $aux=$request->all();
 
         $cont=0;
@@ -210,6 +197,7 @@ class TecnicaEstudioController extends Controller
 
         $tecnicasEstudio=TecnicaEstudio::find($id);
 
+        $tecnicasEstudio->estatus=1;
 
         $aux=$request->all();
 
@@ -229,7 +217,7 @@ class TecnicaEstudioController extends Controller
         }else{
 
             $tecnicasEstudio->descripcion_tecnica_estudio=$request->descripcion_tecnica_estudio;
-            $tecnicasEstudio->estatus=$request->estatus;
+            
 
             $val=$tecnicasEstudio->save();
         }

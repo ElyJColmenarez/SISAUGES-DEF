@@ -65,17 +65,6 @@ class TutorController extends Controller
                     'solonumero',
                     'obligatorio' )),
 
-            'estatus' => array(
-                'type'      => 'select',
-                'value'     => (!empty($tutor->estatus))? $tutor->estatus:'',
-                'id'        => 'estatus',
-                'label'     => 'estatus',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1' =>'Activo',
-                    '0'=>'Inactivo'
-                )
-            ),
 
             'separador1'=>array('type'=>'separador'),
 
@@ -90,14 +79,14 @@ class TutorController extends Controller
                 'options'   => $instituciones[1],
                 'related_select' => 'id_departamento',
                 'selectadd' => array(
-                    'btnlabel'=>'Agegar Institución',
+                    'btnlabel'=>'Registrar Institución',
                     'btnfinlavel'=>'Registrar Institución',
                     'url'=> url('institucion/registerform')
                 )
 
             ),
 
-            'separador1'=>array('type'=>'separador'),
+            'separador2'=>array('type'=>'separador'),
 
             'departamento' => array(
 
@@ -109,7 +98,7 @@ class TutorController extends Controller
                 'objkeys'   => array('id_departamento','descripcion_departamento'),
                 'options'   => $departamentos[1],
                 'selectadd' => array(
-                    'btnlabel'=>'Agegar Departamento',
+                    'btnlabel'=>'Registrar Departamento',
                     'btnfinlavel'=>'Registrar Departamento',
                     'url'=> url('departamento/registerform')
                 )
@@ -204,8 +193,8 @@ class TutorController extends Controller
                 'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
+                    '1' =>'Activo',
+                    '0'=>'Inactivo'
                 )
             )
         );
@@ -235,9 +224,6 @@ class TutorController extends Controller
             'carpeta'           => 'tutor'
 
         );
-
-
-
 
 
         return view('layouts.index',compact('data','action','fields','request'));
@@ -283,6 +269,20 @@ class TutorController extends Controller
         if ($request->typeform == 'delete')
         {
             $fields = false;
+            $modulo='Tutor';
+
+            $hiddenfields = array(
+                'field_id'=>array(
+                    'type'  => 'hidden',
+                    'value' => $request->field_id,
+                    'id'    => 'field_id',
+                ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('tutor/registerform'),
+                    'id'    => 'extra_url',
+                )
+            );
         }
         else
         {
@@ -291,6 +291,11 @@ class TutorController extends Controller
                     'type'  => 'hidden',
                     'value' => $request->field_id,
                     'id'    => 'field_id',
+                ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('tutor/registerform'),
+                    'id'    => 'extra_url',
                 )
             );
 
@@ -338,14 +343,14 @@ class TutorController extends Controller
             $persona->apellido  = $request->apellido;
             $persona->email     = $request->email;
             $persona->telefono  = $request->telefono;
-            $persona->estatus    = $request->estatus;
+            $persona->estatus    = 1;
             $persona->save();
 
             $tutor = new Tutor();
 
             $tutor->id_departamento     = $request->departamento;
             $tutor->cedula_persona      = $request->cedula;
-            $tutor->estatus              = $request->estatus;
+            $tutor->estatus              = 1;
             $val = $tutor->save();
 
 
@@ -356,7 +361,7 @@ class TutorController extends Controller
 
             $tutor->id_departamento     = $request->departamento;
             $tutor->cedula_persona      = $request->cedula;
-            $tutor->estatus              = $request->estatus;
+            $tutor->estatus              = 1;
             $val = $tutor->save();
         }
 
@@ -384,7 +389,7 @@ class TutorController extends Controller
         $persona->apellido  = $request->apellido;
         $persona->email     = $request->email;
         $persona->telefono  = $request->telefono;
-        $persona->estatus    = $request->estatus;
+        $persona->estatus    = 1;
         $persona->save();
 
 
