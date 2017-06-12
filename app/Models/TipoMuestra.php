@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class TipoMuestra extends Model
 {
     public $timestamps = false;
-    protected $table = 'tecnica_estudio';
-    protected $primaryKey = 'id_tecnica_estudio';
-    protected $fillable = ['descripcion_tecnica_estudio','estatus'];
-    protected $guarded = ['id_tecnica_estudio'];
+    protected $table = 'tipo_muestra';
+    protected $primaryKey = 'id_tipo_muestra';
+    protected $fillable = ['descripcion_tipo_muestra','estatus'];
+    protected $guarded = ['id_tipo_muestra'];
 
     public function muestra()
     {
-        return $this->belongsTo(Muestra::class,'muestra_tipo_muestra');
+        return $this->hasMany(Muestra::class,'id_tipo_muestra');
     }
 
     public function scopeDescripcionTecnicaE($query,$search)
     {
-        return $query->where('descripcion_tecnica_estudio', 'LIKE', '%'.$search.'%');
+        return $query->where('descripcion_tipo_muestra', 'LIKE', '%'.$search.'%');
     }
 
     public function scopeStatusTecnicaE($query,$search){
