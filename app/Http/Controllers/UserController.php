@@ -95,9 +95,9 @@ class UserController extends Controller
                     'id'        => 'estatus',
                     'label'     => 'estatus',
                     'options'   => array(
-                                    ''=>'Seleccione...',
-                                    'true' =>'Activo',
-                                    'false'=>'Inactivo'
+                        ''=>'Seleccione...',
+                        '1' =>'Activo',
+                        '0'=>'Inactivo'
                     )
                 )
             );
@@ -177,8 +177,8 @@ class UserController extends Controller
                 'label'     => 'estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
+                    '1' =>'Activo',
+                    '0'=>'Inactivo'
                 )
             )
         );
@@ -232,12 +232,15 @@ class UserController extends Controller
             $persona = Persona::buscarpersona($usuario->cedula_persona)->get();
             $persona = Persona::find($persona[0]->id_persona);
         }else{
-             $persona = null;
+
+            $persona = Persona::find($request->field_id);
+
         }
 
         if ($request->typeform == 'delete')
         {
             $fields = false;
+            $modulo='Usuario';
         }
         else
         {

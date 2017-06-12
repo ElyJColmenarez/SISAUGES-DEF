@@ -24,7 +24,7 @@ class EstudianteController extends Controller
             ),
             'separador1'=>array('type'=>'separador'),
             'cedula'         => array(
-                'type'          => (empty($persona))? 'text' : 'label',
+                'type'          => 'text',
                 'value'         => (empty($persona))? '' : $persona->cedula,
                 'id'            => 'cedula',
                 'label'         => 'Cédula',
@@ -93,8 +93,8 @@ class EstudianteController extends Controller
                 'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
-                    '1' =>'Activo',
-                    '0'=>'Inactivo'
+                    'true' =>'Activo',
+                    'false'=>'Inactivo'
                 )
             ),
 
@@ -118,7 +118,16 @@ class EstudianteController extends Controller
                     'btnlabel'=>'Registrar Proyecto',
                     'btnfinlavel'=>'Registrar Proyecto',
                     'url'=> url('proyecto/registerform')
-                )
+                ),
+                'relation_table'=>array(
+                    'title'=>'Proyectos involucrados',
+                    'table_fields'=>array(
+                        'Nombre del Proyecto'
+                    ),
+                    'table_key'=>'nombre_proyecto',
+                    'table_obj'=>(isset($institucion->proyecto))? $institucion->proyecto()->get() :null,
+                ),
+                'relacion_campo'=>'id_proyecto'
 
             ),
             'separador2'=>array('type'=>'separador')
@@ -268,12 +277,11 @@ class EstudianteController extends Controller
 
         $estudiante = Estudiante::find($request->field_id);
 
-
         if (isset($estudiante)){
 
             $persona = Persona::buscarpersona($estudiante->cedula_persona)->first();
 
-            //$persona = Persona::find($persona[0]->id_persona);
+            $persona = Persona::find($persona[0]->id_persona);
         }else{
 
             $persona = Persona::find($request->field_id);
@@ -484,7 +492,7 @@ class EstudianteController extends Controller
 
     public function ajaxRegularDestroy(Request $request,$id){
 
-        $val=$this->destroy($id);
+        $val=$this->destroy($request,$id);
 
         $retorno=array();
 

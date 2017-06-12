@@ -10,7 +10,8 @@ jQuery(document).ready(function() {
             expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             
             if ( !expr.test(inp) ){
-                console.log(inp);
+                
+                inp.val('');
                 return inp;
             }else{
                 return inp;
@@ -134,7 +135,7 @@ jQuery(document).ready(function() {
 
             if ($(this).data('obligatorio') || $(this).val().length>1) {
                 
-                if (error>0 || inp.val().trim() === '') {
+                if (error>0 || inp.val().trim() === '' || inp.val().trim() === '#') {
                     retorno[pos]=$(this);
                 }
 
@@ -240,8 +241,6 @@ jQuery(document).ready(function() {
 
         var form=$('#principalform');
 
-
-
         var strcadena=''+$('#lastmodalstep'+num+' form').attr('action')+'';
 
 
@@ -338,7 +337,7 @@ jQuery(document).ready(function() {
 
         jQuery.each(principalsets,function( i, val ){
 
-            $('#principalmodalvalues').append('<input type="hidden" name="'+val.name+'" value="'+val.value+'">');
+            $('#principalmodalvalues').append('<input type="hidden"  id="'+val.name+'" name="'+val.name+'" value="'+val.value+'">');
 
         });
 
@@ -418,102 +417,83 @@ jQuery(document).ready(function() {
 
         var form=new FormData($('#modalForm .modalmicroform')[0]);
 
-        var validacion=validacionGeneral('#modalForm .modalmicroform');
+        var promise=$.ajax({
+
+            url:$('#modalForm .modalmicroform').attr('action'),
+            cache: false,
+            data:form,
+            type:"POST",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            beforeSend: function(){
+            	$('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+            		$('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
+            	});
+            },
+            success:    function(data){
+
+            	if (data.resultado=='success') {
+
+            		$('#modalForm').addClass('modal-block-success');
+
+            		$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
+            		$('#modalForm .msn-alerta-header').text('Solicitud completa!');
+            		$('#modalForm .msn-alerta-body').text(data.mensaje);
+            		$('#modalForm .truebtndissmis > button').attr('class','btn btn-success modal-dismiss mld-dismiss-fin');
 
 
-        if (validacion.length==0) {
+            	}else{
 
-            var promise=$.ajax({
+            		if (data.resultado=='warning'){
 
-                url:$('#modalForm .modalmicroform').attr('action'),
-                cache: false,
-                data:form,
-                type:"POST",
-                dataType: "json",
-                processData: false,
-                contentType: false,
-                beforeSend: function(){
-                	$('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
-                		$('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
-                	});
-                },
-                success:    function(data){
+            			$('#modalForm').addClass('modal-block-warning');
 
-                	if (data.resultado=='success') {
+            			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
+	            		$('#modalForm .msn-alerta-header').text('Alerta!');
+	            		$('#modalForm .msn-alerta-body').text(data.mensaje);
 
-                		$('#modalForm').addClass('modal-block-success');
+	            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-warning regresar');
 
-                		$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
-                		$('#modalForm .msn-alerta-header').text('Solicitud completa!');
-                		$('#modalForm .msn-alerta-body').text(data.mensaje);
-                		$('#modalForm .truebtndissmis > button').attr('class','btn btn-success modal-dismiss mld-dismiss-fin');
+            		}else{
 
+            			$('#modalForm').addClass('modal-block-danger');
 
-                	}else{
+            			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+	            		$('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+	            		$('#modalForm .msn-alerta-body').text(data.mensaje);
 
-                		if (data.resultado=='warning'){
+	            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
-                			$('#modalForm').addClass('modal-block-warning');
+            		}
+            	}
 
-                			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
-    	            		$('#modalForm .msn-alerta-header').text('Alerta!');
-    	            		$('#modalForm .msn-alerta-body').text(data.mensaje);
+            	setTimeout(function(){
 
-    	            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-warning regresar');
+	            	$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+	            		$('#modalForm .result-mdl').slideDown('fast','swing');
+	            	});
 
-                		}else{
+	            },1200);
+            	
+            },
+            error:      function(){
 
-                			$('#modalForm').addClass('modal-block-danger');
+            	$('#modalForm').addClass('modal-block-danger');
 
-                			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-    	            		$('#modalForm .msn-alerta-header').text('Ocurrio un error!');
-    	            		$('#modalForm .msn-alerta-body').text(data.mensaje);
+    			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+        		$('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+        		$('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
 
-    	            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+        		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
-                		}
-                	}
+        		$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+            		$('#modalForm .result-mdl').slideDown('fast','swing');
+            	});
 
-                	setTimeout(function(){
+            }
 
-    	            	$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-    	            		$('#modalForm .result-mdl').slideDown('fast','swing');
-    	            	});
-
-    	            },1200);
-                	
-                },
-                error:      function(){
-
-                	$('#modalForm').addClass('modal-block-danger');
-
-        			$('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-            		$('#modalForm .msn-alerta-header').text('Ocurrio un error!');
-            		$('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
-
-            		$('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
-
-            		$('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-                		$('#modalForm .result-mdl').slideDown('fast','swing');
-                	});
-
-                }
-
-            });
-
-        }else{
-            $('#modalForm').addClass('modal-block-danger');
-
-            $('#modalForm > section > form > div.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-            $('.msn-alerta-header').text('Ocurrio un error!');
-            $('.msn-alerta-body').text('La solicitud no se pudo completar, complete todos los campos obligatorios...');
-
-            $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
-
-            $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
-                $('#modalForm .result-mdl').slideDown('fast','swing');
-            });
-        }  
+        });
 
         //Table data update
 
@@ -530,104 +510,86 @@ jQuery(document).ready(function() {
 
         var form=new FormData($('#modalForm .modalmicroform')[0]);
 
-        var validacion=validacionGeneral('#modalForm .modalmicroform');
+        var promise=$.ajax({
 
-        if (validacion.length==0) {
-
-            var promise=$.ajax({
-
-                url:$('#modalForm .modalmicroform').attr('action'),
-                cache: false,
-                data:form,
-                type:"POST",
-                dataType: "json",
-                processData: false,
-                contentType: false,
-                beforeSend: function(){
-                    $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
-                        $('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
-                    });
-                },
-                success:    function(data){
+            url:$('#modalForm .modalmicroform').attr('action'),
+            cache: false,
+            data:form,
+            type:"POST",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            beforeSend: function(){
+                $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+                    $('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
+                });
+            },
+            success:    function(data){
 
 
-                    if (data.resultado=='success') {
+                if (data.resultado=='success') {
 
-                        $('#modalForm').addClass('modal-block-success');
+                    $('#modalForm').addClass('modal-block-success');
 
-                        $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
-                        $('#modalForm .msn-alerta-header').text('Solicitud completa!');
+                    $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-check');
+                    $('#modalForm .msn-alerta-header').text('Solicitud completa!');
+                    $('#modalForm .msn-alerta-body').text(data.mensaje);
+                    $('#modalForm .truebtndissmis > button').attr('class','btn btn-success dismisslastmodal');
+
+                    $('#principalmodalvalues input[name='+data.keystone+']').val(data.obj);
+
+                }else{
+
+                    if (data.resultado=='warning'){
+
+                        $('#modalForm').addClass('modal-block-warning');
+
+                        $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
+                        $('#modalForm .msn-alerta-header').text('Alerta!');
                         $('#modalForm .msn-alerta-body').text(data.mensaje);
-                        $('#modalForm .truebtndissmis > button').attr('class','btn btn-success dismisslastmodal');
 
-                        $('#principalmodalvalues input[name='+data.keystone+']').val(data.obj);
+                        $('#modalForm .mld-dismiss-fin').attr('class','btn btn-warning regresar');
 
                     }else{
 
-                        if (data.resultado=='warning'){
+                        $('#modalForm').addClass('modal-block-danger');
 
-                            $('#modalForm').addClass('modal-block-warning');
+                        $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+                        $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+                        $('#modalForm .msn-alerta-body').text(data.mensaje);
 
-                            $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-warning');
-                            $('#modalForm .msn-alerta-header').text('Alerta!');
-                            $('#modalForm .msn-alerta-body').text(data.mensaje);
+                        $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
-                            $('#modalForm .mld-dismiss-fin').attr('class','btn btn-warning regresar');
-
-                        }else{
-
-                            $('#modalForm').addClass('modal-block-danger');
-
-                            $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-                            $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
-                            $('#modalForm .msn-alerta-body').text(data.mensaje);
-
-                            $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
-
-                        }
                     }
+                }
 
-                    setTimeout(function(){
-
-                        $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
-                            $('#modalForm .result-mdl').slideDown('fast','swing');
-                        });
-
-                    },1200);
-                    
-                },
-                error:      function(){
-
-
-                    $('#modalForm').addClass('modal-block-danger');
-
-                    $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-                    $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
-                    $('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
-
-                    $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+                setTimeout(function(){
 
                     $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
                         $('#modalForm .result-mdl').slideDown('fast','swing');
                     });
 
-                }
+                },1200);
+                
+            },
+            error:      function(){
 
-            });
 
-        }else{
-            $('#modalForm').addClass('modal-block-danger');
+                $('#modalForm').addClass('modal-block-danger');
 
-            $('#modalForm > section > form > div.result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
-            $('.msn-alerta-header').text('Ocurrio un error!');
-            $('.msn-alerta-body').text('La solicitud no se pudo completar, complete todos los campos obligatorios...');
+                $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+                $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+                $('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
 
-            $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+                $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
 
-            $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
-                $('#modalForm .result-mdl').slideDown('fast','swing');
-            });
-        } 
+                $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                    $('#modalForm .result-mdl').slideDown('fast','swing');
+                });
+
+            }
+
+        });
 
         //Table data update
 
@@ -773,7 +735,6 @@ jQuery(document).ready(function() {
         var f = new Date();
 
         $('#modalForm .muestra-seccion table.newrecords tbody').empty();
-        $('#modalForm .muestra-seccion .borrados .agregadosmstrs').remove();
 
         for (var i = 0; i < $(this)[0].files.length; i++) {
 
@@ -820,19 +781,23 @@ jQuery(document).ready(function() {
 
         var obj=$(this);
 
-        if (obj.attr('data-trueid')) {
-
-            $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" class="agregadosmstrs" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
-        }
-
-
-        if (obj.attr('data-existfile')) {
-
-            $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados_existentes[]" value="'+$(this).attr('data-existfile')+'">');
-        }
-
         $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
             $(this).remove();
+
+            console.log($(this).attr('data-trueid'));
+
+            if (obj.attr('data-trueid')) {
+
+                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
+            }
+
+
+            if (obj.attr('data-existfile')) {
+
+                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados_existentes[]" value="'+$(this).attr('data-trueid')+'">');
+            }
+
+
         });
 
     });
@@ -862,10 +827,16 @@ jQuery(document).ready(function() {
         });
     });
 
+    $('.datepkr').datepicker({
+        format:'yyyy-mm-dd'
+    });
+
     $('body').on('click', '.datepkr', function() {
 
+        console.log('pase');
+
         $(this).datepicker({
-            format:'dd-mm-yyyy'
+            format:'yyyy-mm-dd'
         });
         $(this).datepicker('show');
     });

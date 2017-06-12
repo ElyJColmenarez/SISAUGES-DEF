@@ -43,20 +43,6 @@ class LaboratorioController extends Controller
                 'validaciones'=>array(
                         'obligatorio'
                     )
-            ),
-            'estatus' => array(
-                'type'      => 'select',               
-                'value'     => (empty($laboratorio))? '' : $laboratorio->estatus,
-                'id'        => 'estatus',
-                'label'     => 'estatus',
-                'validaciones'=>array(
-                        'obligatorio'
-                    ),
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1'=>'Activo',
-                    '0'=>'Inactivo'
-                )
             )
         );
 
@@ -167,6 +153,7 @@ class LaboratorioController extends Controller
 
         if ($request->typeform=='deleted') {
             $fields=false;
+            $modulo='Laboratorio';
         }else{
 
 
@@ -218,6 +205,8 @@ class LaboratorioController extends Controller
     public function store(Request $request){
 
         $Laboratorio=new Laboratorio($request->all());
+
+        $Laboratorio->estatus                       =1;
 
         $aux=$request->all();
 
@@ -276,7 +265,7 @@ class LaboratorioController extends Controller
             $Laboratorio->nombre_laboratorio           =$request->nombre_laboratorio;
             $Laboratorio->ubicacion_laboratorio        =$request->ubicacion_laboratorio;
             $Laboratorio->telefono_laboratorio         =$request->telefono_laboratorio;            
-            $Laboratorio->estatus                       =$request->estatus;
+            $Laboratorio->estatus                       =1;
 
             $val=$Laboratorio->save();
         }
@@ -299,9 +288,9 @@ class LaboratorioController extends Controller
 
     public function destroy($id){
         $Laboratorio=Laboratorio::find($id);
-        $Laboratorio->estatus='false';
+        $Laboratorio->estatus=false;
         $val=$Laboratorio->save();
-        return array('result'=>$val,'obj'=>$laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
+        return array('result'=>$val,'obj'=>$Laboratorio->id_laboratorio,'keystone'=>'id_laboratorio');
     }
 
 

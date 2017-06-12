@@ -166,13 +166,13 @@ class ProyectoController extends Controller
                 'type'  => 'date',
                 'value' => (isset($proyecto->fecha_inicio))? $proyecto->fecha_inicio:'',
                 'id'    => 'fecha_inicio',
-                'label' => 'Fecha de Recepción de la proyecto'
+                'label' => 'Fecha de Recepción del proyecto'
             ),
             'fecha_final' => array(
                 'type'  => 'date',
                 'value' => (isset($proyecto->fecha_final))? $proyecto->fecha_final:'',
                 'id'    => 'fecha_final',
-                'label' => 'Fecha de Culminacion de la proyecto'
+                'label' => 'Fecha de Recepción del proyecto'
             ),
             'permiso_proyecto' => array(
                 'type'      => 'select',
@@ -260,6 +260,8 @@ class ProyectoController extends Controller
 
         if ($request->typeform=='deleted') {
             $fields=false;
+            $modulo='Proyecto';
+            $hiddenfields=false;
         }else{
 
             $hiddenfields=array(
@@ -292,12 +294,12 @@ class ProyectoController extends Controller
 
             $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request));
             $modulo='Proyecto';
-            $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
-
+            
             
         }
 
-        
+        $htmlbody=View::make('layouts.regularform',compact('action','fields','hiddenfields','request','modulo'))->render();
+
 
         if ($htmlbody) {
             $retorno=array(
@@ -404,41 +406,26 @@ class ProyectoController extends Controller
             'fecha_inicio'=>'required|min:1|max:255',
             'fecha_final'=>'required|min:1|max:255',
             'permiso_proyecto'=>'required|min:1|max:255',
-            'institucion'=>'required|min:1|max:255'
-       
+            'institucion'=>'required|min:1|max:255',
+            'estudiante'=>'required|min:1|max:255'
 
         ]);
 
 
         if ($validator->passes()) {
 
-
-
             $val=$proyecto->save();
 
-            if (isset($request->deleteinid_institucion)) {
-                    
-                foreach ($request->deleteinid_institucion as $prokey => $provalue) {
-
-                    if ($proyecto->institucion()->find($provalue)) {
-
-                        $proyecto->institucion()->detach($provalue);
-                    }
-
-                }
-            }
+            $ins=Institucion::find($request->institucion);
+            $ins->proyecto->detach($val->id_proyecto);
+            $ins->proyecto->attach($val->id_proyecto);
+            $ins->save();
 
 
-            foreach ($request->addeninid_institucion as $prokey => $provalue) {
+            $est=Estudiante::find($request->estudiante);
 
-                if (!$proyecto->institucion()->find($provalue)) {
-
-                    $proyecto->institucion()->attach($provalue);
-
-                    $proyecto->save();
-                }
-
-            }
+            $est->id_proyecto=$val->id_proyecto;
+            $est->save();
 
 
         }else{
@@ -460,7 +447,7 @@ class ProyectoController extends Controller
 
         $proyecto=Proyecto::find($id);
 
-        $proyecto->estatus='Culminado';
+        $proyecto->estatus_proyecto='Culminado';
 
         $val=$proyecto->save();
 
@@ -528,7 +515,7 @@ class ProyectoController extends Controller
 
     public function ajaxRegularDestroy(Request $request,$id){
 
-        $val=$this->destroy($id);
+        $val=$this->destroy($request,$id);
 
         $retorno=array();
 

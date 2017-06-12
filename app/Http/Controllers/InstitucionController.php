@@ -192,6 +192,7 @@ class InstitucionController extends Controller
 
         if ($request->typeform=='deleted') {
             $fields=false;
+            $modulo='Institución';
         }else{
 
             $hiddenfields=array(
@@ -382,7 +383,7 @@ class InstitucionController extends Controller
 
     public function ajaxRegularDestroy(Request $request,$id){
 
-        $val=$this->destroy($id);
+        $val=$this->destroy($request,$id);
 
         $retorno=array();
 

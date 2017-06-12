@@ -5,6 +5,14 @@
 	display: none;
 }
 
+body > section > div > section > div > div > section > div.panel-body > div:nth-child(1) > div.col-md-9 > div > div > form > div > div > span.input-group-btn > button{
+	height: 33px!important;
+}
+
+body > section > div > section > div > div > section > div.panel-body > div:nth-child(1) > div.col-md-9 > div > div > form > div > div > span.input-group-addon.advanced-search-proyect{
+	height: 34px;
+}
+
 .tblwait{
 	display: none;
 }
@@ -220,12 +228,6 @@
       right: 0;
       top: 0;
       z-index: 99999999;
-}
-
-.obligatorio{
-	position: absolute;
-    top: 7px;
-    right: -7px;
 }
 
 .select2-drop-superindex{

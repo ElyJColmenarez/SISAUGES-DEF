@@ -21,28 +21,33 @@
                             <div class="row">
                                 
                                 <div>
-                                    {!!Form::open(['url'=>$action , 'method' => 'post' , 'class'=>'form-horizontal form-bordered formsimple'])!!}
 
-                                        <div class="col-md-6 col-md-offset-6">
-                                            <div class="input-group mb-md">
+                                    @if($data['carpeta']=='muestra')
 
-                                                <span class="input-group-addon advanced-search-proyect" data-show="0" data-formid="1">
-                                                    Busqueda avanzada
-                                                </span>
+                                        {!!Form::open(['url'=>$action , 'method' => 'post' , 'class'=>'form-horizontal form-bordered formsimple'])!!}
 
-                                                <?php $aux=$data['principal_search']; ?>
-                                                
-                                                <input type="text" name="{{$aux}}" class="form-control form1" value="@if(isset($request->$aux)){{ $request->$aux }}@endif">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-default start-search-proyect" type="submit">
-                                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                                    </button>
-                                                </span>
+                                            <div class="col-md-6 col-md-offset-6">
+                                                <div class="input-group mb-md">
 
+                                                    <span class="input-group-addon advanced-search-proyect" data-show="0" data-formid="1">
+                                                        Busqueda avanzada
+                                                    </span>
+
+                                                    <?php $aux=$data['principal_search']; ?>
+                                                    
+                                                    <input type="text" name="{{$aux}}" class="form-control form1" value="@if(isset($request->$aux)){{ $request->$aux }}@endif">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default start-search-proyect" type="submit">
+                                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                                        </button>
+                                                    </span>
+
+                                                </div>
                                             </div>
-                                        </div>
-                                        
-                                    {!! Form::close() !!}
+                                            
+                                        {!! Form::close() !!}
+
+                                    @endif
 
                                 </div>
 

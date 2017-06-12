@@ -58,20 +58,8 @@ class DepartamentoController extends Controller
                 'id'    => 'descripcion_departamento',
                 'label' => 'Nombre '
             ),
-            'estatus' => array(
-                'type'      => 'select',
-                'value'     => (empty($departamento))? '' : $departamento->estatus,
-                'id'        => 'estatus',
-                'validaciones'=>array(
-                    'obligatorio'
-                ),
-                'label'     => 'Estatus',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1'=>'Activo',
-                    '0'=>'Inactivo'
-                )
-            ),
+            'separador1'=>array('type'=>'separador'),
+            
             'id_institucion' => array(
                 'type'      => 'select',
                 'value'     => (isset($departamento->id_institucion))? $departamento->id_institucion:'',
@@ -177,6 +165,20 @@ class DepartamentoController extends Controller
 
         if ($request->typeform=='deleted') {
             $fields=false;
+            $modulo='Departamento';
+
+            $hiddenfields = array(
+                'field_id'=>array(
+                    'type'  => 'hidden',
+                    'value' => $request->field_id,
+                    'id'    => 'field_id',
+                ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('departamento/registerform'),
+                    'id'    => 'extra_url',
+                )
+            );
         }else{
 
             // $instituciones=Institucion::all()->toArray();
@@ -188,6 +190,11 @@ class DepartamentoController extends Controller
                     'type'  => 'hidden',
                     'value' => $request->field_id,
                     'id'    => 'field_id',
+                ),
+                'extra_url'=>array(
+                    'type'  => 'hidden',
+                    'value' =>  url('departamento/registerform'),
+                    'id'    => 'extra_url',
                 )
             );
 
@@ -229,7 +236,7 @@ class DepartamentoController extends Controller
 
         $departamento=new Departamento($request->all());
 
-       
+        $departamento->estatus=1;
 
         $aux=$request->all();
 
@@ -268,6 +275,7 @@ class DepartamentoController extends Controller
 
         $departamento=Departamento::find($id);
 
+        $departamento->estatus=1;
 
         $aux=$request->all();
 
@@ -288,7 +296,7 @@ class DepartamentoController extends Controller
 
             $departamento->descripcion_departamento=$request->descripcion_departamento;
             $departamento->id_institucion=$request->id_institucion;
-            $departamento->estatus=$request->estatus;
+            $departamento->estatus=1;
 
             $val=$departamento->save();
         }

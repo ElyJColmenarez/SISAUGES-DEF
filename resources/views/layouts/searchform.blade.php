@@ -129,7 +129,7 @@
 							                            
 						                        	@foreach( $value['options'] as $key2 => $value2 )
 
-						                        		<option value="{!! $key2 !!}" {{ ($value['value']==$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
+						                        		<option value="{!! $key2 !!}" {{ ($value['value']===$key2)? 'selected' : '' }}> {!! $value2 !!} </option>
 
 						                        	@endforeach
 

@@ -12,6 +12,7 @@ use SISAUGES\Http\Controllers\Controller;
 use SISAUGES\Models\Institucion;
 use SISAUGES\Models\Departamento;
 use SISAUGES\Models\Muestra;
+use SISAUGES\Models\TecnicaEstudio;
 use SISAUGES\Models\Proyecto;
 use SISAUGES\Models\Archivo;
 use Storage;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\View;
 class MuestraController extends Controller
 {
 
-     public function fieldsRegisterCall($muestra,$proyectos){
+     public function fieldsRegisterCall($muestra,$proyectos,$tecnicas){
 
         $fields=array(
 
@@ -61,10 +62,45 @@ class MuestraController extends Controller
 
             'separador4'=>array('type'=>'separador'),
 
+            'titulo3'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Técnica de estudio'
+            ),
+
+            'tecnica'  => array(
+                'type'      => 'relacion',
+                'value'     => (isset($muestra->tecnicaEstudio->id_tecnica_estudio))? $muestra->tecnicaEstudio->id_tecnica_estudio:'',
+                'id'        => 'id_tecnica_estudio',
+                'label'     => 'Técnica de estudio',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_tecnica_estudio','descripcion_tecnica_estudio'),
+                'options'   => $tecnicas,
+                'selectadd' => array(
+                    'btnadd'=>'Agregar técnica',
+                    'btnlabel'=>'Registrar técnica',
+                    'btnfinlavel'=>'Registrar técnica',
+                    'url'=> url('tecnica-estudio/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Técnicas Asociados a la Muestra',
+                    'table_fields'=>array(
+                        'Nombre de la técnica'
+                    ),
+                    'table_key'=>'descripcion_tecnica_estudio',
+                    'table_obj'=>(isset($muestra->tecnicaEstudio))? $muestra->tecnicaEstudio()->get() :null,
+
+                ),
+                'relacion_campo'=>'id_tecnica_estudio'
+            ),
+
+            'separador5'=>array('type'=>'separador'),
+
             'titulo2'=>array(
                 'type'      => 'titulo',
                 'value'     => 'Datos de la Muestra'
             ),
+
+            'separador7'=>array('type'=>'separador'),
 
             'codigo_muestra' => array(
                 'type'  => 'text',
@@ -90,6 +126,8 @@ class MuestraController extends Controller
                 'id'    => 'descripcion_muestra',
                 'label' => 'Descripcion de la Muestra'
             ),
+
+
             'fecha_recepcion' => array(
                 'type'  => 'date',
                 'value' => (isset($muestra->fecha_recepcion))? $muestra->fecha_recepcion:'',
@@ -100,7 +138,7 @@ class MuestraController extends Controller
                 'type'      => 'select',
                 'value'     => (isset($muestra->estatus))? $muestra->estatus:'',
                 'id'        => 'estatus',
-                'label'     => 'estatus',
+                'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
@@ -116,6 +154,7 @@ class MuestraController extends Controller
 
             )
         );
+
 
         return $fields;
      }
@@ -157,7 +196,7 @@ class MuestraController extends Controller
                 'type'      => 'select',
                 'value'     => (isset($request->estatus))? $request->estatus:'',
                 'id'        => 'estatus',
-                'label'     => 'estatus',
+                'label'     => 'Estatus',
                 'options'   => array(
                     ''=>'Seleccione...',
                     '1'=>'Activo',
@@ -263,6 +302,8 @@ class MuestraController extends Controller
 
         $muestra = Muestra::find($request->field_id);
         $proyectos = Proyecto::where('estatus_proyecto','<>','Culminado')->get();
+        $tecnicas = TecnicaEstudio::where('estatus','=',1)->get();
+
 
         if ($request->typeform=='deleted') {
             $fields=false;
@@ -279,7 +320,7 @@ class MuestraController extends Controller
                 'extra_url'=>array(
                     'type'  => 'hidden',
                     'value' =>  url('muestra/registerform'),
-                    'id'    => 'field_id',
+                    'id'    => 'extra_url',
                 )
             );
 
@@ -296,11 +337,11 @@ class MuestraController extends Controller
                 'extra_url'=>array(
                     'type'  => 'hidden',
                     'value' =>  url('muestra/registerform'),
-                    'id'    => 'field_id',
+                    'id'    => 'extra_url',
                 )
             );
 
-            $fields=$this->fieldsRegisterCall($muestra,$proyectos);
+            $fields=$this->fieldsRegisterCall($muestra,$proyectos,$tecnicas);
 
             $modulo='Muestra';
         }
@@ -385,53 +426,30 @@ class MuestraController extends Controller
         //Agregar registros nuevos
 
         if (count($request->file('imagenes'))>1) {
-
-            $borra=$request->borrados;
             
             foreach ($request->file('imagenes') as $key => $value) {
 
-                $contador=0;
 
-                if (count($borra)>0) {
-                    
-                    foreach ($borra as $borrakey => $borravalue) {
+                if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
+
+                    $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
+
+                    $file=new Archivo();
+
+                    $file->ruta_img_muestra="storage/".$request->proyecto."/";
+                    $file->fecha_analisis=date('d-m-Y');
+                    $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
+                    $file->nombre_temporal_muestra=$img;
+                    $file->id_muestra=$muestra->id_muestra;
+                    $file->save();
+
+                    if (strpos($value->getClientMimeType(),'image')!==false) {
                         
-                        if ($key==$borravalue) {
-
-                            unset($borra[$borrakey]);
-                            array_values($borra);
-                            $contador++;
-
-                            break 1;
-                        }
-
+                        $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
                     }
 
-                }
-
-
-                if ($contador==0) {
-                    if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
-
-                        $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
-
-                        $file=new Archivo();
-
-                        $file->ruta_img_muestra="storage/".$request->proyecto."/";
-                        $file->fecha_analisis=date('d-m-Y');
-                        $file->nombre_original_muestra=$request->imagenes[$key]->getClientOriginalName();
-                        $file->nombre_temporal_muestra=$img;
-                        $file->id_muestra=$muestra->id_muestra;
-                        $file->save();
-
-                        if (strpos($value->getClientMimeType(),'image')!==false) {
-                            
-                            $this->generarImagenVisible($file->ruta_img_muestra,$file->nombre_temporal_muestra,$value->getClientOriginalExtension());
-                        }
-
-                    }else{
-                        $retorno[]=$value;
-                    }
+                }else{
+                    $retorno[]=$value;
                 }
 
                  
@@ -485,6 +503,18 @@ class MuestraController extends Controller
                 if (!$muestra->proyecto()->find($provalue)) {
 
                     $muestra->proyecto()->attach($provalue);
+
+                    $muestra->save();
+                }
+
+            }
+
+
+            foreach ($request->addeninid_tecnica_estudio as $prokey => $provalue) {
+
+                if (!$muestra->tecnicaEstudio()->find($provalue)) {
+
+                    $muestra->tecnicaEstudio()->attach($provalue);
 
                     $muestra->save();
                 }
@@ -561,6 +591,19 @@ class MuestraController extends Controller
                 }
 
 
+                if (isset($request->deleteinid_tecnica_estudio)) {
+                    
+                    foreach ($request->deleteinid_tecnica_estudio as $prokey => $provalue) {
+
+                        if ($muestra->tecnicaEstudio()->find($provalue)) {
+
+                            $muestra->tecnicaEstudio()->detach($provalue);
+                        }
+
+                    }
+                }
+
+
                 foreach ($request->addeninid_proyecto as $prokey => $provalue) {
 
                     if (!$muestra->proyecto()->find($provalue)) {
@@ -569,6 +612,19 @@ class MuestraController extends Controller
                     }
 
                 }
+
+
+
+                foreach ($request->addeninid_tecnica_estudio as $prokey => $provalue) {
+
+                if (!$muestra->tecnicaEstudio()->find($provalue)) {
+
+                    $muestra->tecnicaEstudio()->attach($provalue);
+
+                    $muestra->save();
+                }
+
+            }
    
 
                 $procesados=$this->imagenVal($request,$muestra);
