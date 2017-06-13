@@ -354,26 +354,40 @@
 										        							
 										        								foreach ($archi as $mkey => $muestra) {
 										        								
-										        									$ruta=base_path() .'/public/'.$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
+										        									$ruta=$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
 
-										        									$extension=explode('.', $muestra->nombre_temporal_muestra);
-
-										        									$rutaweb=$muestra->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $muestra->nombre_temporal_muestra);
+										    
 
 										        									if (file_exists($ruta)) {
 										        										$finfo = new finfo(FILEINFO_MIME);
 
 												        								$type = explode(';', $finfo->file($ruta));
 
+
+												        								if (explode('/', $type[0])[0]=='image'){
+
+												        									$extension=explode('.', $muestra->nombre_temporal_muestra);
+
+										        											$rutaweb=$muestra->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $muestra->nombre_temporal_muestra);
+
+											        										$putimg=url($rutaweb);
+											        										
+											        									}else{ 
+
+											        										$rutaweb=$ruta;
+
+											        										$putimg=asset('assets/images/nodisponible.svg'); 
+											        									}
+
 												        								echo "<tr id='tableregd".$mkey."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
-												        									echo    "<td><div class='tbl-imgcontainer'><img src='".url($rutaweb)."'></div></td>";
-													        								echo "<td>".$muestra->nombre_temporal_muestra."</td>";
+												        									echo    "<td><div class='tbl-imgcontainer'><img src='".$putimg."'></div></td>";
+													        								echo "<td>".$muestra->nombre_original_muestra."</td>";
 													        								echo "<td>".$type[0]."</td>";
 													        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
 													        								echo "<td>".$muestra->tecnicaEstudio()->first()->descripcion_tecnica_estudio."</td>";
 													        								echo "<td>".$muestra->fecha_analisis."</td>";
 													        								echo '<td>
-													        									<a href="#" class="btn btn-primary verimg" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
+													        									<a href="#" class="btn btn-primary verimg" data-visible="true" data-field-url="'.url($rutaweb).'" data-typefile="'.explode('/', $type[0])[0].'"><i class="fa fa-eye"></i></a>
 													        									<a href="#" class="btn btn-danger remove-row deleted-row eliminarimg" data-existfile="'.$mkey.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
 													        								</td>';
 													        							echo "</tr>";

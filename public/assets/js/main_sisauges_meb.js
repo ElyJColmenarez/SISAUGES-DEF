@@ -832,17 +832,27 @@ jQuery(document).ready(function() {
 
         event.preventDefault();
 
-        console.log('pase');
+        if ($(this).attr('data-typefile')=='image') {
 
-        if ($(this).attr('data-visible')=='true') {
-            $('.waitingprev > img').attr('src',$(this).attr('data-field-url'));
+            if ($(this).attr('data-visible')=='true') {
+                $('.waitingprev > img').attr('src',$(this).attr('data-field-url'));
+            }
+
+            $('.mdl-truebody').slideUp('fast','swing',function(){
+                $('#modalForm .imgpreview').slideDown('fast','swing');
+            });
+
+        }else{
+
+            window.open($(this).attr('data-field-url'), '_blank');
+            
         }
 
-        $('.mdl-truebody').slideUp('fast','swing',function(){
-            $('#modalForm .imgpreview').slideDown('fast','swing');
-        });
+        
 
     });
+
+
 
     $('#modalForm').on('click','.imgpreview button',function(event){
 
@@ -854,13 +864,13 @@ jQuery(document).ready(function() {
         });
     });
 
+
+
     $('.datepkr').datepicker({
         format:'yyyy-mm-dd'
     });
 
     $('body').on('click', '.datepkr', function() {
-
-        console.log('pase');
 
         $(this).datepicker({
             format:'yyyy-mm-dd'

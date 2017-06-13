@@ -265,52 +265,6 @@ class MuestraController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
-    public function generarImagenVisible($original_paht,$name,$extension){
-
-
-        $ruta=base_path() ."/public/".$original_paht.'visibles/';
-
-        if (!file_exists($ruta)) {
-           File::makeDirectory($ruta,0777,true);
-        }
-
-
-        $image = new Imagick(base_path() ."/public/".$original_paht.$name);
-
-        $name=str_replace($extension, 'jpg', $name);
-
-        $ruta=$ruta.$name;
-
-        $image->setImageFormat('jpg');
-
-        $image->writeImage($ruta);
-
-        return $name;
-
-    }
-
-
-    public function generarArchivo($file,$id,$proyecto){
-
-
-        $ruta=base_path() ."/public/storage/".$proyecto."/";
-
-        if (!file_exists($ruta)) {
-           File::makeDirectory($ruta,0777,true);
-        }
-
-
-        $fecha=date("d_m_Y_H_i_s");
-
-        $name=rand(0,9).$id.rand(0,9).'aux-'.$fecha.'.'.$file->getClientOriginalExtension();
-
-        $file->move($ruta,$name);
-
-        return $name;
-
-    }
-
     public function renderForm(Request $request){
 
         
@@ -386,6 +340,52 @@ class MuestraController extends Controller
 
     }
 
+
+    public function generarImagenVisible($original_paht,$name,$extension){
+
+
+        $ruta=base_path() ."/public/".$original_paht.'visibles/';
+
+        if (!file_exists($ruta)) {
+           File::makeDirectory($ruta,0777,true);
+        }
+
+
+        $image = new Imagick(base_path() ."/public/".$original_paht.$name);
+
+        $name=str_replace($extension, 'jpg', $name);
+
+        $ruta=$ruta.$name;
+
+        $image->setImageFormat('jpg');
+
+        $image->writeImage($ruta);
+
+        return $name;
+
+    }
+
+
+    public function generarArchivo($file,$id,$proyecto){
+
+
+        $ruta=base_path() ."/public/storage/".$proyecto."/";
+
+        if (!file_exists($ruta)) {
+           File::makeDirectory($ruta,0777,true);
+        }
+
+
+        $fecha=date("d_m_Y_H_i_s");
+
+        $name=rand(0,9).$id.rand(0,9).'aux-'.$fecha.'.'.$file->getClientOriginalExtension();
+
+        $file->move($ruta,$name);
+
+        return $name;
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -414,9 +414,7 @@ class MuestraController extends Controller
 
         }
 
-
     }
-
 
     public function dirDelete($carpeta=''){
 
@@ -468,27 +466,31 @@ class MuestraController extends Controller
 
                         $bcont=0;
 
-                        foreach ($borradosaux as $borrakey => $borravalue) {
+                        if (isset($borradosaux)) {
+                            foreach ($borradosaux as $borrakey => $borravalue) {
                     
-                            if ($borravalue==$key) {
+                                if ($borravalue==$key) {
 
-                                unset($borradosaux[$borrakey]);
-                                $borradosaux=array_values($borradosaux);
-                                $bcont=1;
+                                    unset($borradosaux[$borrakey]);
+                                    $borradosaux=array_values($borradosaux);
+                                    $bcont=1;
 
-                                break 1;
+                                    break 1;
+                                }
                             }
                         }
+
+                        
 
                         if(strpos($value->getClientMimeType(),'pdf')!==false || strpos($value->getClientMimeType(),'image')!==false){
 
                             if ($bcont==0) {
                                 
-                                $img=$this->generarArchivo($value,$muestra->id_muestra,$request->proyecto);
+                                $img=$this->generarArchivo($value,$muestra->id_muestra,$muestra->id_muestra);
 
                                 $file=new Archivo();
 
-                                $file->ruta_img_muestra="storage/".$request->proyecto."/";
+                                $file->ruta_img_muestra="storage/".$muestra->id_muestra."/";
                                 $file->fecha_analisis=date('d-m-Y');
                                 $file->nombre_original_muestra=$request->$aux1[$key]->getClientOriginalName();
                                 $file->nombre_temporal_muestra=$img;
@@ -693,6 +695,40 @@ class MuestraController extends Controller
 
     }
 
+
+    //Reportes
+
+    public function reportArray(){}
+
+    public function reportRenderForm($request){}
+
+    public function reportOutput($request){}
+
+
+
+    public function ajaxReportOutput(Request $request){
+
+        $val=$this->reportOutput($request);
+
+        $retorno=array();
+
+        if ($val['result']) {
+            //Datos Validos
+            $retorno['resultado']='success';
+            $retorno['mensaje']='El registro de los datos fue exitoso...';
+            $retorno['obj']=$val['obj'];
+            $retorno['keystone']=$val['keystone'];
+
+        }else{
+            //Datos Invalidos
+            $retorno['resultado']='danger';
+            $retorno['mensaje']='Los datos suministrados no son validos';
+
+        }
+
+        echo json_encode($retorno);
+
+    }
 
 
     public function ajaxRegularStore(Request $request){
