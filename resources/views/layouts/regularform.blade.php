@@ -177,7 +177,7 @@
 
 							        						@foreach($value['relation_table']['table_obj'] as $relacionesp)
 
-							        							<input type="hidden" name="addenin{{ $value['relacion_campo'] }}[]" value="{{ $relacionesp->$aux1 }}" id="addin{{ $relacionesp->$aux1 }}-{{ $value['relacion_campo'] }}">
+							        							<input type="hidden" name="addenin{{ $value['relacion_campo'] }}[]" value="{{ $relacionesp->$aux1 }}" id="addin{{ $relacionesp->$aux1 }}-{{ $value['relacion_campo'] }}" class="form-control">
 
 
 							        						@endforeach
@@ -366,15 +366,15 @@
 												        								$type = explode(';', $finfo->file($ruta));
 
 												        								echo "<tr id='tableregd".$mkey."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
-												        									echo "<td>".url($rutaweb)."</td>";
+												        									echo    "<td><div class='tbl-imgcontainer'><img src='".url($rutaweb)."'></div></td>";
 													        								echo "<td>".$muestra->nombre_temporal_muestra."</td>";
 													        								echo "<td>".$type[0]."</td>";
 													        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
-													        								echo "<td>".$archi->tecnicaEstudio()->descripcion_tecnica_estudio."</td>";
+													        								echo "<td>".$muestra->tecnicaEstudio()->first()->descripcion_tecnica_estudio."</td>";
 													        								echo "<td>".$muestra->fecha_analisis."</td>";
 													        								echo '<td>
-													        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
-													        									<a href="#" class="btn btn-danger remove-row deleted-row" data-existfile="'.$mkey.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
+													        									<a href="#" class="btn btn-primary verimg" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>
+													        									<a href="#" class="btn btn-danger remove-row deleted-row eliminarimg" data-existfile="'.$mkey.'" data-field-id="d'.$mkey.'"><i class="fa fa-trash-o"></i></a>
 													        								</td>';
 													        							echo "</tr>";
 										        									}
@@ -560,7 +560,7 @@
 							@endforeach
 
 							@foreach( $hiddenfields as $key => $value )
-								<input type="{!! $value['type'] !!}" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}">
+								<input type="{!! $value['type'] !!}" id="{!! $value['id'] !!}" name="{!! $key !!}" value="{!! $value['value'] !!}" class="form-control">
 							@endforeach
 
 						</div>

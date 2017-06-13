@@ -47,7 +47,7 @@ class Muestra extends Model
     public function scopeTipoMuestra($query,$search){
 
         if (strlen(trim($search))>=1) {
-            return $query->where('tipo_muestra', '=', $search);
+            return $query->where('id_tipo_muestra', '=', $search);
         }
 
     }

@@ -25,15 +25,15 @@
                     $extension=explode('.', $aux[0]->nombre_temporal_muestra);
                     $rutaweb=url($aux[0]->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $aux[0]->nombre_temporal_muestra));
                 }else{
-                    $rutaweb=url('assets/images/projects/project.jpg');
+                    $rutaweb=asset('assets/images/nodisponible.svg');
                 }
 
             ?>
             <td><div class="tbl-imgcontainer"><img src="{{ $rutaweb }}"></div></td>
             <td>{{$muestra->codigo_muestra}}</td>
-            <td>{{$muestra->tipo_muestra}}</td>
+            <td>{{$muestra->tipoMuestra()->first()->descripcion_tipo_muestra}}</td>
             <td>{{$muestra->fecha_recepcion}}</td>
-            <td>{{$muestra->status}}</td>
+            <td>@if($muestra->estatus==1) Activo @else Inactivo @endif</td>
             <td>{{ count($aux) }}</td>
             <td class="actions">
                 <a href="#" class="btn btn-warning click" data-typeform="modify" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-pencil"></i></a>

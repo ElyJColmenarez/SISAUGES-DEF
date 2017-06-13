@@ -769,7 +769,7 @@ jQuery(document).ready(function() {
             htmlsect=htmlsect+"<td>"+textos+"</td>";
             htmlsect=htmlsect+"<td>"+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+"</td>";
             htmlsect=htmlsect+'<td>';
-            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-imgpos="'+imgpos+'" data-field-id="'+i+'"  data-trueid="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
+            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row eliminarimg" data-imgpos="'+imgpos+'" data-field-id="'+i+'"  data-trueid="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
             $('#modalForm .muestra-seccion table.newrecords  tbody').append(htmlsect);
@@ -801,7 +801,7 @@ jQuery(document).ready(function() {
     });
 
 
-    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(7) a:nth-child(2)',function(event){
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(7) a.eliminarimg',function(event){
 
         event.preventDefault();
 
@@ -828,7 +828,7 @@ jQuery(document).ready(function() {
     });
 
 
-    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(7) a:nth-child(1)',function(event){
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(7) a.verimg',function(event){
 
         event.preventDefault();
 
