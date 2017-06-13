@@ -235,6 +235,10 @@ jQuery(document).ready(function() {
                    
         event.preventDefault();
 
+        $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success');
+
+        $('#modalForm').addClass('modal-block-primary');
+
         var num= (parseInt($('#modalsteps').attr('data-laststep'))-1);
 
         $('#modalsteps').attr('data-laststep', parseInt($('#modalsteps').attr('data-laststep'))-1 );
@@ -289,13 +293,13 @@ jQuery(document).ready(function() {
 
                         var principalsets=$('#principalmodalvalues').serializeArray();
 
-                        $('#principalmodalvalues').empty();
+                        $('#principalmodalvalues input').each(function( index ){
 
-                        jQuery.each(principalsets,function( i, val ){
-
-                            $('#modalForm #'+val.name).val(val.value);
+                            $('#modalForm #'+$(this).attr('id')).val($(this).val());
 
                         });
+
+                        $('#principalmodalvalues').empty();
 
                         $('#lastmodalstep'+num).remove();
                         $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
@@ -335,9 +339,9 @@ jQuery(document).ready(function() {
 
         $('#principalmodalvalues').empty();
 
-        jQuery.each(principalsets,function( i, val ){
+        $('#modalForm .modalmicroform .form-control').each(function( index ){
 
-            $('#principalmodalvalues').append('<input type="hidden"  id="'+val.name+'" name="'+val.name+'" value="'+val.value+'">');
+            $('#principalmodalvalues').append('<input type="hidden"  id="'+$(this).attr('id')+'" name="'+$(this).attr('name')+'" value="'+$(this).val()+'">');
 
         });
 
@@ -720,12 +724,22 @@ jQuery(document).ready(function() {
 
     /*Muestras Functions*/
 
-    $('#modalForm').on('click','button[name=cargaimg]',function(event){
+    $('#modalForm').on('click','.muestra-seccion button[name=cargaimg]',function(event){
 
         event.preventDefault();
 
-        $('#modalForm .ocultos input').click();
+        if ( $('#modalForm .muestra-seccion #id_tecnica_estudio').val().length>0 ) {
 
+            var cont= parseInt($('#modalForm .muestra-seccion input[name=imgcont]').val()); 
+
+            $('#modalForm .muestra-seccion .ocultos').append('<input class="imgcontfiles'+cont+'" type="file" name="imagenes'+cont+'[]" data-imgpos="'+cont+'" multiple="true">');
+
+            $('#modalForm .muestra-seccion input[name=imgcont]').val((cont+1));
+
+            $('#modalForm .ocultos .imgcontfiles'+(cont)).click();
+
+        }
+        
     });
 
     $('#modalForm').on('change','.ocultos input',function(event){
@@ -734,22 +748,34 @@ jQuery(document).ready(function() {
 
         var f = new Date();
 
-        $('#modalForm .muestra-seccion table.newrecords tbody').empty();
+        var tecnica=$('#modalForm .muestra-seccion select[name=tecnica]').val();
+
+        var textos=$('#modalForm .muestra-seccion select[name=tecnica] option[value='+tecnica+']').text();
+
+        var imgnodisponible=$('#imgresorces').attr('data-imagennodisponible');
+
+        var imgpos=$(this).attr('data-imgpos');
+
 
         for (var i = 0; i < $(this)[0].files.length; i++) {
 
             var aux= $(this)[0].files[i];
 
             var htmlsect="<tr id='tablereg"+i+"'>";
+            htmlsect=htmlsect+"<td><div class='tbl-imgcontainer'><img src='"+imgnodisponible+"'></div></td>";
             htmlsect=htmlsect+"<td>"+aux.name+"</td>";
             htmlsect=htmlsect+"<td>"+aux.type+"</td>";
             htmlsect=htmlsect+"<td>"+(aux.size/1000)+"KB</td>";
+            htmlsect=htmlsect+"<td>"+textos+"</td>";
             htmlsect=htmlsect+"<td>"+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+"</td>";
-            htmlsect=htmlsect+'<td><a href="#" class="btn btn-primary remove-row deleted-row ocultos" data-visible="false" data-field-url="'+aux.mozFullPath+'"><i class="fa fa-eye"></i></a>';
-            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-field-id="'+i+'"  data-trueid="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
+            htmlsect=htmlsect+'<td>';
+            htmlsect=htmlsect+'<a href="#" class="btn btn-danger remove-row deleted-row" data-imgpos="'+imgpos+'" data-field-id="'+i+'"  data-trueid="'+i+'"><i class="fa fa-trash-o"></i></a></td>';
             htmlsect=htmlsect+"</tr>";
 
             $('#modalForm .muestra-seccion table.newrecords  tbody').append(htmlsect);
+
+            $('#modalForm .muestra-seccion .tecnicasmstrs').append('<input class="tecnicaarchi'+imgpos+'" type="hidden" value="'+tecnica+'" name="tecnicaarchi'+imgpos+'[]" data-imgpos="'+imgpos+'">');
+
         }
 
 
@@ -775,7 +801,7 @@ jQuery(document).ready(function() {
     });
 
 
-    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(5) a:nth-child(2)',function(event){
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(7) a:nth-child(2)',function(event){
 
         event.preventDefault();
 
@@ -784,11 +810,10 @@ jQuery(document).ready(function() {
         $('#tablereg'+$(this).attr('data-field-id')).fadeOut(function(){
             $(this).remove();
 
-            console.log($(this).attr('data-trueid'));
 
             if (obj.attr('data-trueid')) {
 
-                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados[]" value="'+$(this).attr('data-trueid')+'">');
+                $('#modalForm .muestra-seccion .borrados').append('<input type="hidden" name="borrados'+obj.attr('data-imgpos')+'[]" value="'+$(this).attr('data-trueid')+'">');
             }
 
 
@@ -803,9 +828,11 @@ jQuery(document).ready(function() {
     });
 
 
-    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(5) a:nth-child(1)',function(event){
+    $('#modalForm').on('click','.muestra-seccion table tbody tr td:nth-child(7) a:nth-child(1)',function(event){
 
         event.preventDefault();
+
+        console.log('pase');
 
         if ($(this).attr('data-visible')=='true') {
             $('.waitingprev > img').attr('src',$(this).attr('data-field-url'));

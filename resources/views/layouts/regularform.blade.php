@@ -247,24 +247,69 @@
 
 								        	<div class="col-md-12 muestra-seccion">
 
-							        			
-							        			<div class="ocultos"><input type="file" name="imagenes[]"  multiple="true"></div>
+							        			<input type="hidden" name="imgcont" value="0">
+
+							        			<div class="ocultos"></div>
+							        			<div class="tecnicasmstrs"></div>
 							        			<div class="borrados"></div>
 
+							        			<div id="imgresorces"  data-imagennodisponible="{{asset('assets/images/nodisponible.svg')}}"></div>
 
 								        		<div class="">
 								        			<div class="col-md-12">
 
-								        				<h3>Registros Nuevos <button class="btn btn-default click" name="cargaimg">Agregar Archivos</button></h3>
+								        				<div class="col-md-6">
+								        					<h3>Registros Nuevos <button class="btn btn-default click" name="cargaimg">Agregar Archivos</button></h3>
+								        				</div>
+
+								        				<div class="col-md-6">
+
+
+								        					<?php  $tecnica=$value['relaciones']['tecnica']; ?>
+
+											                <h3>
+											                    
+											                    <div class="col-md-7">
+											                    
+											                        <select data-plugin-selectTwo name="tecnica" id="{!! $tecnica['id'] !!}" class="form-control populate" value="{!! $tecnica['value'] !!}">
+
+											                        	<option value="">Seleccione {!! $tecnica['label'] !!}</option>
+											                        
+												                    	<?php $aux1=$tecnica['objkeys'][0]; $aux2=$tecnica['objkeys'][1] ?>
+
+												                    	@if(isset($tecnica['options']))
+
+												                        	@foreach( $tecnica['options'] as $key2 => $value2 )
+
+												                        		<option value="{!! $value2->$aux1 !!}" {{ ($tecnica['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+												                        	@endforeach
+
+												                        @endif
+
+											                    	</select>
+
+											                    </div>
+
+											                    <div class="col-md-5">
+											                        <button class="btn btn-primary" name="nextstep" value="{!! $tecnica['selectadd']['url'] !!}" data-idpointer="{!! $tecnica['id'] !!}" data-finlabel="{!! $tecnica['selectadd']['btnfinlavel'] !!}">{!! $tecnica['selectadd']['btnlabel'] !!}</button>
+											                    </div>
+
+											                </h3>
+
+
+								        				</div>
 
 								        				<div class="tablecontainer">
 								        					<table class="table table-bordered table-striped mb-none newrecords">
 
 									        					<thead>
 									        						<tr>
+									        							<th>Miniatura</th>
 									        							<th>Archivo</th>
 									        							<th>Tipo de Archivo</th>
 									        							<th>Tamaño</th>
+									        							<th>Tecnica de Estudio</th>
 									        							<th>Fecha de Registro</th>
 									        							<th></th>
 									        						</tr>
@@ -290,9 +335,11 @@
 
 										        					<thead>
 										        						<tr>
+										        							<th>Miniatura</th>
 										        							<th>Archivo</th>
 										        							<th>Tipo de Archivo</th>
 										        							<th>Tamaño</th>
+										        							<th>Tecnica de Estudio</th>
 										        							<th>Fecha de Registro</th>
 										        							<th></th>
 										        						</tr>
@@ -319,9 +366,11 @@
 												        								$type = explode(';', $finfo->file($ruta));
 
 												        								echo "<tr id='tableregd".$mkey."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
+												        									echo "<td>".url($rutaweb)."</td>";
 													        								echo "<td>".$muestra->nombre_temporal_muestra."</td>";
 													        								echo "<td>".$type[0]."</td>";
 													        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
+													        								echo "<td>".$archi->tecnicaEstudio()->descripcion_tecnica_estudio."</td>";
 													        								echo "<td>".$muestra->fecha_analisis."</td>";
 													        								echo '<td>
 													        									<a href="#" class="btn btn-primary remove-row deleted-row" data-visible="true" data-field-url="'.url($rutaweb).'"><i class="fa fa-eye"></i></a>

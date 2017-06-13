@@ -67,34 +67,6 @@ class MuestraController extends Controller
                 'type'      => 'titulo',
                 'value'     => 'Tipo de Muestra'
             ),
-
-            /*'tecnica'  => array(
-                'type'      => 'relacion',
-                'value'     => (isset($muestra->tecnicaEstudio->id_tecnica_estudio))? $muestra->tecnicaEstudio->id_tecnica_estudio:'',
-                'id'        => 'id_tecnica_estudio',
-                'label'     => 'Técnica de estudio',
-                'selecttype'=> 'obj',
-                'objkeys'   => array('id_tecnica_estudio','descripcion_tecnica_estudio'),
-                'options'   => $tecnicas,
-                'selectadd' => array(
-                    'btnadd'=>'Agregar técnica',
-                    'btnlabel'=>'Registrar técnica',
-                    'btnfinlavel'=>'Registrar técnica',
-                    'url'=> url('tecnica-estudio/registerform')
-                ),
-                'relation_table'=>array(
-                    'title'=>'Técnicas Asociados a la Muestra',
-                    'table_fields'=>array(
-                        'Nombre de la técnica'
-                    ),
-                    'table_key'=>'descripcion_tecnica_estudio',
-                    'table_obj'=>(isset($muestra->tecnicaEstudio))? $muestra->tecnicaEstudio()->get() :null,
-
-                ),
-                'relacion_campo'=>'id_tecnica_estudio'
-            ),*/
-
-
             'tipo_muestra'=>array(
 
                 'type'      => 'select',
@@ -170,7 +142,37 @@ class MuestraController extends Controller
                 'type'      => 'muestra',
                 'id'        => 'muestra',
                 'label'     => 'Archivos',
-                'data'      => $muestra
+                'data'      => $muestra,
+                'relaciones'=> array(
+
+                    'tecnica'  => array(
+                        'type'      => 'relacion',
+                        'value'     => (isset($muestra->tecnicaEstudio->id_tecnica_estudio))? $muestra->tecnicaEstudio->id_tecnica_estudio:'',
+                        'id'        => 'id_tecnica_estudio',
+                        'label'     => 'Técnica de estudio',
+                        'selecttype'=> 'obj',
+                        'objkeys'   => array('id_tecnica_estudio','descripcion_tecnica_estudio'),
+                        'options'   => $tecnicas,
+                        'selectadd' => array(
+                            'btnadd'=>'Agregar técnica',
+                            'btnlabel'=>'Registrar técnica',
+                            'btnfinlavel'=>'Registrar técnica',
+                            'url'=> url('tecnica-estudio/registerform')
+                        ),
+                        'relation_table'=>array(
+                            'title'=>'Técnicas Asociados a la Muestra',
+                            'table_fields'=>array(
+                                'Nombre de la técnica'
+                            ),
+                            'table_key'=>'descripcion_tecnica_estudio',
+                            'table_obj'=>(isset($muestra->tecnicaEstudio))? $muestra->tecnicaEstudio()->get() :null,
+
+                        ),
+                        'relacion_campo'=>'id_tecnica_estudio'
+                    )
+
+
+                )
 
             )
         );

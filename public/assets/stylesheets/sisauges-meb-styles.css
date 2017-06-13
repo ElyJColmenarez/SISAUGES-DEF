@@ -13,6 +13,11 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 	height: 34px;
 }
 
+.tablecontainer table td{
+	text-align: center!important;
+    vertical-align: middle!important;
+}
+
 .tblwait{
 	display: none;
 }
@@ -167,20 +172,21 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 }
 
 .muestra-seccion .tablecontainer{
+	width: 100%;
 	max-height: 300px;
 	overflow-y: scroll;
 
 }
 
-.muestra-seccion table tbody tr td:nth-child(5){
+.muestra-seccion table tbody tr td:nth-child(7){
 	text-align: center;
 }
 
-.muestra-seccion table tbody tr td:nth-child(5) a{
+.muestra-seccion table tbody tr td:nth-child(7) a{
 	margin: 0px 5px;
 }
 
-.muestra-seccion table tbody tr td:nth-child(5) a i.fa{
+.muestra-seccion table tbody tr td:nth-child(7) a i.fa{
 	color: #fff;
 	text-decoration: none;
 }
