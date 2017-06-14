@@ -38,6 +38,7 @@
             <td class="actions">
                 <a href="#" class="btn btn-warning click" data-typeform="modify" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-pencil"></i></a>
                 <a href="#" class="btn btn-danger remove-row deleted-row" data-typeform="deleted" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-trash-o"></i></a>
+                <a href="{{ url('/muestra/report/'.$muestra->id_muestra) }}" class="btn btn-info down" target="_blank" data-typeform="downfile" data-taction="requestdownfile" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-cloud-download"></i></a>
             </td>
         </tr>
 

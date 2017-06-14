@@ -172,7 +172,7 @@ class ProyectoController extends Controller
                 'type'  => 'date',
                 'value' => (isset($proyecto->fecha_final))? $proyecto->fecha_final:'',
                 'id'    => 'fecha_final',
-                'label' => 'Fecha de Recepción del proyecto'
+                'label' => 'Fecha de Finalización del proyecto'
             ),
             'permiso_proyecto' => array(
                 'type'      => 'select',

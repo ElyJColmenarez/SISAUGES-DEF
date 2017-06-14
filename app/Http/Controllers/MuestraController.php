@@ -20,6 +20,7 @@ use Storage;
 use Validator;
 use File;
 use Imagick;
+use ZipArchive;
 
 use Illuminate\Support\Facades\View;
 
@@ -692,6 +693,43 @@ class MuestraController extends Controller
     public function obtenerConteoMuestras(){
 
         return Muestra::count();
+
+    }
+
+    public function descargaMuestra(Request $request){
+
+
+        $rarrute=base_path() ."/public/rar/";
+
+        $zip = new ZipArchive();
+
+        $muestra=Muestra::find($request->field_id);
+ 
+        $filename = 'muestra'.$request->field_id.'.zip';
+
+        if (file_exists($rarrute.$filename)) {
+            unlink($rarrute.$filename);
+        }
+         
+        if($zip->open($rarrute.$filename,ZIPARCHIVE::CREATE)===true) {
+
+                $archi=$muestra->archivo()->get();
+
+                foreach ($archi as $archikey => $archivalue) {
+                    
+                   $zip->addFile($archivalue->ruta_img_muestra.$archivalue->nombre_temporal_muestra); 
+
+                }
+                $zip->close();
+        }
+ 
+
+         header("Content-type: application/octet-stream");
+         header("Content-disposition: attachment; filename=".$filename);
+         readfile($rarrute.$filename);
+         unlink($rarrute.$filename);
+
+         echo "<script languaje='javascript' type='text/javascript'>window.close();</script>";
 
     }
 

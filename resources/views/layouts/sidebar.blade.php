@@ -54,7 +54,7 @@
 
                         <li class="">
                             <a href="{{url('departamento/listar')}}">
-                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <i class="fa fa-archive" aria-hidden="true"></i>
                                 <span>Departamentos</span>
                             </a>
                         </li>
@@ -75,7 +75,7 @@
 
                         <li class="">
                             <a href="{{url('tipo-muestra/listar')}}">
-                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <span>Tipo de Muestra</span>
                             </a>
                         </li>

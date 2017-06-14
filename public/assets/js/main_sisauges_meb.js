@@ -845,7 +845,7 @@ jQuery(document).ready(function() {
         }else{
 
             window.open($(this).attr('data-field-url'), '_blank');
-            
+
         }
 
         
@@ -864,16 +864,16 @@ jQuery(document).ready(function() {
         });
     });
 
-
-
     $('.datepkr').datepicker({
-        format:'yyyy-mm-dd'
+        format:'yyyy-mm-dd',
+        maxDate:'now'
     });
 
     $('body').on('click', '.datepkr', function() {
 
         $(this).datepicker({
-            format:'yyyy-mm-dd'
+            format:'yyyy-mm-dd',
+            maxDate:'now'
         });
         $(this).datepicker('show');
     });

@@ -202,6 +202,8 @@ Route::group(['middleware'=>'op'],function(){
         Route::post('asignar-muestra-a-proyecto',['uses'=>'MuestraController@ajaxRegularAssignSample', 'as'=>'asignar-Muestra-a-proyecto']);
         Route::post('asignar-tecnica-a-muestra',['uses'=>'MuestraController@ajaxRegularAssignTechnique', 'as'=>'asignar-tecnica-a-muestra']);
 
+        Route::match(array('get','post'),'report/{field_id}',['uses'=>'MuestraController@descargaMuestra', 'as'=>'report']);
+
     });
 
 });
