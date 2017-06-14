@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\View;
 class MuestraController extends Controller
 {
 
-     public function fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos){
+     public function fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos,$relacionproyecto=null){
 
         $fields=array(
 
@@ -37,8 +37,8 @@ class MuestraController extends Controller
             ),
 
             'proyecto'  => array(
-                'type'      => 'relacion',
-                'value'     => (isset($muestra->proyecto->id_proyecto))? $muestra->proyecto->id_proyecto:'',
+                'type'      => (isset($relacionproyecto))? 'label':'relacion',
+                'value'     => (isset($relacionproyecto))? $relacionproyecto->id_proyecto:'',
                 'id'        => 'id_proyecto',
                 'label'     => 'Proyecto',
                 'selecttype'=> 'obj',
@@ -59,7 +59,9 @@ class MuestraController extends Controller
                     'table_obj'=>(isset($muestra->proyecto))? $muestra->proyecto()->get() :null,
 
                 ),
-                'relacion_campo'=>'id_proyecto'
+                'relacion_campo'=>'id_proyecto',
+                'valshow'=>$relacionproyecto->nombre_proyecto,
+                'valkey'=>'addeninid_proyecto[]'
             ),
 
             'separador4'=>array('type'=>'separador'),
@@ -199,23 +201,7 @@ class MuestraController extends Controller
                 'label'     => 'Proyecto',
                 'selecttype'=> 'obj',
                 'objkeys'   => array('id_proyecto','nombre_proyecto'),
-                'options'   => $proyectos,
-                'selectadd' => array(
-                    'btnadd'=>'Agregar Proyecto',
-                    'btnlabel'=>'Registrar Proyecto',
-                    'btnfinlavel'=>'Registrar Proyecto',
-                    'url'=> url('proyecto/registerform')
-                ),
-                'relation_table'=>array(
-                    'title'=>'Proyectos Asociados a la Muestra',
-                    'table_fields'=>array(
-                        'Nombre del Proyecto'
-                    ),
-                    'table_key'=>'nombre_proyecto',
-                    'table_obj'=>(isset($muestra->proyecto))? $muestra->proyecto()->get() :null,
-
-                ),
-                'relacion_campo'=>'id_proyecto'
+                'options'   => $proyectos
             ),
             'id_tipo_muestra'=>array(
 
@@ -226,22 +212,7 @@ class MuestraController extends Controller
                 'selecttype'=> 'obj',
                 'values_seting'=> $tipos,
                 'objkeys'   => array('id_tipo_muestra','descripcion_tipo_muestra'),
-                'options'   => $tipos,
-                'selectadd' => array(
-                    'btnadd'=>'Registrar Tipo de Muestra',
-                    'btnlabel'=>'Registrar Tipo de Muestra',
-                    'btnfinlavel'=>'Registrar Tipo de Muestra',
-                    'url'=> url('tipo-muestra/registerform')
-                ),
-                'relation_table'=>array(
-                    'title'=>'Tipos de Muestra',
-                    'table_fields'=>array(
-                        'Descripción del Tipo de Muestra'
-                    ),
-                    'table_key'=>'descripcion_tipo_muestra',
-                    'table_obj'=>(isset($muestra->tipoMuestra))? $muestra->tipoMuestra->get() :null,
-                ),
-                'relacion_campo'=>'id_tipo_muestra'
+                'options'   => $tipos
 
             ),
             'descripcion_muestra' => array(
@@ -363,7 +334,14 @@ class MuestraController extends Controller
                 )
             );
 
-            $fields=$this->fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos);
+            if (isset($request->relationid)) {
+
+                $subpro=Proyecto::find($request->relationid);
+
+                $fields=$this->fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos,$subpro);
+            }else{
+                $fields=$this->fieldsRegisterCall($muestra,$proyectos,$tecnicas,$tipos);
+            }
 
             $modulo='Muestra';
         }

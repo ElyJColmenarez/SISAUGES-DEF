@@ -140,6 +140,16 @@
 								                </div>
 								            </div>
 
+
+								        @elseif( $value['type']=='label' )
+
+
+								        	<input type="hidden" id="{!! $value['id'] !!}" name="{!! $value['valkey'] !!}" value="{!! $value['value'] !!}" class="form-control">
+
+								        	<div class="col-md-12">
+								                <label class="col-md-12 control-label" style="text-align: left!important;" for="{!! $key !!}">{!! $value['label'] !!}: <strong>{{ $value['valshow'] }}</strong> </label>
+								            </div>
+
 								        @elseif( $value['type']=='separador' )
 
 

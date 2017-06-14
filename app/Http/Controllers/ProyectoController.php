@@ -31,7 +31,7 @@ class ProyectoController extends Controller
 
 
 
-    public function fieldsRegisterCall($proyecto,$instituciones=null,$departamentos=null,$tutores=null,$estudiantes=null){
+    public function fieldsRegisterCall($proyecto,$instituciones=null,$departamentos=null,$tutores=null,$estudiantes=null,$muestras=null){
 
             
         $fields=array(
@@ -187,15 +187,62 @@ class ProyectoController extends Controller
             )
         );
 
+
+        if ($muestras!=null) {
+
+            $fields['titulo4']=array(
+                'type'      => 'titulo',
+                'value'     => 'Muestras Asociadas'
+            );
+
+            $fields['muestras']=array(
+
+                'type'      => 'relacion',
+                'value'     => '',
+                'id'        => 'id_muestra',
+                'label'     => 'Muestras',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_muestra','codigo_muestra'),
+                'options'   => $muestras,
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Muestras',
+                    'btnlabel'=>'Registrar Muestras',
+                    'btnfinlavel'=>'Registrar Muestras',
+                    'url'=> url('muestra/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Muestras Asociadas al Proyecto',
+                    'table_fields'=>array(
+                        'Codigo de la Muestra'
+                    ),
+                    'table_key'=>'codigo_muestra',
+                    'table_obj'=>(isset( $proyecto->muestras ))? $proyecto->muestras()->get() :null,
+                ),
+                'relacion_campo'=>'id_muestra'
+
+            );
+
+        }
+        
+
         return $fields;
 
     }
 
     public function fieldsSearchCall(){
         $fields=array(
+
+            
         );
 
         return $fields;
+    }
+
+
+    public function fieldsReportCall($institucion,$departamento,$estudiantes,$tutores,$muestras){
+
+
+
     }
 
 
@@ -290,9 +337,14 @@ class ProyectoController extends Controller
             $depes=Departamento::get();
             $tutes=Tutor::get();
             $estes=Estudiante::get();
+            $muestras=Muestra::get();
 
+            if ($request->typeform=='modify') {
+                $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request),$muestras);
+            }else{
+                $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request));
+            }
 
-            $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request));
             $modulo='Proyecto';
             
             
@@ -337,7 +389,7 @@ class ProyectoController extends Controller
             'fecha_inicio'=>'required|min:1|max:255',
             'fecha_final'=>'required|min:1|max:255',
             'permiso_proyecto'=>'required|min:1|max:255',
-            'institucion'=>'required|min:1|max:255'
+            'addeninid_institucion.*'=>'required'
 
         ]);
 
@@ -358,20 +410,6 @@ class ProyectoController extends Controller
 
             }
 
-            if (isset($request->addeninid_estudiante)) {
-
-                foreach ($request->addeninid_estudiante as $prokey => $provalue) {
-
-                    if (!$proyecto->estudiante()->find($provalue)) {
-
-                        $proyecto->estudiante()->attach($provalue);
-
-                        $proyecto->save();
-                    }
-
-                }
-
-            }
 
             
 
@@ -406,8 +444,7 @@ class ProyectoController extends Controller
             'fecha_inicio'=>'required|min:1|max:255',
             'fecha_final'=>'required|min:1|max:255',
             'permiso_proyecto'=>'required|min:1|max:255',
-            'institucion'=>'required|min:1|max:255',
-            'estudiante'=>'required|min:1|max:255'
+            'addeninid_institucion.*'=>'required'
 
         ]);
 
@@ -416,16 +453,32 @@ class ProyectoController extends Controller
 
             $val=$proyecto->save();
 
-            $ins=Institucion::find($request->institucion);
-            $ins->proyecto->detach($val->id_proyecto);
-            $ins->proyecto->attach($val->id_proyecto);
-            $ins->save();
+            if (isset($request->deleteinid_institucion)) {
+                    
+                foreach ($request->deleteinid_institucion as $prokey => $provalue) {
+
+                    if ($muestra->proyecto()->find($provalue)) {
+
+                        $muestra->proyecto()->detach($provalue);
+                    }
+
+                }
+            }
 
 
-            $est=Estudiante::find($request->estudiante);
+            foreach ($request->addeninid_institucion as $prokey => $provalue) {
 
-            $est->id_proyecto=$val->id_proyecto;
-            $est->save();
+                if (!$proyecto->institucion()->find($provalue)) {
+
+                    $proyecto->institucion()->attach($provalue);
+
+                    $proyecto->save();
+                }
+
+            }
+
+
+            
 
 
         }else{

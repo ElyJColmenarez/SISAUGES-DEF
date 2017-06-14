@@ -353,6 +353,7 @@ jQuery(document).ready(function() {
         var inform= form.serializeArray();
 
         inform.push({name: 'stepform', value: 'true'})
+        inform.push({name: 'relationid', value: $('#modalForm .modalmicroform input[name=field_id]').val()})
         inform.push({name: 'finlabel', value: $(this).attr('data-finlabel')})
 
         var promise=$.ajax({
