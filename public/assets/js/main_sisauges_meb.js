@@ -414,6 +414,92 @@ jQuery(document).ready(function() {
     });
 
 
+
+    $('#modalForm').on('click','a.editbtn',function(event){
+
+        event.preventDefault();
+
+        var altaction=$(this).attr('data-urlval');
+
+        var principalsets=$('#modalForm .modalmicroform').serializeArray();
+
+        $('#principalmodalvalues').empty();
+
+        $('#modalForm .modalmicroform .form-control').each(function( index ){
+
+            $('#principalmodalvalues').append('<input type="hidden"  id="'+$(this).attr('id')+'" name="'+$(this).attr('name')+'" value="'+$(this).val()+'">');
+
+        });
+
+        var form=$('#principalform');
+
+        $('#principalform> input[name=typeform]').attr('value','modify');
+        $('#principalform> input[name=field_id]').attr('value',$(this).attr('data-trueid'));
+
+        var inform= form.serializeArray();
+
+        inform.push({name: 'stepform', value: 'true'})
+        inform.push({name: 'relationid', value: $('#modalForm .modalmicroform input[name=field_id]').val()})
+        inform.push({name: 'finlabel', value: $(this).attr('data-finlabel')})
+
+        var promise=$.ajax({
+
+            url:altaction,
+            cache: false,
+            data:inform,
+            type:"POST",
+            dataType: "json",
+            beforeSend: function(){
+                $('#modalForm .mdl-truebody').slideUp('fast','swing',function(){
+                    $('#modalForm .modalmicroform > .waitingimg').slideDown('fast','swing');
+                });
+            },
+            success:    function(data){
+
+                if (data.result) {
+
+                    $('#modalsteps').append(
+                        '<div id="lastmodalstep'+$('#modalsteps').attr('data-laststep')+'">'+$('#modalForm').html()+'</div>'
+
+                    );
+
+                    $('#modalsteps').attr('data-laststep',(parseInt($('#modalsteps').attr('data-laststep'))+1));
+
+                    $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                        $('#modalForm').empty();
+                        $('#modalForm').append('<div class="ocultos">'+data.html+'</div>');
+                        $('#modalForm > .ocultos').slideDown('fast','swing');
+                        
+                    });
+
+
+                    $('.openmodalbtn').click();
+                }
+
+            },
+            error:      function(){
+
+                $('#modalForm').removeClass('modal-block-danger modal-block-warning modal-block-success  modal-block-primary');
+
+                $('#modalForm').addClass('modal-block-danger');
+
+                $('#modalForm .result-mdl > div > div > div.modal-icon > i').attr('class','fa fa-times-circle');
+                $('#modalForm .msn-alerta-header').text('Ocurrio un error!');
+                $('#modalForm .msn-alerta-body').text('La solicitud no se pudo completar, recargue la pagina he intente mas tarde...');
+
+                $('#modalForm .mld-dismiss-fin').attr('class','btn btn-danger regresar');
+
+                $('#modalForm .modalmicroform > .waitingimg').slideUp('fast','swing',function(){
+                    $('#modalForm .result-mdl').slideDown('fast','swing');
+                });
+
+            }
+
+        });
+
+    });
+
+
     $('#modalForm').on('click','button[name=finregistro]',function(event){
 
         event.preventDefault();

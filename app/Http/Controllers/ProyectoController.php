@@ -184,7 +184,8 @@ class ProyectoController extends Controller
                     'Publico'=>'Publico',
                     'Privado'=>'Privado'
                 )
-            )
+            ),
+            'separador4'=>array('type'=>'separador')
         );
 
 
@@ -218,7 +219,8 @@ class ProyectoController extends Controller
                     'table_key'=>'codigo_muestra',
                     'table_obj'=>(isset( $proyecto->muestras ))? $proyecto->muestras()->get() :null,
                 ),
-                'relacion_campo'=>'id_muestra'
+                'relacion_campo'=>'id_muestra',
+                'editinclude'=> true
 
             );
 
@@ -229,23 +231,72 @@ class ProyectoController extends Controller
 
     }
 
-    public function fieldsSearchCall(){
+    public function fieldsSearchCall($request,$instituciones){
         $fields=array(
+
+            'nombre_proyecto' => array(
+                'type'  => 'text',
+                'value' => (isset($request->nombre_proyecto))? $request->nombre_proyecto:'',
+                'id'    => 'nombre_proyecto',
+                'label' => 'Nombre del Proyecto'
+            ),
+            'estatus_proyecto' => array(
+                'type'  => 'select',
+                'value' => (isset($request->estatus_proyecto))? $request->estatus_proyecto:'',
+                'id'    => 'estatus_proyecto',
+                'label' => 'Estatus del Proyecto',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'No iniciado'=>'No iniciado',
+                    'En progreso'=>'En progreso',
+                    'Culminado'=>'Culminado'
+                )
+            ),
+            'fecha_inicio' => array(
+                'type'  => 'date',
+                'value' => (isset($request->fecha_inicio))? $request->fecha_inicio:'',
+                'id'    => 'fecha_inicio',
+                'label' => 'Fecha de Recepción del proyecto'
+            ),
+            'fecha_final' => array(
+                'type'  => 'date',
+                'value' => (isset($request->fecha_final))? $request->fecha_final:'',
+                'id'    => 'fecha_final',
+                'label' => 'Fecha de Finalización del proyecto'
+            ),
+            'permiso_proyecto' => array(
+                'type'      => 'select',
+                'value'     => (isset($request->permiso_proyecto))? $request->permiso_proyecto:'',
+                'id'        => 'permiso_proyecto',
+                'label'     => 'Permiso',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    'Publico'=>'Publico',
+                    'Privado'=>'Privado'
+                )
+            ),
+
+            'id_institucion'=>array(
+
+                'type'      => 'relacion',
+                'value'     => (isset($request->id_institucion))? $request->id_institucion:'',
+                'id'        => 'id_institucion',
+                'label'     => 'Institución',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_institucion','nombre_institucion'),
+                'options'   => $instituciones
+
+            ),
 
             
         );
-
         return $fields;
     }
 
 
     public function fieldsReportCall($institucion,$departamento,$estudiantes,$tutores,$muestras){
 
-
-
     }
-
-
 
 
     /**
@@ -260,7 +311,9 @@ class ProyectoController extends Controller
 
         $action="proyecto/listar";
 
-        $fields=$this->fieldsSearchCall();
+        $instituciones=Institucion::get();
+
+        $fields=$this->fieldsSearchCall($request,$instituciones);
 
         $data=array(
 

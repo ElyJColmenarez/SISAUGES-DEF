@@ -34,7 +34,7 @@ class Proyecto extends Model
 
     public function scopeNombreProyecto($query,$search)
     {
-        return $query->where('nombre', 'LIKE', '%'.$search.'%');
+        return $query->where('nombre_proyecto', 'LIKE', '%'.$search.'%');
     }
 
     public function scopePermisoProyecto($query,$search)
@@ -54,7 +54,7 @@ class Proyecto extends Model
 
     public function scopeStatusProyecto($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        return $query->where('estatus_proyecto', '=', $search);
     }
 
 }

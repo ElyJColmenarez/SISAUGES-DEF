@@ -17,12 +17,12 @@ class TipoMuestra extends Model
         return $this->hasMany(Muestra::class,'id_tipo_muestra');
     }
 
-    public function scopeDescripcionTecnicaE($query,$search)
+    public function scopeDescripcionTipoM($query,$search)
     {
         return $query->where('descripcion_tipo_muestra', 'LIKE', '%'.$search.'%');
     }
 
-    public function scopeStatusTecnicaE($query,$search){
+    public function scopeStatusTipoM($query,$search){
 
         return $query->where('estatus', '=', $search);
     }

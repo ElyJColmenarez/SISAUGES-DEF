@@ -60,7 +60,7 @@ class MuestraController extends Controller
 
                 ),
                 'relacion_campo'=>'id_proyecto',
-                'valshow'=>$relacionproyecto->nombre_proyecto,
+                'valshow'=>(isset($relacionproyecto))? $relacionproyecto->nombre_proyecto: '',
                 'valkey'=>'addeninid_proyecto[]'
             ),
 
@@ -194,24 +194,24 @@ class MuestraController extends Controller
                 'id'    => 'codigo_muestra',
                 'label' => 'Codigo de la Muestra'
             ),
-            'id_proyecto'  => array(
+            'nombre_proyecto'  => array(
                 'type'      => 'select',
-                'value'     => (isset($request->id_proyecto))? $request->id_proyecto:'',
+                'value'     => (isset($request->nombre_proyecto))? $request->nombre_proyecto:'',
                 'id'        => 'id_proyecto',
                 'label'     => 'Proyecto',
                 'selecttype'=> 'obj',
-                'objkeys'   => array('id_proyecto','nombre_proyecto'),
+                'objkeys'   => array('nombre_proyecto','nombre_proyecto'),
                 'options'   => $proyectos
             ),
-            'id_tipo_muestra'=>array(
+            'descripcion_tipo_muestra'=>array(
 
                 'type'      => 'select',
-                'value'     => (!empty($request->id_tipo_muestra))? $request->id_tipo_muestra:'',
+                'value'     => (!empty($request->descripcion_tipo_muestra))? $request->descripcion_tipo_muestra:'',
                 'id'        => 'id_tipo_muestra',
                 'label'     => 'Tipo de Muestra',
                 'selecttype'=> 'obj',
                 'values_seting'=> $tipos,
-                'objkeys'   => array('id_tipo_muestra','descripcion_tipo_muestra'),
+                'objkeys'   => array('descripcion_tipo_muestra','descripcion_tipo_muestra'),
                 'options'   => $tipos
 
             ),
@@ -251,7 +251,27 @@ class MuestraController extends Controller
     public function index(Request $request)
     {
 
-        $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->statusmuestra($request->estatus)->orderBy('codigo_muestra', 'desc')->paginate(20);
+        $muestras=Muestra::codigomuestra($request->codigo_muestra)->
+
+        tipomuestra($request->tipo_muestra)->
+
+        descripcionmuestra($request->descripcion_muestra)->
+
+        fecharecepcionmuestra($request->fecha_recepcion)->
+
+        statusmuestra($request->estatus)->
+
+        whereHas('proyecto', function($query) use ($request){
+
+                $query->nombreproyecto($request->nombre_proyecto);
+
+        })->
+        whereHas('tipoMuestra', function($query) use ($request){
+
+                $query->descripciontipom($request->descripcion_tipo_muestra);
+
+        })->orderBy('codigo_muestra', 'desc')
+        ->paginate(20);
 
         $action="muestra/listar";
         
@@ -578,6 +598,8 @@ class MuestraController extends Controller
 
 
         if ($validator->passes()) {
+
+            $muestra->id_tipo_muestra=$request->id_tipo_muestra;
 
             $val=$muestra->save();
 

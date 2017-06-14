@@ -31,7 +31,7 @@
             ?>
             <td><div class="tbl-imgcontainer"><img src="{{ $rutaweb }}"></div></td>
             <td>{{$muestra->codigo_muestra}}</td>
-            <td>{{$muestra->tipoMuestra()->first()->descripcion_tipo_muestra}}</td>
+            <td> @if(!empty($muestra->id_tipo_muestra)) {{$muestra->tipoMuestra()->first()->descripcion_tipo_muestra}} @endif</td>
             <td>{{$muestra->fecha_recepcion}}</td>
             <td>@if($muestra->estatus==1) Activo @else Inactivo @endif</td>
             <td>{{ count($aux) }}</td>

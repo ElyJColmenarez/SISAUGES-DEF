@@ -262,7 +262,7 @@
 											        								
 											        								<td>{{ $relacionesp->$aux2 }}</td>
 											        								<td class="tableregularbtns">
-											        									<a href="#" class="btn btn-primary remove-row deleted-row btnver ocultos" data-visible="false" data-trueid="{{ $relacionesp->$aux1 }}" data-relation="{!! $value['relacion_campo'] !!}"><i class="fa fa-eye"></i></a>
+											        									<a href="#" class="btn btn-warning remove-row deleted-row editbtn"  data-typeform="modify" data-taction="registerform" data-visible="false" data-trueid="{{ $relacionesp->$aux1 }}" data-relation="{!! $value['relacion_campo'] !!}" data-urlval="{!! $value['selectadd']['url'] !!}" data-idpointer="{!! $value['id'] !!}" data-finlabel="{!! $value['selectadd']['btnfinlavel'] !!}"><i class="fa fa-pencil"></i></a>
 
 											        									<a href="#" class="btn btn-danger remove-row deleted-row btnborrar" data-field-id="{{ $relacionesp->$aux1 }}"  data-trueid="{{ $relacionesp->$aux1 }}" data-relation="{!! $value['relacion_campo'] !!}"><i class="fa fa-trash-o"></i></a>
 											        								</td>
@@ -459,6 +459,12 @@
 								        		@endif
 								        		
 								        	</div>
+
+
+								        @elseif( $value['type']=='muestrareport' )
+
+
+
 
 
 
