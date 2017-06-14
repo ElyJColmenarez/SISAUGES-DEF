@@ -866,14 +866,16 @@ jQuery(document).ready(function() {
 
     $('.datepkr').datepicker({
         format:'yyyy-mm-dd',
-        maxDate:'now'
+        maxDate:'now',
+        autoclose: true,
     });
 
     $('body').on('click', '.datepkr', function() {
 
         $(this).datepicker({
             format:'yyyy-mm-dd',
-            maxDate:'now'
+            maxDate:'now',
+            autoclose: true,
         });
         $(this).datepicker('show');
     });

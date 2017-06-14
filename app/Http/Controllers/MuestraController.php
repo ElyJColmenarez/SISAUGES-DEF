@@ -182,7 +182,7 @@ class MuestraController extends Controller
         return $fields;
      }
 
-     public function fieldsSearchCall($request){
+     public function fieldsSearchCall($request,$proyectos,$tipos){
 
         $fields=array(
 
@@ -192,16 +192,57 @@ class MuestraController extends Controller
                 'id'    => 'codigo_muestra',
                 'label' => 'Codigo de la Muestra'
             ),
-            'tipo_muestra' => array(
-                'type'  => 'select',
-                'value' => (isset($request->tipo_muestra))? $request->tipo_muestra:'',
-                'id'    => 'tipo_muestra',
-                'label' => 'Tipo de Muestra',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    '1'=>'Tipo1',
-                    '2'=>'Tipo2'
-                )
+            'id_proyecto'  => array(
+                'type'      => 'select',
+                'value'     => (isset($request->id_proyecto))? $request->id_proyecto:'',
+                'id'        => 'id_proyecto',
+                'label'     => 'Proyecto',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_proyecto','nombre_proyecto'),
+                'options'   => $proyectos,
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Proyecto',
+                    'btnlabel'=>'Registrar Proyecto',
+                    'btnfinlavel'=>'Registrar Proyecto',
+                    'url'=> url('proyecto/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Proyectos Asociados a la Muestra',
+                    'table_fields'=>array(
+                        'Nombre del Proyecto'
+                    ),
+                    'table_key'=>'nombre_proyecto',
+                    'table_obj'=>(isset($muestra->proyecto))? $muestra->proyecto()->get() :null,
+
+                ),
+                'relacion_campo'=>'id_proyecto'
+            ),
+            'id_tipo_muestra'=>array(
+
+                'type'      => 'select',
+                'value'     => (!empty($request->id_tipo_muestra))? $request->id_tipo_muestra:'',
+                'id'        => 'id_tipo_muestra',
+                'label'     => 'Tipo de Muestra',
+                'selecttype'=> 'obj',
+                'values_seting'=> $tipos,
+                'objkeys'   => array('id_tipo_muestra','descripcion_tipo_muestra'),
+                'options'   => $tipos,
+                'selectadd' => array(
+                    'btnadd'=>'Registrar Tipo de Muestra',
+                    'btnlabel'=>'Registrar Tipo de Muestra',
+                    'btnfinlavel'=>'Registrar Tipo de Muestra',
+                    'url'=> url('tipo-muestra/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Tipos de Muestra',
+                    'table_fields'=>array(
+                        'Descripción del Tipo de Muestra'
+                    ),
+                    'table_key'=>'descripcion_tipo_muestra',
+                    'table_obj'=>(isset($muestra->tipoMuestra))? $muestra->tipoMuestra->get() :null,
+                ),
+                'relacion_campo'=>'id_tipo_muestra'
+
             ),
             'descripcion_muestra' => array(
                 'type'  => 'text',
@@ -242,8 +283,11 @@ class MuestraController extends Controller
         $muestras=Muestra::codigomuestra($request->codigo_muestra)->tipomuestra($request->tipo_muestra)->descripcionmuestra($request->descripcion_muestra)->fecharecepcionmuestra($request->fecha_recepcion)->statusmuestra($request->estatus)->orderBy('codigo_muestra', 'desc')->paginate(20);
 
         $action="muestra/listar";
+        
+        $proyectos = Proyecto::where('estatus_proyecto','<>','Culminado')->get();
+        $tipos=TipoMuestra::where('estatus','=',1)->get();
 
-        $fields=$this->fieldsSearchCall($request);
+        $fields=$this->fieldsSearchCall($request,$proyectos,$tipos);
 
         $data=array(
 

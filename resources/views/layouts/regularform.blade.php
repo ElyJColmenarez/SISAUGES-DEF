@@ -1,4 +1,39 @@
 	<section class="panel">
+
+		<style type="text/css">
+			.select2-drop-mask {
+			      position: absolute;
+			      bottom: 0;
+			      left: 0;
+			      right: 0;
+			      top: 0;
+			      z-index: 99999999;
+			}
+
+			.select2-drop-superindex{
+				z-index: 999999999;
+			}
+
+
+			.datepicker{
+				z-index: 99999999!important;
+			}
+
+			.datepicker.dropdown-menu{
+				z-index: 99999999!important;
+			}
+		</style>
+
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+
+				$('.datepkr').datepicker({
+			        format:'yyyy-mm-dd',
+			        maxDate:'now',
+			        autoclose: true,
+			    });
+			})
+		</script>
 									
 
 		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
@@ -371,7 +406,7 @@
 										        											$rutaweb=$muestra->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $muestra->nombre_temporal_muestra);
 
 											        										$putimg=url($rutaweb);
-											        										
+
 											        									}else{ 
 
 											        										$rutaweb=$ruta;
