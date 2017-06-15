@@ -26,28 +26,32 @@ class Departamento extends Model
 
     public function scopeDescripcionDepartamento($query,$search){
 
-        return $query->where('descripcion_departamento', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('descripcion_departamento', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeStatusDepartamento($query,$search){
 
-        if (isset($search)) {
+        if (strlen(trim($search))>=1) {
             return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
         }
         
     }
 
     public function scopeInstitutoDepartamento($query,$search){
 
-        return $query->where('id_institucion', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('id_institucion', $search);
+        }
     }
 
     public function scopeInstitucionRelaciones($query,$request){
 
         return $query->whereHas('institucion',function($query) use ($request){
-
-                $query->nombreinstitucion($request->nombre_institucion);
-
+            $query->nombreinstitucion($request->nombre_institucion)->statusinstitucion(1);
         });
 
     }

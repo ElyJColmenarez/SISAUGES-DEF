@@ -14,32 +14,31 @@ class Laboratorio extends Model
     protected $fillable = ['nombre_laboratorio','ubicacion_laboratorio','telefono_laboratorio','estatus'];
     protected $guarded = ['id_Laboratorio'];
 
-   /* public function muestraLaboratorio()
-    {
-        return $this->belongsToMany(Muestra::class,
-            'muestra_laboratorio',
-            'id_Laboratorio',
-            'id_muestra');
-    }
-*/
     public function scopeNombreLaboratorio($query,$search){
-
-        return $query->where('nombre_laboratorio', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('nombre_laboratorio', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeUbicacionLaboratorio($query,$search){
-
-        return $query->where('ubicacion_laboratorio', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('ubicacion_laboratorio', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeTelefonoLaboratorio($query,$search){
-
-        return $query->where('telefono_laboratorio',  'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('telefono_laboratorio',  'LIKE', '%'.$search.'%');
+        }
     }
     
     public function scopeStatusLaboratorio($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
 
 }

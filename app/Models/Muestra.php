@@ -70,6 +70,8 @@ class Muestra extends Model
 
         if (strlen(trim($search))>=1) {
             return $query->where('estatus', '=', $search);
+        }else{
+            return $query->where('estatus', '=', 1);
         }
     }
 }

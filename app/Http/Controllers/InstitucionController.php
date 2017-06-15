@@ -152,11 +152,12 @@ class InstitucionController extends Controller
     public function index(Request $request)
     {
 
-        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->/*whereHas('departamento', function($query) use ($request){
-
-                $query->descripciondepartamento('');
-
-        })->*/orderBy('nombre_institucion', 'desc')->paginate(20);
+        $instituciones=Institucion::nombreinstitucion($request->nombre_institucion)->
+        direccioninstitucion($request->correo_institucional)->
+        correoinstitucion($request->direccion_institucion)->
+        telefonoinstitucion($request->telefono_institucion)->
+        statusinstitucion($request->estatus)->
+        orderBy('nombre_institucion', 'desc')->paginate(20);
 
         $action="institucion/listar";
 
@@ -315,7 +316,7 @@ class InstitucionController extends Controller
 
         $institucion=Institucion::find($id);
 
-        $institucion->estatus = $request->estatus;
+        $institucion->estatus = 0;
         $val = $institucion->save();
 
         return array('result'=>$val,'obj'=>$institucion->id_institucion,'keystone'=>'id_institucion');

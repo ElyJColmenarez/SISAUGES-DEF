@@ -43,6 +43,17 @@ class LaboratorioController extends Controller
                 'validaciones'=>array(
                         'obligatorio'
                     )
+            ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($laboratorio))? '' : $laboratorio->estatus,
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
             )
         );
 
@@ -99,22 +110,12 @@ class LaboratorioController extends Controller
 
 
         
-    //$Laboratorio=Laboratorio::find(1);
-    // if (!is_null($request->estatus)){
-         $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
-         ubicacionlaboratorio($request->ubicacion_laboratorio)->
-         telefonolaboratorio($request->telefono_laboratorio)->
-      //   statuslaboratorio($request->estatus)->
-            orderBy('nombre_laboratorio', 'desc')->paginate(20);
-   /* }else{
         $Laboratorio=Laboratorio::nombrelaboratorio($request->nombre_Laboratorio)->
-         ubicacionlaboratorio($request->ubicacion_laboratorio)->
-         telefonolaboratorio($request->telefono_laboratorio)->    
-         statuslaboratorio($request->estatus)->
-         orderBy('nombre_laboratorio', 'desc')->paginate(20);
-    }*/
-     
-    //    dd($Laboratorio);
+        ubicacionlaboratorio($request->ubicacion_laboratorio)->
+        telefonolaboratorio($request->telefono_laboratorio)->
+        statuslaboratorio($request->estatus)->
+        orderBy('nombre_laboratorio', 'desc')->paginate(20);
+
 
         $action="laboratorio/listar";
 

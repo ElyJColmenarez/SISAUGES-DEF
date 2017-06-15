@@ -26,27 +26,35 @@ class Institucion extends Model
     }
 
     public function scopeNombreInstitucion($query,$search){
-
-        return $query->where('nombre_institucion', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('nombre_institucion', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeDireccionInstitucion($query,$search){
-
-        return $query->where('direccion_institucion', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('direccion_institucion', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeCorreoInstitucion($query,$search){
-
-        return $query->where('correo_institucional', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('correo_institucional', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeTelefonoInstitucion($query,$search){
-
-        return $query->where('telefono_institucion', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('telefono_institucion', '=', $search);
+        }
     }
     
     public function scopeStatusInstitucion($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
 }

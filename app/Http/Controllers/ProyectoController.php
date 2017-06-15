@@ -276,14 +276,14 @@ class ProyectoController extends Controller
                 )
             ),
 
-            'id_institucion'=>array(
+            'nombre_institucion'=>array(
 
-                'type'      => 'relacion',
+                'type'      => 'select',
                 'value'     => (isset($request->id_institucion))? $request->id_institucion:'',
                 'id'        => 'id_institucion',
                 'label'     => 'Institución',
                 'selecttype'=> 'obj',
-                'objkeys'   => array('id_institucion','nombre_institucion'),
+                'objkeys'   => array('nombre_institucion','nombre_institucion'),
                 'options'   => $instituciones
 
             ),
@@ -307,7 +307,16 @@ class ProyectoController extends Controller
     public function index(Request $request)
     {
 
-        $proyectos=Proyecto::orderBy('id_proyecto', 'desc')->paginate(20);
+        $proyectos=Proyecto::nombreproyecto($request->nombre_proyecto)->
+        permisoproyecto($request->permiso_proyecto)->
+        fechainicioproyecto($request->fecha_inicio)->
+        fechafinalproyecto($request->fecha_final)->
+        whereHas('institucion', function($query) use ($request){
+
+                $query->nombreinstitucion($request->nombre_institucion);
+
+        })->
+        orderBy('id_proyecto', 'desc')->paginate(20);
 
         $action="proyecto/listar";
 

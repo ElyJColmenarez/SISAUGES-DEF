@@ -22,7 +22,7 @@
                                 
                                 <div>
 
-                                    @if($data['carpeta']=='muestra')
+
 
                                         {!!Form::open(['url'=>$action , 'method' => 'post' , 'class'=>'form-horizontal form-bordered formsimple'])!!}
 
@@ -47,7 +47,7 @@
                                             
                                         {!! Form::close() !!}
 
-                                    @endif
+
 
                                 </div>
 

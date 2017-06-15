@@ -34,27 +34,37 @@ class Proyecto extends Model
 
     public function scopeNombreProyecto($query,$search)
     {
-        return $query->where('nombre_proyecto', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('nombre_proyecto', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopePermisoProyecto($query,$search)
     {
-        return $query->where('permiso_proyecto','=',$search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('permiso_proyecto','=',$search);
+        }
     }
 
     public function scopeFechaInicioProyecto($query,$search)
     {
-        return $query->where('fecha_inicio','=',$search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('fecha_inicio','=',$search);
+        }
     }
 
     public function scopeFechaFinalProyecto($query,$search)
     {
-        return $query->where('fecha_final','=',$search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('fecha_final','=',$search);
+        }
     }
 
     public function scopeStatusProyecto($query,$search){
 
-        return $query->where('estatus_proyecto', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus_proyecto', '=', $search);
+        }
     }
 
 }

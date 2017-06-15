@@ -58,6 +58,21 @@ class DepartamentoController extends Controller
                 'id'    => 'descripcion_departamento',
                 'label' => 'Nombre '
             ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($departamento))? '' : $departamento->estatus,
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),                    
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
+            ),
+
             'separador1'=>array('type'=>'separador'),
             
             'id_institucion' => array(
@@ -80,7 +95,7 @@ class DepartamentoController extends Controller
         return $fields;
     }
 
-    public function fieldsSearchCall($request){
+    public function fieldsSearchCall($request,$instituciones){
 
         $fields=array(
 
@@ -92,11 +107,16 @@ class DepartamentoController extends Controller
             ),
            
 
-             'nombre_institucion' => array(
-                'type'  => 'text',
-                'value' => (isset($request->nombre_institucion))?  $request->nombre_institucion:'',
-                'id'    => 'nombre_institucion',
-                'label' => 'institucion '
+            'nombre_institucion'=>array(
+
+                'type'      => 'select',
+                'value'     => (isset($request->id_institucion))? $request->id_institucion:'',
+                'id'        => 'id_institucion',
+                'label'     => 'Institución',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('nombre_institucion','nombre_institucion'),
+                'options'   => $instituciones
+
             ),
 
             'estatus' => array(
@@ -131,10 +151,9 @@ class DepartamentoController extends Controller
 
         $action="departamento/listar";
 
-        $fields=$this->fieldsSearchCall($request);
+        $instituciones=Institucion::statusinstitucion(1)->get();
 
-
-     
+        $fields=$this->fieldsSearchCall($request,$instituciones);
 
         $data=array(
 
@@ -183,7 +202,7 @@ class DepartamentoController extends Controller
 
             // $instituciones=Institucion::all()->toArray();
 
-            $instituciones=Institucion::get();
+            $instituciones=Institucion::statusinstitucion(1)->get();
 
             $hiddenfields = array(
                 'field_id'=>array(
