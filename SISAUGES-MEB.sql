@@ -348,3 +348,29 @@ CREATE TABLE IF NOT EXISTS auditoria
   fecha date,
   CONSTRAINT pk_auditoria PRIMARY KEY (id_auditoria)
 );
+
+
+
+
+INSERT INTO rol_usuario(
+            id_rol, descripcion_rol, estatus)
+    VALUES (1, 'su', true);
+
+INSERT INTO rol_usuario(
+            id_rol, descripcion_rol, estatus)
+    VALUES (2, 'admin', true);
+
+INSERT INTO rol_usuario(
+            id_rol, descripcion_rol, estatus)
+    VALUES (3, 'op', true);
+
+
+INSERT INTO persona(
+            id_persona, cedula, nombre, apellido, email, telefono, estatus)
+    VALUES (1,'21120397', 'Aministrador', 'Sistema', 'admin@gmail.com', '04240000000', true);
+
+
+INSERT INTO usuario(
+            id_usuario, username, password, id_rol, cedula_persona, estatus, 
+            remember_token)
+    VALUES (1, "Administrador", "$2y$10$EJwofo6xJdB50al9/HiI.ukAM2oseSZM0lu5NWnlzRMPDNXCg2q0a", 2, '21120397', true);
