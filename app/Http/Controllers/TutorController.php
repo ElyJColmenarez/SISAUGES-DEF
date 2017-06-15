@@ -23,11 +23,14 @@ class TutorController extends Controller
 
 
             'cedula'         => array(
-                'type'          => 'text',
+                'type'          => (empty($persona))? 'text' : 'label',
                 'value'         => (empty($persona))? '' : $persona[0]->cedula,
                 'id'            => 'cedula',
                 'label'         => 'Cédula',
-                'validaciones'  => array('solonumeros','obligatorio')),
+                'validaciones'  => array('solonumeros','obligatorio'),
+                'valshow'=>(empty($persona))? '' : $persona[0]->cedula,
+                'valkey'=>'cedula'
+            ),
 
             'nombre'         => array(
                 'type'          => 'text',
@@ -65,27 +68,6 @@ class TutorController extends Controller
                     'solonumero',
                     'obligatorio' )),
 
-
-            'separador1'=>array('type'=>'separador'),
-
-            'institucion' => array(
-
-                'type'      => 'select',
-                'value'     => (isset($instituciones[0]->id_institucion))? $instituciones[0]->id_institucion:'',
-                'id'        => 'id_institucion',
-                'label'     => 'Institución',
-                'selecttype'=> 'obj',
-                'objkeys'   => array('id_institucion','nombre_institucion'),
-                'options'   => $instituciones[1],
-                'related_select' => 'id_departamento',
-                'selectadd' => array(
-                    'btnlabel'=>'Registrar Institución',
-                    'btnfinlavel'=>'Registrar Institución',
-                    'url'=> url('institucion/registerform')
-                )
-
-            ),
-
             'separador2'=>array('type'=>'separador'),
 
             'departamento' => array(
@@ -111,7 +93,7 @@ class TutorController extends Controller
         return $fields;
     }
 
-    public function fieldsSearchCall($request){
+    public function fieldsSearchCall($request,$departamentos){
 
         $fields = array(
 
@@ -159,31 +141,18 @@ class TutorController extends Controller
                     'solonumero',
                     'obligatorio' )),
 
-            'institucion' => array(
-                'type'      => 'select',
-                'value'     => (isset($request->institucion))? $request->institucion:'',
-                'id'        => 'institucion',
-                'label'     => 'Institución',
-                'options'   => array(
-                    ''=>'Seleccione...',
-                    'true' =>'Activo',
-                    'false'=>'Inactivo'
-                )
-            ),
 
-            'id_departamento' => array(
+            'descripcion_departamento'=>array(
+
                 'type'      => 'select',
-                'value'     => (isset($request->id_departamento))? $request->id_departamento:'',
-                'id'        => 'departamento',
+                'value'     => (!empty($request->descripcion_departamento))? $request->descripcion_departamento:'',
+                'id'        => 'id_departamento',
                 'label'     => 'Departamento',
-                'options'   => array(
-                    ''          =>'Seleccione...',
-                    '1'         =>'Informática',
-                    '2'         =>'Electricidad',
-                    '3'         =>'Tecnología de los materiales',
-                    '4'         =>'Quimica',
+                'selecttype'=> 'obj',
+                'values_seting'=> $departamentos,
+                'objkeys'   => array('descripcion_departamento','descripcion_departamento'),
+                'options'   => $departamentos
 
-                )
             ),
 
             'estatus' => array(
@@ -210,11 +179,29 @@ class TutorController extends Controller
      */
     public function index(Request $request)
     {
-        $tutor = Tutor::with('persona')->cedulaTutor($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+        $tutor = Tutor::with('persona')->
+        cedulaTutor($request->cedula)->
+        statustutor($request->estatus)->
+        whereHas('departamento', function($query) use ($request){
+
+                $query->descripciondepartamento($request->descripcion_departamento);
+
+        })->
+        whereHas('persona', function($query) use ($request){
+
+                $query->nombrepersona($request->nombre)->
+                        apellidopersona($request->apellido)->
+                        emailpersona($request->email)->
+                        telefonopersona($request->telefono);
+
+        })->
+        orderBy('cedula_persona','asc')->paginate(20);
 
         $action = "tutor/listar";
 
-        $fields = $this->fieldsSearchCall($request);
+        $dp=Departamento::statusdepartamento(1)->get();
+
+        $fields = $this->fieldsSearchCall($request,$dp);
 
         $data=array(
 
@@ -299,8 +286,8 @@ class TutorController extends Controller
                 )
             );
 
-            $dp=Departamento::get();
-            $ins=institucion::get();
+            $dp=Departamento::statusdepartamento(1)->get();
+            $ins=institucion::statusinstitucion(1)->get();
 
             $fields = $this->fieldsRegisterCall($persona,$tutor,array($instituciones,$ins),array($departamentos,$dp));
 
@@ -364,6 +351,9 @@ class TutorController extends Controller
             $tutor->estatus              = 1;
             $val = $tutor->save();
         }
+
+
+        
 
         return array('result'=>$val,'obj'=>$tutor->id_tutor,'keystone'=>'id_tutor');
         

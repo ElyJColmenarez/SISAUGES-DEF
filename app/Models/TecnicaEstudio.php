@@ -19,11 +19,17 @@ class TecnicaEstudio extends Model
 
     public function scopeDescripcionTecnicaE($query,$search)
     {
-        return $query->where('descripcion_tecnica_estudio', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('descripcion_tecnica_estudio', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeStatusTecnicaE($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
 }

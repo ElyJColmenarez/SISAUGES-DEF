@@ -18,12 +18,18 @@ class TipoMuestra extends Model
     }
 
     public function scopeDescripcionTipoM($query,$search)
-    {
-        return $query->where('descripcion_tipo_muestra', 'LIKE', '%'.$search.'%');
+    {   
+        if (strlen(trim($search))>=1) {
+            return $query->where('descripcion_tipo_muestra', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeStatusTipoM($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
 }

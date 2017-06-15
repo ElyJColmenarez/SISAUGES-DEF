@@ -24,7 +24,18 @@ class Tutor extends Model
     }
 
     public function scopeCedulaTutor($query,$search){
+        if (strlen(trim($search))>=1) {
+            return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+        }
+    }
 
-        return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+    public function scopeStatusTutor($query,$search){
+
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
+        
     }
 }

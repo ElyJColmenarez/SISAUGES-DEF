@@ -31,17 +31,32 @@ class User extends Authenticatable
 
     public function scopeDescripcionUser($query,$search)
     {
-        return $query->where('username', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('username', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeCedulaUser($query,$search)
     {
-        return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+        }
+    }
+
+    public function scopeRolUser($query,$search)
+    {
+        if (strlen(trim($search))>=1) {
+            return $query->where('id_rol', $search);
+        }
     }
 
     public function scopeStatusUser($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
     
 }

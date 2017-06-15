@@ -22,6 +22,20 @@ class TipoMuestraController extends Controller
                 'value' => (empty($tipoMuestra))? '' : $tipoMuestra->descripcion_tipo_muestra,
                 'id'    => 'descripcion_tipo_muestra',
                 'label' => 'Nombre '
+            ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($tipoMuestra))? '' : $tipoMuestra->estatus,
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),                    
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
             )
         );
 
@@ -62,16 +76,13 @@ class TipoMuestraController extends Controller
     public function index(Request $request)
     {
 
-        if (!is_null($request->estatus)){
-            $tipos=TipoMuestra::DescripcionTecnicaE($request->descripcion_tipo_muestra)->
-            StatusTecnicaE($request->estatus)->
-            orderBy('descripcion_tipo_muestra', 'desc')->paginate(20);
-        }else{
-            $tipos=TipoMuestra::DescripcionTecnicaE($request->descripcion_tipo_muestra)->
-            orderBy('descripcion_tipo_muestra', 'desc')->paginate(20);
-        }
 
-         $action="tecnica-estudio/listar";
+        $tipos=TipoMuestra::descripciontipom($request->descripcion_tipo_muestra)->
+        statustipom($request->estatus)->
+        orderBy('descripcion_tipo_muestra', 'desc')->paginate(20);
+
+
+         $action="tipo-muestra/listar";
 
         $fields=$this->fieldsSearchCall($request);    
 
@@ -215,8 +226,6 @@ class TipoMuestraController extends Controller
         }else{
 
             $tipoMuestra->descripcion_tipo_muestra=$request->descripcion_tipo_muestra;
-            
-
             $val=$tipoMuestra->save();
         }
 

@@ -24,6 +24,20 @@ class TecnicaEstudioController extends Controller
                 'value' => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->descripcion_tecnica_estudio,
                 'id'    => 'descripcion_tecnica_estudio',
                 'label' => 'Nombre '
+            ),
+            'estatus' => array(
+                'type'      => 'select',
+                'value'     => (empty($tecnicasEstudio))? '' : $tecnicasEstudio->estatus,
+                'id'        => 'estatus',
+                'label'     => 'estatus',
+                'validaciones'=>array(
+                    'obligatorio'
+                ),                    
+                'options'   => array(
+                    ''=>'Seleccione...',
+                    '1'=>'Activo',
+                    '0'=>'Inactivo'
+                )
             )
         );
 
@@ -64,16 +78,12 @@ class TecnicaEstudioController extends Controller
     public function index(Request $request)
     {
 
-        if (!is_null($request->estatus)){
-            $tecnicas=TecnicaEstudio::DescripcionTecnicaE($request->descripcion_tecnica_estudio)->
-            StatusTecnicaE($request->estatus)->
-            orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
-        }else{
-            $tecnicas=TecnicaEstudio::DescripcionTecnicaE($request->descripcion_tecnica_estudio)->
-            orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
-        }
+        $tecnicas=TecnicaEstudio::descripciontecnicae($request->descripcion_tecnica_estudio)->
+        statustecnicae($request->estatus)->
+        orderBy('descripcion_tecnica_estudio', 'desc')->paginate(20);
 
-         $action="tecnica-estudio/listar";
+
+        $action="tecnica-estudio/listar";
 
         $fields=$this->fieldsSearchCall($request);    
 

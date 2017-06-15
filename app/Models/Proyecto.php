@@ -62,9 +62,13 @@ class Proyecto extends Model
 
     public function scopeStatusProyecto($query,$search){
 
+
         if (strlen(trim($search))>=1) {
-            return $query->where('estatus_proyecto', '=', $search);
+            return $query->where('estatus_proyecto', $search);
+        }else{
+            return $query->where('estatus_proyecto','<>','Culminado');
         }
+
     }
 
 }

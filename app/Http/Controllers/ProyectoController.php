@@ -320,7 +320,7 @@ class ProyectoController extends Controller
 
         $action="proyecto/listar";
 
-        $instituciones=Institucion::get();
+        $instituciones=Institucion::statusinstitucion(1)->get();
 
         $fields=$this->fieldsSearchCall($request,$instituciones);
 
@@ -395,10 +395,10 @@ class ProyectoController extends Controller
             $est=Estudiante::find($request->estudiante);
 
 
-            $inses=Institucion::get();
-            $depes=Departamento::get();
-            $tutes=Tutor::get();
-            $estes=Estudiante::get();
+            $inses=Institucion::statusinstitucion(1)->get();
+            $depes=Departamento::statusdepartamento(1)->get();
+            $tutes=Tutor::statustutor(1)->get();
+            $estes=Estudiante::statusestudiante(1)->get();
             $muestras=Muestra::get();
 
             if ($request->typeform=='modify') {
@@ -522,6 +522,20 @@ class ProyectoController extends Controller
                     if ($muestra->proyecto()->find($provalue)) {
 
                         $muestra->proyecto()->detach($provalue);
+                    }
+
+                }
+            }
+
+            if (isset($request->addeninid_institucion)) {
+                    
+                foreach ($request->addeninid_muestra as $prokey => $provalue) {
+
+                    if (!$proyecto->muestras()->find($provalue)) {
+
+                        $proyecto->muestras()->attach($provalue);
+
+                        $proyecto->save();
                     }
 
                 }

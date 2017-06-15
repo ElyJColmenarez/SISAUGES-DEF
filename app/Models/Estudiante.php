@@ -23,17 +23,28 @@ class Estudiante extends Model
     }
 
     public function scopeCarreraEstudiante($query,$search){
-
-        return $query->where('carrera_estudiante', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('carrera_estudiante', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeSemestreEstudiante($query,$search){
-
-         return $query->where('semestre_estudiante', 'LIKE', '%'.$search.'%');
+        if (strlen(trim($search))>=1) {
+            return $query->where('semestre_estudiante', 'LIKE', '%'.$search.'%');
+        }
     }
 
     public function scopeCedulaEstudiante($query,$search){
+        if (strlen(trim($search))>=1) {
+            return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+        }
+    }
 
-        return $query->where('cedula_persona', 'LIKE', '%'.$search.'%');
+    public function scopeStatusEstudiante($query,$search){
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
 }

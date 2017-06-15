@@ -65,7 +65,7 @@
                                     <strong>Uppss!</strong>Hay algunos problemas con los datos que ingresaste<br><br>
                                     <ul>
                                         @foreach($errors->all() as $error)
-                                            <li>{{ $error  }}</li>
+                                            <li>{{ $error }}</li>
                                         @endforeach
                                     </ul>
 

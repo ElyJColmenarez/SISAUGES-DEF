@@ -22,11 +22,14 @@ class UserController extends Controller
 
 
                 'cedula'         => array(
-                    'type'          => 'text',
+                    'type'          => (empty($persona))? 'text' : 'label',
                     'value'         => (empty($persona))? '' : $persona->cedula,
                     'id'            => 'cedula',
                     'label'         => 'Cédula',
-                    'validaciones'  => array('solonumeros','obligatorio')),
+                    'validaciones'  => array('solonumeros','obligatorio'),
+                    'valshow'=>(empty($persona))? '' : $persona->cedula,
+                    'valkey'=>'cedula'
+                ),
 
                 'nombre'         => array(
                     'type'          => 'text',
@@ -193,7 +196,20 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $usuario = User::with('persona')->cedulaUser($request->cedula)->orderBy('cedula_persona','asc')->paginate(20);
+        $usuario = User::with('persona')->
+        cedulaUser($request->cedula)->
+        descripcionuser($request->username)->
+        roluser($request->id_rol)->
+        statususer($request->estatus)->
+        whereHas('persona', function($query) use ($request){
+
+                $query->nombrepersona($request->nombre)->
+                        apellidopersona($request->apellido)->
+                        emailpersona($request->email)->
+                        telefonopersona($request->telefono);
+
+        })->
+        orderBy('cedula_persona','asc')->paginate(20);
 
         $action = "usuario/listar";
 

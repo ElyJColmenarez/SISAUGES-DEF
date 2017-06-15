@@ -112,12 +112,12 @@
 
                         @if (Auth::user()->id_rol == 2)
 
-                         <li class="">
+                         <!--<li class="">
                             <a href="{{url('auditoria/listar')}}">
                                 <i class="fa fa-book" aria-hidden="true"></i>
                                 <span>Auditoria</span>
                             </a>
-                        </li>
+                        </li>-->
 
                         <li class="">
                             <a href="{{url('usuario/listar')}}">
