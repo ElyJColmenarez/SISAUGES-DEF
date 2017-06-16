@@ -4,10 +4,13 @@ namespace SISAUGES\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 
-class Laboratorio extends Model
+class Laboratorio extends Model implements AuditableContract
 {
+    use Auditable;
 	public $timestamps=false;
     protected $table="laboratorio";
     protected $primaryKey="id_laboratorio";

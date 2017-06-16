@@ -3,9 +3,12 @@
 namespace SISAUGES\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Auditoria extends Model
+class Auditoria extends Model implements AuditableContract
 {
+    use Auditable;
     public $timestamps = false;
     protected $table = "auditoria";
     protected $primaryKey = "id_auditoria";

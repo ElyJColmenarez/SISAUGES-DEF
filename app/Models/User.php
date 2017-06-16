@@ -3,9 +3,12 @@
 namespace SISAUGES\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class User extends Authenticatable
+class User extends Authenticatable implements AuditableContract
 {
+    use Auditable;
     public $timestamps = false;
     protected $table="usuario";
     protected $primaryKey = "id_usuario";
