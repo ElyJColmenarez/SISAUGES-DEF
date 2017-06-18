@@ -23,55 +23,53 @@ class AuditoriaController extends Controller
     public function index(Request $request)
     {
         //
-        $auditoria=Auditoria::moduloauditoria($request->modulo)->/*whereHas('departamento', function($query) use ($request){
-
-                $query->descripciondepartamento('');
-
-        })->*/orderBy('modulo', 'desc')->paginate(20);
-
-       // dd($auditoria);    
+        $auditoria=Auditoria::with('user')->eventoAuditoria($request->evento)
+                                                    ->moduloAuditoria($request->modulo)
+                                                    ->oldValuesAuditoria($request->oldValues)
+                                                    ->newValuesAuditoria($request->newValues)
+                                                    ->fechaAuditoria($request->date)->orderBy('id','asc')->paginate(20);
     
         $action="auditoria/listar";
 
         $fields=array(
 
+            'evento' => array(
+                'type'  => 'text',
+                'value' => (isset($request->evento))? $request->evento:'',
+                'id'    => 'evento',
+                'label' => 'Evento de la auditoria'
+            ),
             'modulo' => array(
                 'type'  => 'text',
                 'value' => (isset($request->modulo))? $request->modulo:'',
                 'id'    => 'modulo',
-                'label' => 'modulo de la auditoria'
+                'label' => 'Módulo'
             ),
-            'operacion' => array(
+            'oldvalues' => array(
                 'type'  => 'text',
-                'value' => (isset($request->operacion))? $request->operacion:'',
-                'id'    => 'operacion',
-                'label' => 'operacion'
+                'value' => (isset($request->oldValues))? $request->oldValues:'',
+                'id'    => 'oldvalues',
+                'label' => 'Antiguos Valores'
             ),
-            'descripcion' => array(
+            'newvalues' => array(
                 'type'  => 'text',
-                'value' => (isset($request->descripcion))? $request->descripcion:'',
-                'id'    => 'descripcion',
-                'label' => 'descripcion'
-            ),
-            'usuario' => array(
-                'type'  => 'text',
-                'value' => (isset($request->usuario))? $request->usuario:'',
-                'id'    => 'usuario',
-                'label' => 'Usuario del sistema'
+                'value' => (isset($request->newValues))? $request->newValues:'',
+                'id'    => 'newValues',
+                'label' => 'Nuevos Valores'
             ),
 
-            'fecha' => array(
+            'date' => array(
                 'type'  => 'text',
-                'value' => (isset($request->fecha))? $request->fecha:'',
-                'id'    => 'fecha',
-                'label' => 'fecha'
+                'value' => (isset($request->date))? $request->date:'',
+                'id'    => 'date',
+                'label' => 'date'
             )
         );
 
         $data=array(
 
             'title'=>'Auditoria',
-            'principal_search'=>'modulo',
+            'principal_search'=>'evento',
             'registros'=>$auditoria,
             'carpeta'=>'auditoria'
 
@@ -79,43 +77,6 @@ class AuditoriaController extends Controller
 
         return view('layouts.indexAut',compact('data','action','fields','request'));
 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public static function store($modulo, $operacion, $descripcion, $usuario)
-    {
-        //
-        $auditoria= new Auditoria();
-        $auditoria->modulo=$modulo;
-        $auditoria->operacion=$operacion;
-        $auditoria->descripcion=$descripcion;
-        $auditoria->usuario=$usuario;
-        $date = date('Y-m-d H:i:s');
-        $auditoria->fecha=$date;
-        $val=$auditoria->save();
-        return $val;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-   
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
 

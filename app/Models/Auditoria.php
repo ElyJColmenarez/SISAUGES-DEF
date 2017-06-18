@@ -2,42 +2,34 @@
 
 namespace SISAUGES\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Models\Audit;
 
-class Auditoria extends Model implements AuditableContract
+class Auditoria extends Audit
 {
-    use Auditable;
-    public $timestamps = false;
-    protected $table = "auditoria";
-    protected $primaryKey = "id_auditoria";
-    protected $fillable = ['modulo','operacion','descripcion','usuario','fecha'];
-    protected $guarded = ['id_auditoria'];
+
+    public function scopeEventoAuditoria($query,$search)
+    {
+        return $query->where('event', 'LIKE', '%'.$search.'%');
+    }
 
     public function scopeModuloAuditoria($query,$search)
     {
-        return $query->where('modulo', 'LIKE', '%'.$search.'%');
+        return $query->where('auditable_type', 'LIKE', '%'.$search.'%');
     }
 
-    public function scopeOperacionAuditoria($query,$search)
+    public function scopeOldValuesAuditoria($query,$search)
     {
-        return $query->where('operacion', 'LIKE', '%'.$search.'%');
+        return $query->where('old_values','LIKE', '%'.$search.'%');
     }
 
-    public function scopeDescripcionAuditoria($query,$search)
+    public function scopeNewValuesAuditoria($query,$search)
     {
-        return $query->where('descripcion','LIKE', '%'.$search.'%');
-    }
-
-    public function scopeUsiarioAuditoria($query,$search)
-    {
-        return $query->where('usuario','LIKE', '%'.$search.'%');
+        return $query->where('new_values','LIKE', '%'.$search.'%');
     }
 
     public function scopeFechaAuditoria($query,$search){
 
-        return $query->where('fecha', 'LIKE', '%'.$search.'%');
+        return $query->where('created_at', 'LIKE', '%'.$search.'%');
     }
 
 }
