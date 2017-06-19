@@ -946,6 +946,41 @@ jQuery(document).ready(function() {
 
 
 
+    //Reports Functions
+
+
+
+    $('#modalForm').on('click','a.pnless',function(event){
+
+        event.preventDefault();
+
+
+        if ($(this).attr('data-open')=='false') {
+
+            $('.panelocultos').slideUp('fast','swing');
+
+            $(this).attr('data-open','true')
+            $(this).removeClass('fa-caret-down');
+            $(this).addClass('fa-caret-up');
+            $('#modalForm #pnl'+$(this).attr('data-target')).slideDown('fast','swing');
+
+        }else{
+
+            $(this).attr('data-open','false')
+            $(this).removeClass('fa-caret-up');
+            $(this).addClass('fa-caret-down');
+            $('#modalForm #pnl'+$(this).attr('data-target')).slideUp('fast','swing');
+
+        }
+
+        
+
+    });
+
+
+    //Extra
+
+
     $('#modalForm').on('click','.imgpreview button',function(event){
 
         event.preventDefault();

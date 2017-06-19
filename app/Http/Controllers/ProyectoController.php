@@ -31,7 +31,7 @@ class ProyectoController extends Controller
 
 
 
-    public function fieldsRegisterCall($proyecto,$instituciones=null,$departamentos=null,$tutores=null,$estudiantes=null,$muestras=null){
+    public function fieldsRegisterCall($proyecto,$instituciones=null,$departamentos=null,$tutores=null,$estudiantes=null,$muestras=null,$mestudiantes=null){
 
             
         $fields=array(
@@ -105,40 +105,6 @@ class ProyectoController extends Controller
             ),
             'separador3'=>array('type'=>'separador'),*/
 
-            /*'titulo2'=>array(
-                'type'      => 'titulo',
-                'value'     => 'Datos del Estudiante'
-            ),
-
-            'estudiante'=>array(
-
-                'type'      => 'relacion',
-                'value'     => (isset($estudiantes[1]))? $estudiantes[1]->id_estudiante:'',
-                'id'        => 'id_estudiante',
-                'label'     => 'Estudiante',
-                'selecttype'=> 'obj',
-                'objkeys'   => array('id_estudiantes','cedula_persona'),
-                'options'   => $estudiantes[0],
-                'values_seting'=> $estudiantes[2],
-                'selectadd' => array(
-                    'btnadd'=>'Agregar Estudiante',
-                    'btnlabel'=>'Registrar Estudiante',
-                    'btnfinlavel'=>'Registrar Estudiante',
-                    'url'=> url('estudiante/registerform')
-                ),
-                'relation_table'=>array(
-                    'title'=>'Estudiantes involucrados en el Proyecto',
-                    'table_fields'=>array(
-                        'Cedula del Estudiante'
-                    ),
-                    'table_key'=>'cedula_persona',
-                    'table_obj'=>(isset($proyecto->estudiante))? $proyecto->estudiante()->get() :null,
-                ),
-                'relacion_campo'=>'id_estudiante'
-
-            ),
-            'separador4'=>array('type'=>'separador'),*/
-
             'titulo3'=>array(
                 'type'      => 'titulo',
                 'value'     => 'Datos del Proyecto'
@@ -187,6 +153,44 @@ class ProyectoController extends Controller
             ),
             'separador4'=>array('type'=>'separador')
         );
+
+		if ($mestudiantes!=null) {
+			
+			$fields['titulo2']=array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Estudiante'
+            );
+
+            $fields['estudiante']=array(
+
+                'type'      => 'relacion',
+                'value'     => '',
+                'id'        => 'id_estudiante',
+                'label'     => 'Estudiante',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_estudiante','cedula_persona'),
+                'options'   => $proyecto->estudiante,
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Estudiante',
+                    'btnlabel'=>'Registrar Estudiante',
+                    'btnfinlavel'=>'Registrar Estudiante',
+                    'url'=> url('estudiante/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Estudiantes involucrados en el Proyecto',
+                    'table_fields'=>array(
+                        'Cedula del Estudiante'
+                    ),
+                    'table_key'=>'cedula_persona',
+                    'table_obj'=>(isset($proyecto->estudiante))? $proyecto->estudiante()->get() :null,
+                ),
+                'relacion_campo'=>'id_estudiante'
+
+            );
+
+            $fields['separador5']=array('type'=>'separador');
+
+		}
 
 
         if ($muestras!=null) {
@@ -294,7 +298,126 @@ class ProyectoController extends Controller
     }
 
 
-    public function fieldsReportCall($institucion,$departamento,$estudiantes,$tutores,$muestras){
+    public function fieldsReportCall($proyecto,$instituciones=null,$departamentos=null,$tutores=null,$estudiantes=null,$muestras=null,$mestudiantes=null){
+
+            
+        $fields=array(
+
+            'titulo1'=>array(
+                'type'      => 'titulo',
+                'value'     => 'Datos de la Institución'
+            ),
+
+            'institucion'=>array(
+
+                'type'      => 'report_relacion',
+                'value'     => '',
+                'id'        => 'id_institucion',
+                'label'     => 'Institución',
+                'selecttype'=> 'obj',
+                'values_seting'=> $instituciones[2],
+                'objkeys'   => array('id_institucion','nombre_institucion'),
+                'options'   => $instituciones[0],
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Institución',
+                    'btnlabel'=>'Registrar Institución',
+                    'btnfinlavel'=>'Registrar Institución',
+                    'url'=> url('institucion/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Instituciones Asociadas al Proyecto',
+                    'table_fields'=>array(
+                        'Nombre de la Institucion'
+                    ),
+                    'table_key'=>'nombre_institucion',
+                    'table_obj'=>(isset($proyecto->institucion))? $proyecto->institucion()->get() :null,
+                ),
+                'relacion_campo'=>'id_institucion'
+
+            ),
+            'separador1'=>array('type'=>'separador'),
+
+        );
+
+		if ($mestudiantes!=null) {
+			
+			$fields['titulo2']=array(
+                'type'      => 'titulo',
+                'value'     => 'Datos del Estudiante'
+            );
+
+            $fields['estudiante']=array(
+
+                'type'      => 'report_relacion',
+                'value'     => '',
+                'id'        => 'id_estudiante',
+                'label'     => 'Estudiante',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_estudiantes','cedula_persona'),
+                'options'   => $estudiantes[0],
+                'values_seting'=> $estudiantes[2],
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Estudiante',
+                    'btnlabel'=>'Registrar Estudiante',
+                    'btnfinlavel'=>'Registrar Estudiante',
+                    'url'=> url('estudiante/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Estudiantes involucrados en el Proyecto',
+                    'table_fields'=>array(
+                        'Cedula del Estudiante'
+                    ),
+                    'table_key'=>'cedula_persona',
+                    'table_obj'=>(isset($proyecto->estudiante))? $proyecto->estudiante()->get() :null,
+                ),
+                'relacion_campo'=>'id_estudiante'
+
+            );
+
+            $fields['separador5']=array('type'=>'separador');
+
+		}
+
+
+        if ($muestras!=null) {
+
+            $fields['titulo4']=array(
+                'type'      => 'titulo',
+                'value'     => 'Muestras Asociadas'
+            );
+
+            $fields['muestras']=array(
+
+                'type'      => 'report_muestra',
+                'value'     => '',
+                'id'        => 'id_muestra',
+                'label'     => 'Muestras',
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_muestra','codigo_muestra'),
+                'options'   => $proyecto->muestras()->get(),
+                'selectadd' => array(
+                    'btnadd'=>'Agregar Muestras',
+                    'btnlabel'=>'Registrar Muestras',
+                    'btnfinlavel'=>'Registrar Muestras',
+                    'url'=> url('muestra/registerform')
+                ),
+                'relation_table'=>array(
+                    'title'=>'Muestras Asociadas al Proyecto',
+                    'table_fields'=>array(
+                        'Codigo de la Muestra'
+                    ),
+                    'table_key'=>'codigo_muestra',
+                    'table_obj'=>(isset( $proyecto->muestras ))? $proyecto->muestras()->get() :null,
+                ),
+                'relacion_campo'=>'id_muestra',
+                'editinclude'=> true
+
+            );
+
+        }
+        
+
+        return $fields;
 
     }
 
@@ -355,6 +478,8 @@ class ProyectoController extends Controller
             $action="proyecto/editar/".$request->field_id;
         }elseif($request->typeform=='deleted'){
             $action="proyecto/eliminar/".$request->field_id;
+        }elseif ($request->typeform=='report') {
+        	$action="proyecto/reporte/".$request->field_id;
         }
 
 
@@ -402,7 +527,16 @@ class ProyectoController extends Controller
             $muestras=Muestra::get();
 
             if ($request->typeform=='modify') {
-                $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request),$muestras);
+                $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request),$muestras,$estes);
+            }elseif ($request->typeform=='report') {
+
+            	$hiddenfields['report']=array(
+                    'type'  => 'hidden',
+                    'value' =>  url($action),
+                    'id'    => 'report',
+                );
+
+            	$fields=$this->fieldsReportCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request),$muestras,$estes);
             }else{
                 $fields=$this->fieldsRegisterCall($proyecto,array($inses,$ins,$request),array($depes,$dep),array($tutes,$tut),array($estes,$est,$request));
             }

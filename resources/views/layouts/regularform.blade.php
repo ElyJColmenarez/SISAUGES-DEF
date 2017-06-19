@@ -159,6 +159,151 @@
 									        @elseif( $value['type']=='separador' )
 
 
+								        	@elseif( $value['type']=='report_relacion' )
+
+
+								        		<div class="col-md-6">
+									                <label class="col-md-4 control-label" for="{!! $key !!}">{!! $value['label'] !!}</label>
+									                <div class="col-md-8">
+									                    <select data-plugin-selectTwo name="{!! $key !!}" id="{!! $value['id'] !!}" class="form-control populate" value="{!! $value['value'] !!}" @if (isset($value['validaciones'])) {!! $validaciones !!}  @endif>
+									                        
+									                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1] ?>
+
+								                        	@foreach( $value['options'] as $key2 => $value2 )
+
+								                        		<option value="{!! $value2->$aux1 !!}" {{ ($value['value']==$value2->$aux1)? 'selected' : '' }}> {!! $value2->$aux2 !!} </option>
+
+								                        	@endforeach
+
+									                    </select>
+									                </div>
+									            </div>
+
+
+								        	@elseif( $value['type']=='report_muestra' )
+
+									        		<div class="col-md-12 muestra-seccion mtrsrpt">
+
+									        			<div id="imgresorces"  data-imagennodisponible="{{asset('assets/images/nodisponible.svg')}}"></div>
+
+									        			<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux='' ?>
+
+									        			@foreach($value['options'] as $pro_muestrakey => $pro_muestravalue)
+
+									        				<div class="panel">
+																<header class="panel-heading">
+																	<div class="panel-actions">
+																		<a href="#" class="fa fa-caret-down pnless" data-target="{{ $pro_muestrakey }}" data-open="false"></a>
+																	</div>
+													
+																	<h2 class="panel-title">{{ $pro_muestravalue->$aux2 }}</h2>
+																</header>
+																<div class="panel-body">
+
+																	<?php $archi=$pro_muestravalue->archivo()->get() ?>
+																	
+																	@if(count($archi)>0)
+
+														        		<div class="panelocultos" id="pnl{{ $pro_muestrakey }}">
+														        			<div class="col-md-12">
+
+														        				<div class="tablecontainer">
+															        				<table class="table table-bordered table-striped mb-none">
+
+															        					<thead>
+															        						<tr>
+															        							<th>Miniatura</th>
+															        							<th>Archivo</th>
+															        							<th>Tipo de Archivo</th>
+															        							<th>Tamaño</th>
+															        							<th>Tecnica de Estudio</th>
+															        							<th>Fecha de Registro</th>
+															        							<th></th>
+															        							<th>Incluir</th>
+															        						</tr>
+															        					</thead>
+															        					<tbody id="mstr{{ $pro_muestravalue->id_muestra }}">
+															        						<?php
+
+															        							if (count($archi)>0) {
+															        								
+															        							
+															        								foreach ($archi as $mkey => $muestra) {
+															        								
+															        									$ruta=$muestra->ruta_img_muestra.$muestra->nombre_temporal_muestra;
+
+															    
+
+															        									if (file_exists($ruta)) {
+															        										$finfo = new finfo(FILEINFO_MIME);
+
+																	        								$type = explode(';', $finfo->file($ruta));
+
+
+																	        								if (explode('/', $type[0])[0]=='image'){
+
+																	        									$extension=explode('.', $muestra->nombre_temporal_muestra);
+
+															        											$rutaweb=$muestra->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $muestra->nombre_temporal_muestra);
+
+																        										$putimg=url($rutaweb);
+
+																        									}else{ 
+
+																        										$rutaweb=$ruta;
+
+																        										$putimg=asset('assets/images/nodisponible.svg'); 
+																        									}
+
+																	        								echo "<tr id='tableregd".$mkey."' data-regid='d".$mkey."' data-trueid='".$muestra->id_archivo."'>";
+																	        									echo    "<td><div class='tbl-imgcontainer'><img src='".$putimg."'></div></td>";
+																		        								echo "<td>".$muestra->nombre_original_muestra."</td>";
+																		        								echo "<td>".$type[0]."</td>";
+																		        								echo "<td>".(filesize($ruta)/1000)."KB</td>";
+																		        								echo "<td>".$muestra->tecnicaEstudio()->first()->descripcion_tecnica_estudio."</td>";
+																		        								echo "<td>".$muestra->fecha_analisis."</td>";
+																		        								echo '<td>
+																		        									<a href="#" class="btn btn-primary verimg" data-visible="true" data-field-url="'.url($rutaweb).'" data-typefile="'.explode('/', $type[0])[0].'"><i class="fa fa-eye"></i></a>
+																		        								</td>';
+																			        							echo "<td>
+																			        									<div class='switch switch-sm switch-primary'>
+																															<input type='checkbox' name='archivosincluidos[]' data-plugin-ios-switch value=".$muestra->id_archivo." />
+																														</div>
+																			        							</td>";
+																		        							echo "</tr>";
+															        									}
+
+																        								
+
+																        							}
+
+
+																        						}
+															        							
+
+
+															        						?>
+															        					</tbody>
+
+															        				</table>
+															        			</div>
+														        			</div>
+														        		</div>
+
+
+													        		@endif
+
+																</div>
+															</div>
+
+									        			@endforeach
+
+
+										        		
+										        		
+										        	</div>
+
+
 									        @elseif( $value['type']=='titulo' )
 
 									        	<div class="col-md-12 formsptitels"><h2>{{ $value['value'] }}</h2></div>
@@ -178,7 +323,7 @@
 
 										                        	<option value="">Seleccione...</option>
 										                        
-											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux='' ?>
+											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux=''; var_dump($value['options']); ?>
 
 											                    	@if(isset($value['options']))
 
@@ -873,6 +1018,10 @@
 
 										<button class="btn btn-primary" name="lastcallmodal">{!! $request->finlabel !!}</button>
 										<button class="btn btn-default dismisslastmodal">Regresar</button>
+
+									@elseif(isset($hiddenfields['report']))
+
+										<button class="btn btn-primary" name="finregistroreport">Generar Reporte</button>
 
 									@else
 

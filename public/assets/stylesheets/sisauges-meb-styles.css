@@ -247,6 +247,15 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 
 }
 
+.panelocultos{
+	display: none;
+}
+
+
+.mtrsrpt{
+	max-height: 300px;
+	overflow-y: scroll;
+}
 
 @media only screen and (min-width: 992px){
 

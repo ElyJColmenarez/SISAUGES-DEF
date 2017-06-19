@@ -14,7 +14,7 @@ use SISAUGES\Models\Proyecto;
 class EstudianteController extends Controller
 {
 
-    public function fieldsRegisterCall($persona,$estudiante,$proyectos){
+    public function fieldsRegisterCall($persona,$estudiante,$proyectos,$relacionproyecto=null){
 
         $fields = array(
 
@@ -107,8 +107,8 @@ class EstudianteController extends Controller
 
             'id_proyecto'=>array(
 
-                'type'      => 'select',
-                'value'     => (!empty($estudiante->id_proyecto))? $estudiante->id_proyecto:'',
+                'type'      => (isset($relacionproyecto))? 'label':'select',
+                'value'     => (isset($relacionproyecto))? $relacionproyecto->id_proyecto:'',
                 'id'        => 'id_proyecto',
                 'label'     => 'Proyecto',
                 'selecttype'=> 'selectadd',
@@ -129,7 +129,9 @@ class EstudianteController extends Controller
                     'table_key'=>'nombre_proyecto',
                     'table_obj'=>(isset($institucion->proyecto))? $institucion->proyecto()->get() :null,
                 ),
-                'relacion_campo'=>'id_proyecto'
+                'relacion_campo'=>'id_proyecto',
+                'valshow'=>(isset($relacionproyecto))? $relacionproyecto->nombre_proyecto: '',
+                'valkey'=>'id_proyecto'
 
             ),
             'separador2'=>array('type'=>'separador')
@@ -311,7 +313,14 @@ class EstudianteController extends Controller
                 )
             );
 
-            $fields = $this->fieldsRegisterCall($persona,$estudiante,array($proyectos,$pro,$request));
+            if (isset($request->relationid)) {
+                $subpro=Proyecto::find($request->relationid);
+                $fields = $this->fieldsRegisterCall($persona,$estudiante,array($proyectos,$pro,$request),$subpro);
+            }else{
+                $fields = $this->fieldsRegisterCall($persona,$estudiante,array($proyectos,$pro,$request));
+            }
+
+            
             $modulo='Estudiante';
         }
 
