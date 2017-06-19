@@ -26,6 +26,8 @@ Route::group(['middleware'=>'auditoria'],function(){
 
     Route::group(['prefix'=>'auditoria'], function(){
 
+        Route::match(array('get','post'),'listar',['uses'=>'AuditoriaController@index', 'as'=>'listar']);
+
     });
 
 });
@@ -56,39 +58,6 @@ Route::group(['middleware'=>'admin'], function(){
         Route::post('asignar-estatus',['uses'=>'EstatusTutorController@ajaxRegularAssign', 'as'=>'asignar-estatus']); //hablar con Edward para este metodo
 
     });
-
-    Route::group(['prefix'=>'sector-proyecto'], function(){
-
-        Route::match(array('get','post'),'listar',['uses'=>'SectorProyectoController@index', 'as'=>'listar']);
-        Route::post('registerform',['uses'=>'SectorProyectoController@renderForm', 'as'=>'registerform']);
-        Route::match(array('get','post'),'buscar',['uses'=>'SectorProyectoController@renderForm', 'as'=>'buscar']);
-        Route::match(array('get','post'),'crear',['uses'=>'SectorProyectoController@ajaxRegularStore', 'as'=>'crear']);
-        Route::match(array('get','post'),'editar/{id}',['uses'=>'SectorProyectoController@ajaxRegularUpdate', 'as'=>'editar']);
-        Route::post('eliminar/{id}',['uses'=>'SectorProyectoController@ajaxRegularDestroy', 'as'=>'eliminar']);
-    });
-
-    Route::group(['prefix'=>'tecnica-estudio'], function(){
-
-        Route::match(array('get','post'),'listar',['uses'=>'TecnicaEstudioController@index', 'as'=>'listar']);
-        Route::post('registerform',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'registerform']);
-        Route::match(array('get','post'),'buscar',['uses'=>'TecnicaEstudioController@renderForm', 'as'=>'buscar']);
-        Route::match(array('get','post'),'crear',['uses'=>'TecnicaEstudioController@ajaxRegularStore', 'as'=>'crear']);
-        Route::match(array('get','post'),'editar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularUpdate', 'as'=>'editar']);
-        Route::post('eliminar/{id}',['uses'=>'TecnicaEstudioController@ajaxRegularDestroy', 'as'=>'eliminar']);
-    });
-
-
-    Route::group(['prefix'=>'tipo-muestra'], function(){
-
-        Route::match(array('get','post'),'listar',['uses'=>'TipoMuestraController@index', 'as'=>'listar']);
-        Route::post('registerform',['uses'=>'TipoMuestraController@renderForm', 'as'=>'registerform']);
-        Route::match(array('get','post'),'buscar',['uses'=>'TipoMuestraController@renderForm', 'as'=>'buscar']);
-        Route::match(array('get','post'),'crear',['uses'=>'TipoMuestraController@ajaxRegularStore', 'as'=>'crear']);
-        Route::match(array('get','post'),'editar/{id}',['uses'=>'TipoMuestraController@ajaxRegularUpdate', 'as'=>'editar']);
-        Route::post('eliminar/{id}',['uses'=>'TipoMuestraController@ajaxRegularDestroy', 'as'=>'eliminar']);
-    });
-
-
 
 });
 
@@ -145,16 +114,7 @@ Route::group(['middleware'=>'op'],function(){
         Route::match(array('get','post'),'crear',['uses'=>'LaboratorioController@ajaxRegularStore', 'as'=>'crear']);
         Route::match(array('get','post'),'editar/{id}',['uses'=>'LaboratorioController@ajaxRegularUpdate', 'as'=>'editar']);
         Route::post('eliminar/{id}',['uses'=>'LaboratorioController@ajaxRegularDestroy', 'as'=>'eliminar']);
-    }); 
-
-     Route::group(['prefix'=>'auditoria'], function(){
-        Route::match(array('get','post'),'listar',['uses'=>'AuditoriaController@index', 'as'=>'listar']);      
-        Route::post('registerform',['uses'=>'AuditoriaController@renderForm', 'as'=>'registerform']);
-        Route::match(array('get','post'),'buscar',['uses'=>'AuditoriaController@renderForm', 'as'=>'buscar']);
-        Route::match(array('get','post'),'crear',['uses'=>'AuditoriaController@ajaxRegularStore', 'as'=>'crear']);
-        Route::match(array('get','post'),'editar/{id}',['uses'=>'AuditoriaController@ajaxRegularUpdate', 'as'=>'editar']);
-      
-    }); 
+    });
 
     Route::group(['prefix'=>'tecnica-estudio'], function(){
 
@@ -206,5 +166,19 @@ Route::group(['middleware'=>'op'],function(){
 
     });
 
+});
+
+Route::group(['middleware'=>'visitante'],function(){
+
+    Route::group(['prefix'=>'muestra'], function(){
+
+        Route::match(array('get','post'),'listar',['uses'=>'MuestraController@index', 'as'=>'listar']);
+
+
+    });
+
+    Route::group(['prefix'=>'proyecto'], function() {
+        Route::match(array('get', 'post'), 'listar', ['uses' => 'ProyectoController@index', 'as' => 'listar']);
+    });
 });
 

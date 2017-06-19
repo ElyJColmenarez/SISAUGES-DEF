@@ -51,6 +51,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'op' => \SISAUGES\Http\Middleware\OperadorMiddleware::class,
         'admin' => \SISAUGES\Http\Middleware\AdminMiddleware::class,
-        'auditoria' => \SISAUGES\Http\Middleware\AuditoriaMiddleware::class
+        'auditoria' => \SISAUGES\Http\Middleware\AuditoriaMiddleware::class,
+        'visitante' => \SISAUGES\Http\Middleware\VisitanteMiddleware::class
     ];
 }
