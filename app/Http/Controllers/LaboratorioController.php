@@ -130,11 +130,6 @@ class LaboratorioController extends Controller
 
         );
 
-
-          AuditoriaController::store('Laboratorio','Consulta','Consulta de desSSS','usuario'); 
-
-
-          
           return view('layouts.index',compact('data','action','fields','request'));       
 
     }
