@@ -27,6 +27,10 @@ class RolUsuario extends Model implements AuditableContract
 
     public function scopeStatusRol($query,$search){
 
-        return $query->where('estatus', '=', $search);
+        if (strlen(trim($search))>=1) {
+            return $query->where('estatus', $search);
+        }else{
+            return $query->where('estatus', 1);
+        }
     }
 }
