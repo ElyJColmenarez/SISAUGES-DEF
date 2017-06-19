@@ -21,9 +21,29 @@
 
                 $aux=$muestra->archivo()->get();
 
+
+
+
                 if (count($aux)>0) {
-                    $extension=explode('.', $aux[0]->nombre_temporal_muestra);
-                    $rutaweb=url($aux[0]->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $aux[0]->nombre_temporal_muestra));
+
+
+                    foreach ($aux as $muestrakey => $muestravalue) {
+                    
+                        $ruta=$muestravalue->ruta_img_muestra.$muestravalue->nombre_temporal_muestra;
+                        $finfo = new finfo(FILEINFO_MIME);
+                        $type = explode(';', $finfo->file($ruta));
+
+
+                        if (explode('/', $type[0])[0]!='image') {
+                            $rutaweb=asset('assets/images/nodisponible.svg');
+                        }else{
+                            $extension=explode('.', $muestravalue->nombre_temporal_muestra);
+                            $rutaweb=url($muestravalue->ruta_img_muestra.'visibles/'.str_replace($extension[1], 'jpg', $muestravalue->nombre_temporal_muestra));
+
+                            break 1;
+                        }
+                    }
+
                 }else{
                     $rutaweb=asset('assets/images/nodisponible.svg');
                 }
@@ -36,9 +56,19 @@
             <td>@if($muestra->estatus==1) Activo @else Inactivo @endif</td>
             <td>{{ count($aux) }}</td>
             <td class="actions">
-                <a href="#" class="btn btn-warning click" data-typeform="modify" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-pencil"></i></a>
-                <a href="#" class="btn btn-danger remove-row deleted-row" data-typeform="deleted" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-trash-o"></i></a>
-                <a href="{{ url('/muestra/report/'.$muestra->id_muestra) }}" class="btn btn-info down" target="_blank" data-typeform="downfile" data-taction="requestdownfile" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-cloud-download"></i></a>
+
+                @if(Auth::user()->id_rol != 4)
+
+                    <a href="#" class="btn btn-warning click" data-typeform="modify" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-pencil"></i></a>
+                    <a href="#" class="btn btn-danger remove-row deleted-row" data-typeform="deleted" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-trash-o"></i></a>
+                    <a href="{{ url('/muestra/report/'.$muestra->id_muestra) }}" class="btn btn-info down" target="_blank" data-typeform="downfile" data-taction="requestdownfile" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-cloud-download"></i></a>
+
+                @else
+
+                    <a href="#" class="btn btn-primary click" data-typeform="modify" data-taction="registerform" data-field-id="{{$muestra->id_muestra}}"><i class="fa fa-eye"></i></a>
+
+                @endif
+
             </td>
         </tr>
 

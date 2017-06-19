@@ -78,7 +78,7 @@ class InstitucionController extends Controller
             ),
             'estatus' => array(
                 'type'      => 'select',
-                'value'     => (empty($institucion))? '' : $institucion->estatus,
+                'value'     => (!isset($institucion))? '' : $institucion->estatus,
                 'id'        => 'estatus',
                 'validaciones'=>array(
 
