@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use SISAUGES\Http\Requests;
 use SISAUGES\Models\Persona;
+use SISAUGES\Models\RolUsuario;
 use SISAUGES\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\View;
 class UserController extends Controller
 {
 
-    public function fieldsRegisterCall($persona,$usuario){
+    public function fieldsRegisterCall($persona,$usuario,$roles){
 
         $fields = array(
 
@@ -84,12 +85,15 @@ class UserController extends Controller
                 ),
 
                 'id_rol'           => array(
+
                     'type'          => 'select',
                     'value'         => (empty($usuario))? '' : $usuario->id_rol,
                     'id'            => 'rol',
                     'validaciones'  => array('obligatorio'),
                     'label'         => 'Rol usuario',
-                    'options'       => array('2' => 'Administrador', '3' => 'Operador')
+                    'selecttype'=> 'obj',
+                    'objkeys'   => array('id_rol','descripcion_rol'),
+                    'options'   => $roles
                 ),
 
                 'estatus' => array(
@@ -108,7 +112,7 @@ class UserController extends Controller
         return $fields;
     }
 
-    public function fieldsSearchCall($request){
+    public function fieldsSearchCall($request,$roles){
 
         $fields = array(
 
@@ -166,11 +170,13 @@ class UserController extends Controller
 
             'id_rol'           => array(
                 'type'          => 'select',
-                'value'         => (empty($request))? '' : $request->id_rol,
+                'value'         => (empty($usuario))? '' : $usuario->id_rol,
                 'id'            => 'rol',
                 'validaciones'  => array('obligatorio'),
                 'label'         => 'Rol usuario',
-                'options'       => array('2' => 'Administrador', '3' => 'Operador')
+                'selecttype'=> 'obj',
+                'objkeys'   => array('id_rol','descripcion_rol'),
+                'options'   => $roles
             ),
 
             'estatus' => array(
@@ -213,7 +219,9 @@ class UserController extends Controller
 
         $action = "usuario/listar";
 
-        $fields = $this->fieldsSearchCall($request);
+        $roles=RolUsuario::statusrol('')->get();
+
+        $fields = $this->fieldsSearchCall($request,$roles);
 
         $data=array(
 
@@ -268,7 +276,9 @@ class UserController extends Controller
                 )
             );
 
-            $fields = $this->fieldsRegisterCall($persona,$usuario);
+            $roles=RolUsuario::statusrol('')->get();
+
+            $fields = $this->fieldsRegisterCall($persona,$usuario,$roles);
 
             $modulo='Usuario';
         }
