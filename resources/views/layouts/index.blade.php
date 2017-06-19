@@ -14,7 +14,9 @@
                     <div>
 
                         <div class="form-group col-md-3 modalscript">
-                            <a class="btn btn-default click" href="#" data-typeform="add" data-taction="registerform" data-field-id="0">Agregar <i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+                            @if(Auth::user()->id_rol != 4)
+                                <a class="btn btn-default click" href="#" data-typeform="add" data-taction="registerform" data-field-id="0">Agregar <i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+                            @endif
                         </div>
 
                         <div class="col-md-9">

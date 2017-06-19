@@ -131,14 +131,14 @@
                         @if (Auth::user()->id_rol == 4)
 
                         <li class="">
-                            <a href="{{url('proyecto/listar')}}">
+                            <a href="{{url('visitante/proyecto/listar')}}">
                                 <i class="fa fa-cube" aria-hidden="true"></i>
                                 <span>Proyectos</span>
                             </a>
                         </li>
 
                         <li class="">
-                            <a href="{{url('muestra/listar')}}">
+                            <a href="{{url('visitante/muestra/listar')}}">
                                 <i class="fa fa-picture-o" aria-hidden="true"></i>
                                 <span>Muestras</span>
                             </a>

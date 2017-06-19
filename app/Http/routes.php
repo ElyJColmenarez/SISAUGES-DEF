@@ -168,17 +168,19 @@ Route::group(['middleware'=>'op'],function(){
 
 });
 
-Route::group(['middleware'=>'visitante'],function(){
+Route::group(['middleware'=>'visitante', 'prefix' => 'visitante'],function(){
 
     Route::group(['prefix'=>'muestra'], function(){
 
         Route::match(array('get','post'),'listar',['uses'=>'MuestraController@index', 'as'=>'listar']);
-
+        Route::post('registerform',['uses'=>'MuestraController@renderForm', 'as'=>'registerform']);
+        Route::match(array('get','post'),'report/{field_id}',['uses'=>'MuestraController@descargaMuestra', 'as'=>'report']);
 
     });
 
     Route::group(['prefix'=>'proyecto'], function() {
         Route::match(array('get', 'post'), 'listar', ['uses' => 'ProyectoController@index', 'as' => 'listar']);
+        Route::post('registerform',['uses'=>'ProyectoController@renderForm', 'as'=>'registerform']);
     });
 });
 
