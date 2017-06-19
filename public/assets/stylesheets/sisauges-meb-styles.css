@@ -28,6 +28,7 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 }
 .advanced-search-proyect{
 	background-color: #fff;
+	height: 33px!important;
 }
 
 .advanced-search-proyect:hover{
@@ -35,6 +36,11 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 	background-color: #eeeeee;
 	cursor: pointer;
 
+}
+
+.panel-body table.table td{
+	text-align: center;
+	vertical-align: middle;
 }
 
 .start-search-proyect{
@@ -222,6 +228,7 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 
 .tbl-imgcontainer{
 	width: 80px!important;
+	margin: auto;
 }
 
 .tbl-imgcontainer img{
@@ -245,6 +252,10 @@ body > section > div > section > div > div > section > div.panel-body > div:nth-
 
 	.form-control{
 		height: 33px!important;
+	}
+
+	.form-group .col-md-12 .col-md-10{
+		padding-left: 9px!important;
 	}
 }
 

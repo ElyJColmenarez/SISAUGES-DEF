@@ -371,6 +371,6 @@ INSERT INTO persona(
 
 
 INSERT INTO usuario(
-            id_usuario, username, password, id_rol, cedula_persona, estatus, 
+            username, password, id_rol, cedula_persona, estatus, 
             remember_token)
-    VALUES (1, "Administrador", "$2y$10$EJwofo6xJdB50al9/HiI.ukAM2oseSZM0lu5NWnlzRMPDNXCg2q0a", 2, '21120397', true);
+    VALUES ("Administrador", "$2y$10$EJwofo6xJdB50al9/HiI.ukAM2oseSZM0lu5NWnlzRMPDNXCg2q0a", 2, '21120397', true);

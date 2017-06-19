@@ -591,8 +591,6 @@ jQuery(document).ready(function() {
     });
 
 
-    //voy x aqui
-
     $('#modalForm').on('click','button[name=lastcallmodal]',function(event){
 
         event.preventDefault();
@@ -729,6 +727,13 @@ jQuery(document).ready(function() {
 		});   	
 
     });
+
+
+    $('#modalForm').on('change','select.relacionselect',function(event){
+
+    	$('#relacionpointer-'+$(this).attr('data-btid')).click();
+
+    })
 
     /*Ajax table search functions*/
     
@@ -952,16 +957,14 @@ jQuery(document).ready(function() {
     });
 
     $('.datepkr').datepicker({
-        format:'yyyy-mm-dd',
-        maxDate:'now',
+        format:'dd/mm/yyyy',
         autoclose: true,
     });
 
-    $('body').on('click', '.datepkr', function() {
+    $('#modalForm').on('click', '.datepkr', function() {
 
         $(this).datepicker({
-            format:'yyyy-mm-dd',
-            maxDate:'now',
+            format:'dd/mm/yyyy',
             autoclose: true,
         });
         $(this).datepicker('show');
