@@ -10,6 +10,7 @@ use SISAUGES\Http\Requests;
 use SISAUGES\Http\Controllers\Controller;
 
 use SISAUGES\Models\Auditoria;
+use SISAUGES\Models\User;
 
 use Illuminate\Support\Facades\View;
 
@@ -23,12 +24,15 @@ class AuditoriaController extends Controller
     public function index(Request $request)
     {
         //
-        $auditoria=Auditoria::with('user')->eventoAuditoria($request->evento)
+        $auditoria=Auditoria::eventoAuditoria($request->evento)
+                                                    ->join('usuario','usuario.id_usuario','=','audits.user_id')
+                                                    ->select('audits.*','usuario.username')
                                                     ->moduloAuditoria($request->modulo)
                                                     ->oldValuesAuditoria($request->oldValues)
                                                     ->newValuesAuditoria($request->newValues)
-                                                    ->fechaAuditoria($request->date)->orderBy('id','asc')->paginate(20);
-    
+                                                    ->orderBy('id','asc')->paginate(20);
+
+
         $action="auditoria/listar";
 
         $fields=array(

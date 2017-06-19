@@ -32,6 +32,11 @@ class User extends Authenticatable implements AuditableContract
         return $this->belongsTo(Persona::class,'cedula_persona','cedula');
     }
 
+    public function auditoria()
+    {
+        return $this->hasMany(Auditoria::class,'user_id');
+    }
+
     public function scopeDescripcionUser($query,$search)
     {
         if (strlen(trim($search))>=1) {
