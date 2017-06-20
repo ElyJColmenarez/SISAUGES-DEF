@@ -325,28 +325,20 @@ CREATE TABLE IF NOT EXISTS MUESTRA_LABORATORIO
 --insert into tutor(cedula, nombre, apellido, correo_electronico, telefono) values(18491779,'ely','colmenarez','elyjcolmenarez@gmail.com','02124430191');
 --select * from persona
 
-
-CREATE TABLE IF NOT EXISTS AUXIMG
+CREATE TABLE audits
 (
-
-	auxid serial,
-	description_img varchar(200),
-	orgpage_img varchar(200),
-	idmues int
-	
-
-);
-
-
-CREATE TABLE IF NOT EXISTS auditoria
-(
-  id_auditoria serial NOT NULL,
-  modulo character varying(100),
-  operacion character varying(60),
-  descripcion character varying(2000),
-  usuario character varying(200),
-  fecha date,
-  CONSTRAINT pk_auditoria PRIMARY KEY (id_auditoria)
+	id serial NOT NULL,
+	user_id integer,
+	event character varying(255) NOT NULL,
+	auditable_id integer NOT NULL,
+	auditable_type character varying(255) NOT NULL,
+	old_values text,
+	new_values text,
+	url character varying(255),
+	ip_address inet,
+	user_agent character varying(255),
+	created_at timestamp(0) without time zone NOT NULL,
+	CONSTRAINT audits_pkey PRIMARY KEY (id)
 );
 
 
@@ -354,15 +346,19 @@ CREATE TABLE IF NOT EXISTS auditoria
 
 INSERT INTO rol_usuario(
             id_rol, descripcion_rol, estatus)
-    VALUES (1, 'su', true);
+    VALUES (1, 'Auditoria', false);
 
 INSERT INTO rol_usuario(
             id_rol, descripcion_rol, estatus)
-    VALUES (2, 'admin', true);
+    VALUES (2, 'Administrador', false);
 
 INSERT INTO rol_usuario(
             id_rol, descripcion_rol, estatus)
-    VALUES (3, 'op', true);
+    VALUES (3, 'Operador', true);
+
+INSERT INTO rol_usuario(
+	id_rol, descripcion_rol, estatus)
+VALUES (4, 'Visitante', true);
 
 
 INSERT INTO persona(
@@ -373,4 +369,9 @@ INSERT INTO persona(
 INSERT INTO usuario(
             username, password, id_rol, cedula_persona, estatus, 
             remember_token)
-    VALUES ("Administrador", "$2y$10$EJwofo6xJdB50al9/HiI.ukAM2oseSZM0lu5NWnlzRMPDNXCg2q0a", 2, '21120397', true);
+    VALUES ('Administrador', '$2y$10$EJwofo6xJdB50al9/HiI.ukAM2oseSZM0lu5NWnlzRMPDNXCg2q0a', 2, '21120397', true);
+
+INSERT INTO usuario(
+  username, password, id_rol, cedula_persona, estatus,
+  remember_token)
+VALUES ('Auditor', '$2y$10$EJwofo6xJdB50al9/HiI.ukAM2oseSZM0lu5NWnlzRMPDNXCg2q0a', 1, '21120397', true);
