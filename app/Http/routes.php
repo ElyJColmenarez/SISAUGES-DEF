@@ -148,6 +148,7 @@ Route::group(['middleware'=>'op'],function(){
         Route::match(array('get','post'),'editar/{id}',['uses'=>'ProyectoController@ajaxRegularUpdate', 'as'=>'editar']);
         Route::post('eliminar/{id}',['uses'=>'ProyectoController@ajaxRegularDestroy', 'as'=>'eliminar']);
         Route::post('asignar-institucion-A-proyecto',['uses'=>'ProyectoController@ajaxRegularAssign', 'as'=>'asignar-institucion-a-proyecto']);
+        Route::post('reporte/{id}',['uses'=>'ProyectoController@reportProyect', 'as'=>'reporte']);
 
     });
 

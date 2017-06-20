@@ -978,6 +978,17 @@ jQuery(document).ready(function() {
     });
 
 
+    $('#modalForm').on('click','button[name=finregistroreport]',function(event){
+
+        event.preventDefault();
+
+        
+
+        //Table data update
+
+    });
+
+
     //Extra
 
 

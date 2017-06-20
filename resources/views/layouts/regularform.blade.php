@@ -39,7 +39,7 @@
 		</script>
 									
 
-		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post'])!!}
+		{!!Form::open(['url'=>$action, 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-bordered modalmicroform', 'method' => 'post', 'target'=>'_blank'])!!}
 
 	        <header class="panel-heading">
 				<h2 class="panel-title">Formulario de {!! $modulo !!}</h2>
@@ -193,7 +193,7 @@
 									        				<div class="panel">
 																<header class="panel-heading">
 																	<div class="panel-actions">
-																		<a href="#" class="fa fa-caret-down pnless" data-target="{{ $pro_muestrakey }}" data-open="false"></a>
+																		<a href="#" class="fa fa-caret-down pnless" data-target="{{ $pro_muestrakey }}"  @if($pro_muestrakey!=0) data-open="false" @else data-open="true" @endif></a>
 																	</div>
 													
 																	<h2 class="panel-title">{{ $pro_muestravalue->$aux2 }}</h2>
@@ -204,7 +204,7 @@
 																	
 																	@if(count($archi)>0)
 
-														        		<div class="panelocultos" id="pnl{{ $pro_muestrakey }}">
+														        		<div  @if($pro_muestrakey!=0) class="panelocultos"  @endif id="pnl{{ $pro_muestrakey }}">
 														        			<div class="col-md-12">
 
 														        				<div class="tablecontainer">
@@ -323,7 +323,7 @@
 
 										                        	<option value="">Seleccione...</option>
 										                        
-											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux=''; var_dump($value['options']); ?>
+											                    	<?php $aux1=$value['objkeys'][0]; $aux2=$value['objkeys'][1]; $objaux=''; ?>
 
 											                    	@if(isset($value['options']))
 
@@ -1021,7 +1021,8 @@
 
 									@elseif(isset($hiddenfields['report']))
 
-										<button class="btn btn-primary" name="finregistroreport">Generar Reporte</button>
+										<button class="btn btn-primary">Generar Reporte</button>
+										<button class="btn btn-default modal-dismiss">Cancelar</button>
 
 									@else
 

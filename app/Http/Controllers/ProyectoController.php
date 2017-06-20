@@ -19,10 +19,12 @@ use SISAUGES\Models\Estudiante;
 use SISAUGES\Models\Muestra;
 use SISAUGES\Models\Proyecto;
 use SISAUGES\Models\Archivo;
+use SISAUGES\Models\Persona;
 use Storage;
 use Validator;
 use File;
 use Imagick;
+use mPDF;
 
 use Illuminate\Support\Facades\View;
 
@@ -353,7 +355,7 @@ class ProyectoController extends Controller
                 'id'        => 'id_estudiante',
                 'label'     => 'Estudiante',
                 'selecttype'=> 'obj',
-                'objkeys'   => array('id_estudiantes','cedula_persona'),
+                'objkeys'   => array('id_estudiante','cedula_persona'),
                 'options'   => $estudiantes[0],
                 'values_seting'=> $estudiantes[2],
                 'selectadd' => array(
@@ -724,6 +726,28 @@ class ProyectoController extends Controller
     public function obtenerConteoProyectosxMes(){
 
         return Proyecto::whereMonth('fecha_inicio','=',date('n'))->whereYear('fecha_inicio','=',date('Y'))->count();
+
+    }
+
+
+    public function reportProyect(Request $request, $id){
+
+
+    	$proyecto=Proyecto::find($id);
+    	$institucion=Institucion::find($request->institucion);
+    	$estudiante=Estudiante::find($request->estudiante);
+    	$persona = Persona::buscarpersona($estudiante->cedula_persona)->first();
+
+    	$mstr=Archivo::first();
+
+    	$htmlBody = View::make('pdf.report',compact('request','proyecto','institucion','estudiante','persona','mstr'))->render();
+
+        $pdf=new mPDF();
+
+        $pdf->WriteHTML($htmlBody);
+
+        $pdf->Output();
+
 
     }
 
